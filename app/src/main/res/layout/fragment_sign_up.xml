@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="accountInfo"
+            type="com.family.happiness.viewmodels.AccountInfo" />
+        <variable
+            name="viewModel"
+            type="com.family.happiness.viewmodels.SignUpViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.SignUpFragment">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:imageUrl="@{accountInfo.photoUrl}"/>
+
+            <EditText
+                android:id="@+id/nameEditView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:hint="@string/hint_name"
+                android:text="@{accountInfo.name}"/>
+
+            <EditText
+                android:id="@+id/phoneEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="phone"
+                android:textAlignment="center"
+                android:hint="@string/hint_phone_number"
+                android:text="@={viewModel.phone}"
+                app:enabledUnless="@{viewModel.buttonEnabled}"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:text="Next"
+                android:onClick="@{()->viewModel.requestSmsCode()}"
+                app:enabledUnless="@{viewModel.buttonEnabled}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/design_default_color_secondary"
+                android:text="@string/server_failed_please_try_again"
+                app:goneUnless="@{viewModel.textViewVisible}"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

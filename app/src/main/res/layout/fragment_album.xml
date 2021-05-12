@@ -1,0 +1,93 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="albumFragment"
+            type="com.family.happiness.fragments.AlbumFragment" />
+        <variable
+            name="viewModel"
+            type="com.family.happiness.viewmodels.AlbumViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.family.happiness.MainActivity">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_folder"
+            android:background="@null"
+            android:layout_margin="6dp"
+            app:goneUnless="@{viewModel.showAlbumItems != null}"/>
+        <TextView
+            app:layout_constraintTop_toTopOf="@id/imageButton"
+            app:layout_constraintBottom_toBottomOf="@id/imageButton"
+            app:layout_constraintLeft_toRightOf="@id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{'/' + viewModel.showAlbumItems + '/'}"
+            android:layout_marginLeft="6dp"
+            app:goneUnless="@{viewModel.showAlbumItems != null}" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="6dp"
+            android:clipToPadding="false"
+            app:layoutManager=
+                "androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageButton"
+            app:spanCount="3"
+            tools:itemCount="24"
+            tools:listitem="@layout/image_item"
+            app:goneUnless="@{viewModel.viewAlbumInImages || viewModel.showAlbumItems != null}"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/albumRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="6dp"
+            android:clipToPadding="false"
+            app:layoutManager=
+                "androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spanCount="3"
+            tools:itemCount="24"
+            tools:listitem="@layout/image_item"
+            app:goneUnless="@{!viewModel.viewAlbumInImages &amp;&amp; viewModel.showAlbumItems == null}"/>
+
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:HappinessApiStatus="@{viewModel.status}" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_upload"
+            android:layout_margin="16dp"
+            android:onClick="@{albumFragment::onFabClick}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

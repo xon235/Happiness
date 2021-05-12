@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mailFragment"
+        android:icon="@drawable/ic_mail"
+        android:title="@string/title_mail"/>
+    <item
+        android:id="@+id/albumFragment"
+        android:icon="@drawable/ic_album"
+        android:title="@string/title_album"/>
+    <item
+        android:id="@+id/wishesFragment"
+        android:icon="@drawable/ic_wishes"
+        android:title="@string/title_wishes"/>
+</menu>
