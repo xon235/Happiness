@@ -4,7 +4,7 @@
     <data>
         <variable
             name="image"
-            type="com.family.happiness.rooms.Image" />
+            type="com.family.happiness.room.Image" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"

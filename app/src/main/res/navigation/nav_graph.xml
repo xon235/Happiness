@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mailFragment"
-        android:name="com.family.happiness.fragments.MailFragment"
+        android:name="com.family.happiness.ui.home.MailFragment"
         android:label="@string/title_mail"
         tools:layout="@layout/fragment_mail" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.family.happiness.fragments.AlbumFragment"
+        android:name="com.family.happiness.ui.home.AlbumFragment"
         android:label="@string/title_album"
         tools:layout="@layout/fragment_album" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/wishesFragment"
-        android:name="com.family.happiness.fragments.WishesFragment"
+        android:name="com.family.happiness.ui.home.WishesFragment"
         android:label="@string/title_wishes"
         tools:layout="@layout/fragment_wishes" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.family.happiness.fragments.SignInFragment"
+        android:name="com.family.happiness.ui.auth.SignInFragment"
         android:label="@string/title_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.family.happiness.fragments.SignUpFragment"
+        android:name="com.family.happiness.ui.auth.SignUpFragment"
         android:label="@string/title_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -58,7 +58,7 @@
             app:destination="@id/smsVerificationFragment" />
         <argument
             android:name="accountInfo"
-            app:argType="com.family.happiness.viewmodels.AccountInfo" />
+            app:argType="com.family.happiness.ui.auth.AccountInfo" />
     </fragment>
     <action
         android:id="@+id/action_global_signInFragment"
@@ -71,7 +71,7 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/smsVerificationFragment"
-        android:name="com.family.happiness.fragments.SmsVerificationFragment"
+        android:name="com.family.happiness.ui.auth.SmsVerificationFragment"
         android:label="@string/title_sms_verification"
         tools:layout="@layout/fragment_sms_verification">
         <argument
@@ -79,17 +79,17 @@
             app:argType="string" />
         <argument
             android:name="accountInfo"
-            app:argType="com.family.happiness.viewmodels.AccountInfo" />
+            app:argType="com.family.happiness.ui.auth.AccountInfo" />
     </fragment>
     <fragment
         android:id="@+id/createFamilyFragment"
-        android:name="com.family.happiness.fragments.CreateFamilyFragment"
+        android:name="com.family.happiness.ui.createfamily.CreateFamilyFragment"
         android:label="@string/title_create_family"
         tools:layout="@layout/fragment_create_family" />
     <action android:id="@+id/action_global_createFamilyFragment" app:destination="@id/createFamilyFragment" />
     <fragment
         android:id="@+id/uploadImageFragment"
-        android:name="com.family.happiness.fragments.UploadImageFragment"
+        android:name="com.family.happiness.ui.photoupload.UploadImageFragment"
         android:label="Upload Image"
         tools:layout="@layout/fragment_upload_image">
         <argument
@@ -98,21 +98,21 @@
     </fragment>
     <fragment
         android:id="@+id/detailViewFragment"
-        android:name="com.family.happiness.fragments.DetailViewFragment"
+        android:name="com.family.happiness.ui.photodetail.DetailViewFragment"
         android:label="Detail View"
         tools:layout="@layout/fragment_detail_view" >
         <argument
             android:name="image"
-            app:argType="com.family.happiness.rooms.Image" />
+            app:argType="com.family.happiness.room.Image" />
     </fragment>
     <fragment
         android:id="@+id/wishDetailFragment"
-        android:name="com.family.happiness.fragments.WishDetailFragment"
+        android:name="com.family.happiness.ui.wishdetail.WishDetailFragment"
         android:label="Wish Detail"
         tools:layout="@layout/fragment_wish_detail" >
         <argument
             android:name="wish"
-            app:argType="com.family.happiness.rooms.Wish" />
+            app:argType="com.family.happiness.room.Wish" />
         <action
             android:id="@+id/action_wishDetailFragment_to_newWishFragment"
             app:destination="@id/newWishFragment" />
@@ -122,26 +122,26 @@
     </fragment>
     <fragment
         android:id="@+id/newWishFragment"
-        android:name="com.family.happiness.fragments.NewWishFragment"
+        android:name="com.family.happiness.ui.wishnwrite.NewWishFragment"
         android:label="Edit Wish"
         tools:layout="@layout/fragment_new_wish" >
         <argument
             android:name="wish"
-            app:argType="com.family.happiness.rooms.Wish"
+            app:argType="com.family.happiness.room.Wish"
             app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/wishSelectContributorFragment"
-        android:name="com.family.happiness.fragments.WishSelectContributorFragment"
+        android:name="com.family.happiness.ui.wishfinish.WishSelectContributorFragment"
         android:label="Select Contributor"
         tools:layout="@layout/fragment_wish_select_contributor" >
         <argument
             android:name="wish"
-            app:argType="com.family.happiness.rooms.Wish" />
+            app:argType="com.family.happiness.room.Wish" />
     </fragment>
     <fragment
         android:id="@+id/writeMailFragment"
-        android:name="com.family.happiness.fragments.WriteMailFragment"
+        android:name="com.family.happiness.ui.mailwrite.WriteMailFragment"
         android:label="New Mail"
         tools:layout="@layout/fragment_write_mail" />
 </navigation>

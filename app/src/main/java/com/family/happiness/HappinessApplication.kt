@@ -1,7 +1,7 @@
 package com.family.happiness
 
 import android.app.Application
-import com.family.happiness.rooms.HappinessRoomDatabase
+import com.family.happiness.room.HappinessRoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,10 +1,9 @@
 package com.family.happiness
 
 import com.family.happiness.network.*
-import com.family.happiness.rooms.*
+import com.family.happiness.room.*
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
-import retrofit2.http.Multipart
 
 class HappinessRepository(
     private val userDAO: UserDAO,
@@ -21,7 +20,7 @@ class HappinessRepository(
 
     suspend fun signIn(authData: AuthData){
         withContext(Dispatchers.IO) {
-            val response = HappinessApi.retrofitService.signIn(authData)
+            val response = HappinessApiService.retrofitService.signIn(authData)
             if(!response.result) {
                 clearUserData()
                 throw HappinessApiException(response.message!!)
@@ -31,7 +30,7 @@ class HappinessRepository(
 
     suspend fun signInWithToken(tokenData: TokenData){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.signInWithToken(tokenData)
+            val response = HappinessApiService.retrofitService.signInWithToken(tokenData)
             if(response.result) {
                 newUser(response.user!!)
             } else {
@@ -73,7 +72,7 @@ class HappinessRepository(
 
     suspend fun updateMembers(authData: AuthData){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.getMembers(authData)
+            val response = HappinessApiService.retrofitService.getMembers(authData)
             if(response.result) {
                 memberDAO.replaceAll(response.members!!.map { memberData -> memberData.toMember()})
             } else {
@@ -84,7 +83,7 @@ class HappinessRepository(
 
     suspend fun createFamily(authData: AuthData){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.createFamily(authData)
+            val response = HappinessApiService.retrofitService.createFamily(authData)
             if(response.result) {
                 userDAO.updateUserFamily(response.family!!)
             } else {
@@ -95,7 +94,7 @@ class HappinessRepository(
 
     suspend fun joinFamily(authData: AuthData, family: String){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.joinFamily(JoinFamilyData(authData, family))
+            val response = HappinessApiService.retrofitService.joinFamily(JoinFamilyData(authData, family))
             if(response.result) {
                 userDAO.updateUserFamily(response.family!!)
             } else {
@@ -106,7 +105,7 @@ class HappinessRepository(
 
     suspend fun leaveFamily(authData: AuthData){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.leaveFamily(authData)
+            val response = HappinessApiService.retrofitService.leaveFamily(authData)
             if(response.result) {
                 userDAO.updateUserFamily(null)
                 imageDAO.deleteAll()
@@ -148,7 +147,7 @@ class HappinessRepository(
 
     suspend fun uploadImage(isNewAlbum: Boolean, album: String, tagged: List<Member>, files: List<MultipartBody.Part>){
         withContext(Dispatchers.IO){
-            val response = HappinessApi.retrofitService.uploadImage(userDAO.getSync().toAuthData(), isNewAlbum, album, tagged, files)
+            val response = HappinessApiService.retrofitService.uploadImages(userDAO.getSync().toAuthData(), isNewAlbum, album, tagged, files)
             if(response.result) {
                 response.images?.let { insertImages(it) }
             } else {

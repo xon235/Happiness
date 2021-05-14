@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.CreateFamilyViewModel" />
+            type="com.family.happiness.ui.createfamily.CreateFamilyViewModel" />
         <import type="com.family.happiness.network.HappinessApiStatus"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.CreateFamilyFragment">
+        tools:context=".ui.createfamily.CreateFamilyFragment">
 
         <LinearLayout
             android:id="@+id/constraintLayout"

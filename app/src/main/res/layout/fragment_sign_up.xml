@@ -3,17 +3,17 @@
     <data>
         <variable
             name="accountInfo"
-            type="com.family.happiness.viewmodels.AccountInfo" />
+            type="com.family.happiness.ui.auth.AccountInfo" />
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.SignUpViewModel" />
+            type="com.family.happiness.ui.auth.SignUpViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.SignUpFragment">
+        tools:context=".ui.auth.SignUpFragment">
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -5,15 +5,15 @@
     <data>
         <variable
             name="wishesFragment"
-            type="com.family.happiness.fragments.WishesFragment" />
+            type="com.family.happiness.ui.home.WishesFragment" />
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.WishesViewModel" />
+            type="com.family.happiness.ui.home.WishesViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.WishesFragment">
+        tools:context=".ui.home.WishesFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

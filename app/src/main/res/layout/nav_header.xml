@@ -5,10 +5,10 @@
     <data>
         <variable
             name="mainActivity"
-            type="com.family.happiness.MainActivity" />
+            type="com.family.happiness.ui.MainActivity" />
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.HappinessViewModel" />
+            type="com.family.happiness.ui.HappinessViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"

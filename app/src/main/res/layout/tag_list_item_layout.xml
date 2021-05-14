@@ -5,7 +5,7 @@
     <data>
         <variable
             name="member"
-            type="com.family.happiness.rooms.Member" />
+            type="com.family.happiness.room.Member" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -4,14 +4,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.SignInViewModel" />
+            type="com.family.happiness.ui.auth.SignInViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.SignInFragment">
+        tools:context=".ui.auth.SignInFragment">
 
         <LinearLayout
             android:orientation="vertical"

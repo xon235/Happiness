@@ -5,16 +5,16 @@
     <data>
         <variable
             name="albumFragment"
-            type="com.family.happiness.fragments.AlbumFragment" />
+            type="com.family.happiness.ui.home.AlbumFragment" />
         <variable
             name="viewModel"
-            type="com.family.happiness.viewmodels.AlbumViewModel" />
+            type="com.family.happiness.ui.home.AlbumViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.family.happiness.MainActivity">
+        tools:context="com.family.happiness.ui.MainActivity">
 
         <ImageButton
             android:id="@+id/imageButton"
