@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentSignInBinding
 import com.family.happiness.network.request.OAuthData
@@ -28,12 +27,12 @@ class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewMo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        viewModel.personalDataPreferences.observe(viewLifecycleOwner) {
+        viewModel.personalData.observe(viewLifecycleOwner) {
             if (it.token != null) {
-                findNavController().navigate(R.id.action_global_mailFragment)
+                navController.navigate(SignInFragmentDirections.actionSignInFragmentToMailFragment())
             }
         }
 
@@ -56,7 +55,7 @@ class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewMo
                         GoogleSignIn.getClient(requireActivity(), googleSignInOptions).signInIntent,
                         RC_SIGN_IN
                     )
-                    viewModel.disableSignIn()
+                    viewModel.disableInput()
                 }
         }
     }
@@ -77,13 +76,13 @@ class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewMo
                     viewModel.signIn(oAuthData)
                 }
             } catch (e: ApiException) {
-                viewModel.setFailUi()
+                viewModel.setFailUi("Google sign in failed.")
             }
         }
     }
 
     private fun navigateToSignUp(OAuthData: OAuthData) {
-        findNavController().navigate(
+        navController.navigate(
             SignInFragmentDirections.actionSignInFragmentToSignUpFragment(OAuthData)
         )
     }

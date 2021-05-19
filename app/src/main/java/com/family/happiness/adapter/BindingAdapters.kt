@@ -19,8 +19,8 @@ fun visibleIf(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("app:enabledUnless")
-fun enabledUnless(view: View, isEnabled: Boolean) {
+@BindingAdapter("app:enabledIf")
+fun enabledIf(view: View, isEnabled: Boolean) {
     view.isEnabled = isEnabled
 }
 

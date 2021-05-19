@@ -3,14 +3,17 @@ package com.family.happiness.network
 import com.family.happiness.network.response.JoinFamilyResponse
 import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.network.request.OAuthData
+import com.family.happiness.network.request.SignUpData
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -97,6 +100,12 @@ interface HappinessApi {
     @POST("signIn")
     suspend fun signIn(@Body oAuthData: OAuthData): PersonalDataResponse
 
+    @POST("signUp")
+    suspend fun signUp(@Body signUpData: SignUpData): PersonalDataResponse
+
+    @POST("getSmsCode")
+    suspend fun getSmsCode(@Body phone: String): ResponseBody
+
 //    @POST("requestSmsCode")
 //    suspend fun requestSmsCode(@Body body: PhoneData): BasicResponse
 //
@@ -134,29 +143,29 @@ interface HappinessApi {
 
 enum class HappinessApiStatus { LOADING, ERROR, DONE }
 
-object HappinessApiService {
-    private const val BASE_URL = "http://18.219.209.22:5000"
-
-    val api: HappinessApi by lazy {
-
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-        val httpClient = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
-            )
-            .readTimeout(5, TimeUnit.SECONDS)
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl(BASE_URL)
-            .client(httpClient)
-            .build()
-
-        retrofit.create(HappinessApi::class.java)
-    }
-}
+//object HappinessApiService {
+//    private const val BASE_URL = "http://18.219.209.22:5000"
+//
+//    val api: HappinessApi by lazy {
+//
+//        val moshi = Moshi.Builder()
+//            .add(KotlinJsonAdapterFactory())
+//            .build()
+//
+//        val httpClient = OkHttpClient.Builder()
+//            .addInterceptor(
+//                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+//            )
+//            .readTimeout(5, TimeUnit.SECONDS)
+//            .connectTimeout(5, TimeUnit.SECONDS)
+//            .build()
+//
+//        val retrofit = Retrofit.Builder()
+//            .addConverterFactory(MoshiConverterFactory.create(moshi))
+//            .baseUrl(BASE_URL)
+//            .client(httpClient)
+//            .build()
+//
+//        retrofit.create(HappinessApi::class.java)
+//    }
+//}

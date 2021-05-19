@@ -3,27 +3,25 @@ package com.family.happiness.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.family.happiness.network.HappinessApiService
+import com.family.happiness.PreferenceKeys
+import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.SafeResource
+import com.family.happiness.network.request.OAuthData
+import com.family.happiness.network.request.SignUpData
 import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.room.user.UserDao
-import com.family.happiness.network.request.OAuthData
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
 
 class UserRepository(
     private val personalDataDatastore: DataStore<androidx.datastore.preferences.core.Preferences>,
     private val userDao: UserDao,
+    private val happinessApi: HappinessApi
 ) : BaseRepository() {
-    private object PreferenceKeys {
-        val TOKEN = stringPreferencesKey("token")
-        val USER_ID = stringPreferencesKey("user_id")
-        val FAMILY_ID = stringPreferencesKey("family_id")
-    }
 
     val personalDataPreferencesFlow = personalDataDatastore.data
         .catch { exception ->
@@ -43,16 +41,6 @@ class UserRepository(
 
     val users = userDao.getAll()
 
-    val me = combine(
-        personalDataPreferencesFlow,
-        users
-    ) {
-            personalDataPreferences, users  ->
-        users.find {
-            it.id == personalDataPreferences.userId
-        }
-    }
-
     val members = combine(
         personalDataPreferencesFlow,
         users
@@ -63,16 +51,26 @@ class UserRepository(
         }
     }
 
-    suspend fun joinFamily(familyId: String) = safeApiCall {
-        HappinessApiService.api.joinFamily(familyId)
-    }
-
-    suspend fun leaveFamily() = safeApiCall {
-        HappinessApiService.api.leaveFamily()
+    val me = combine(
+        personalDataPreferencesFlow,
+        users
+    ) {
+            personalDataPreferences, users  ->
+        users.find {
+            it.id == personalDataPreferences.userId
+        }
     }
 
     suspend fun signIn(oAuthData: OAuthData): SafeResource<PersonalDataResponse> {
-        return safeApiCall { HappinessApiService.api.signIn(oAuthData) }
+        return safeApiCall { happinessApi.signIn(oAuthData) }
+    }
+
+    suspend fun signUp(signUpData: SignUpData): SafeResource<PersonalDataResponse> {
+        return safeApiCall { happinessApi.signUp(signUpData) }
+    }
+
+    suspend fun getSmsCode(phone: String): SafeResource<ResponseBody>{
+        return safeApiCall { happinessApi.getSmsCode(phone) }
     }
 
     suspend fun insertPersonalData(personalDataResponse: PersonalDataResponse) {
@@ -93,6 +91,14 @@ class UserRepository(
             it.remove(PreferenceKeys.USER_ID)
             it.remove(PreferenceKeys.FAMILY_ID)
         }
+    }
+
+    suspend fun joinFamily(familyId: String) = safeApiCall {
+        happinessApi.joinFamily(familyId)
+    }
+
+    suspend fun leaveFamily() = safeApiCall {
+        happinessApi.leaveFamily()
     }
 
     data class PersonalDataPreferences(

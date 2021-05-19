@@ -2,7 +2,6 @@ package com.family.happiness.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -11,18 +10,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.family.happiness.Event
 import com.family.happiness.HappinessApplication
 import com.family.happiness.R
 import com.family.happiness.adapter.FamilyListAdapter
@@ -30,13 +22,11 @@ import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
 import com.family.happiness.network.SafeResource
 import com.family.happiness.ui.createfamily.CreateFamilyFragmentDirections
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val mainActivityViewModel: MainActivityViewModel by viewModels() {
+    private val viewModel: MainActivityViewModel by viewModels() {
         ViewModelFactory(application as HappinessApplication)
     }
     private val navController: NavController by lazy {
@@ -64,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         NavHeaderBinding.bind(binding.navigationView.getHeaderView(0)).apply {
             mainActivity = this@MainActivity
             lifecycleOwner = this@MainActivity
-            viewModel = mainActivityViewModel
+            viewModel = this@MainActivity.viewModel
             recyclerView.adapter = FamilyListAdapter()
         }
 
@@ -86,20 +76,20 @@ class MainActivity : AppCompatActivity() {
 
         // Observe
         // Check authentication
-        mainActivityViewModel.personalData.observe(this) {
+        viewModel.personalData.observe(this) {
             if (it.token == null) {
                 navController.navigate(R.id.action_global_signInFragment)
             }
         }
 
-        mainActivityViewModel.joinFamilyEvent.observe(this){ event ->
+        viewModel.joinFamilyEvent.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
                 val text = if(it is SafeResource.Success) "Join Successful" else "Join Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
 
-        mainActivityViewModel.leaveFamilyEvent.observe(this){ event ->
+        viewModel.leaveFamilyEvent.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
                 val text = if(it is SafeResource.Success) "Left Family" else "Leave Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
@@ -108,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickSignOut() {
-        mainActivityViewModel.clearUserData()
+        viewModel.clearUserData()
     }
 
 
@@ -122,18 +112,18 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Enter Family Code")
             .setView(input)
             .setPositiveButton("Join") { _, _ ->
-                mainActivityViewModel.joinFamily(input.text.toString())
+                viewModel.joinFamily(input.text.toString())
             }
             .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             .show()
     }
 
     fun onClickLeaveFamily() {
-        mainActivityViewModel.leaveFamily()
+        viewModel.leaveFamily()
     }
 
     fun onClickCopyFamilyCode() {
-        mainActivityViewModel.personalData.value?.familyId?.let { familyId ->
+        viewModel.personalData.value?.familyId?.let { familyId ->
             ContextCompat.getSystemService(this, ClipboardManager::class.java)?.let {
                 it.setPrimaryClip(ClipData.newPlainText("Family Code", familyId))
                 Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()

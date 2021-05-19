@@ -1,27 +1,43 @@
 package com.family.happiness.ui.auth
 
 import androidx.lifecycle.*
-import com.family.happiness.repository.HappinessRepository
-import com.family.happiness.network.HappinessApiService
-import kotlinx.coroutines.Dispatchers
+import com.family.happiness.network.SafeResource
+import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import timber.log.Timber
-import java.lang.Exception
+import retrofit2.HttpException
 
-class SignUpViewModel(private val repository: HappinessRepository): ViewModel() {
-    private val _buttonEnabled = MutableLiveData<Boolean>(true)
-    val buttonEnabled: LiveData<Boolean> = _buttonEnabled
+class SignUpViewModel(private val userRepository: UserRepository): ViewModel() {
 
-    private val _textViewVisible = MutableLiveData<Boolean>(false)
-    val textViewVisible: LiveData<Boolean> = _textViewVisible
+    private val _inputEnabled = MutableLiveData<Boolean>(true)
+    val inputEnabled: LiveData<Boolean> = _inputEnabled
+
+    private val _failText = MutableLiveData<String>(null)
+    val failText: LiveData<String> = _failText
 
     private val _navigateToSmsVerification = MutableLiveData<Boolean>(false)
     val navigateToSmsVerification: LiveData<Boolean> = _navigateToSmsVerification
 
-    var phone = ""
+    fun getSmsCode(phone: String) = viewModelScope.launch {
+        _inputEnabled.postValue(false)
+        when(val response = userRepository.getSmsCode(phone)){
+            is SafeResource.Success -> {_navigateToSmsVerification.postValue(true)}
+            is SafeResource.Failure -> {
+                if(response.throwable is HttpException){
+                    _failText.postValue("Invalid phone number.")
 
-    fun requestSmsCode() {
+                    // TODO delete after test
+                    _navigateToSmsVerification.postValue(true)
+                } else {
+                    _failText.postValue("Server failed. Please try again.")
+                }
+                _inputEnabled.postValue(true)
+            }
+        }
+    }
+
+//    var phone = ""
+
+//    fun requestSmsCode() {
 //        _buttonEnabled.value = false
 //        viewModelScope.launch {
 ////            withContext(Dispatchers.IO){
@@ -38,16 +54,11 @@ class SignUpViewModel(private val repository: HappinessRepository): ViewModel() 
 ////                }
 ////            }
 //        }
-    }
-
-    private fun setFailUi() {
-        _buttonEnabled.postValue(true)
-        _textViewVisible.postValue(true)
-    }
+//    }
 
     fun setToDefault(){
-        _buttonEnabled.postValue(true)
-        _textViewVisible.postValue(false)
+        _inputEnabled.postValue(true)
+        _failText.postValue(null)
         _navigateToSmsVerification.postValue(false)
     }
 }

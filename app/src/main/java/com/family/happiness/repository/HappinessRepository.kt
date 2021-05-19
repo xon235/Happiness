@@ -20,6 +20,7 @@ class HappinessRepository(
     private val tagDao: TagDao,
     private val wishDao: WishDao,
     private val contributorDao: ContributorDao,
+    private val happinessApi: HappinessApi
 ) {
 
 //    val user = userDAO.get()

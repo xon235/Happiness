@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mailFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/mailFragment"
@@ -47,6 +47,11 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_signInFragment_to_mailFragment"
+            app:destination="@id/mailFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -65,11 +70,6 @@
         app:destination="@id/signInFragment"
         app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_global_mailFragment"
-        app:destination="@id/mailFragment"
-        app:popUpTo="@id/nav_graph"
-        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/smsVerificationFragment"
         android:name="com.family.happiness.ui.auth.SmsVerificationFragment"
@@ -81,6 +81,11 @@
         <argument
             android:name="oAuthData"
             app:argType="com.family.happiness.network.request.OAuthData" />
+        <action
+            android:id="@+id/action_smsVerificationFragment_to_mailFragment"
+            app:destination="@id/mailFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/createFamilyFragment"
@@ -145,4 +150,20 @@
         android:name="com.family.happiness.ui.mailwrite.MailWriteFragment"
         android:label="New Mail"
         tools:layout="@layout/fragment_mail_write" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.family.happiness.ui.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_mailFragment"
+            app:destination="@id/mailFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

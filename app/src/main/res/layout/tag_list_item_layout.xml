@@ -13,7 +13,7 @@
         android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView"
+            android:id="@+id/photoImageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="centerCrop"
@@ -30,7 +30,7 @@
             android:text="@{user.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/photoImageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="User Name" />
 

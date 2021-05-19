@@ -31,14 +31,13 @@
                 android:id="@+id/signInButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:enabledUnless="@{viewModel.signInEnabled}"/>
+                app:enabledIf="@{viewModel.inputEnabled}"/>
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_in_failed_please_try_again"
-                app:visibleIf="@{viewModel.textViewVisible}"
+                android:text="@{viewModel.failText}"
                 android:textColor="@color/design_default_color_secondary" />
         </LinearLayout>
 
