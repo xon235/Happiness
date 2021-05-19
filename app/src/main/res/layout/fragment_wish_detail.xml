@@ -6,7 +6,7 @@
     <data>
         <variable
             name="wish"
-            type="com.family.happiness.room.Wish" />
+            type="com.family.happiness.room.wish.Wish" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             android:textAlignment="textEnd"
             android:text="완료!"
             android:padding="6dp"
-            app:goneUnless="@{wish.timestamp_finish != null}" />
+            app:visibleIf="@{wish.timestampClose != null}" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
-                android:text="@{wish.timestamp_create}"
+                android:text="@{wish.timestampOpen}"
                 android:padding="6dp"
                 tools:text="YYYY-MM-DD"/>
 
@@ -78,7 +78,7 @@
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
                 android:text="~"
-                app:goneUnless="@{wish.timestamp_finish != null}"
+                app:visibleIf="@{wish.timestampClose != null}"
                 android:padding="6dp" />
 
             <TextView
@@ -87,8 +87,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
-                android:text="@{wish.timestamp_finish}"
-                app:goneUnless="@{wish.timestamp_finish != null}"
+                android:text="@{wish.timestampClose}"
+                app:visibleIf="@{wish.timestampClose != null}"
                 android:padding="6dp"
                 tools:text="YYYY-MM-DD"/>
         </LinearLayout>
@@ -98,8 +98,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{wish.timestamp_finish != null? &quot;Finished&quot;: &quot;Finish&quot;}"
-            android:enabled="@{wish.timestamp_finish == null}"
+            android:text="@{wish.timestampClose != null? &quot;Finished&quot;: &quot;Finish&quot;}"
+            android:enabled="@{wish.timestampClose == null}"
             tools:text="Finish"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

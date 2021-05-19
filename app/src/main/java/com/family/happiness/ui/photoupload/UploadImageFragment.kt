@@ -15,8 +15,8 @@ import com.family.happiness.HappinessApplication
 import com.family.happiness.network.PhotoUploadBody
 import com.family.happiness.adapter.TagListAdapter
 import com.family.happiness.databinding.FragmentUploadImageBinding
-import com.family.happiness.room.Member
-import com.family.happiness.room.toMember
+import com.family.happiness.room.event.Event
+import com.family.happiness.room.user.User
 import com.family.happiness.ui.HappinessBaseFragment
 import com.family.happiness.ui.ViewModelFactory
 import okhttp3.MediaType
@@ -29,27 +29,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedListener {
+class UploadImageFragment : HappinessBaseFragment<FragmentUploadImageBinding, UploadImageViewModel>(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var binding: FragmentUploadImageBinding
     private val args: UploadImageFragmentArgs by navArgs()
-    val viewModel: UploadImageViewModel by viewModels(){
-        ViewModelFactory((requireActivity().application as HappinessApplication).repository)
-    }
 
-    private lateinit var members: List<Member>
-    private val taggedList = mutableListOf<Member>()
+    private lateinit var members: List<User>
+    private val taggedList = mutableListOf<User>()
 
-    private lateinit var albums: List<String>
-    private lateinit var selectedAlbum: String
+    private lateinit var eventNames: List<String>
+    private lateinit var selectedEventName: String
 
     private var isNewAlbum = true
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentUploadImageBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
@@ -58,8 +52,8 @@ class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedL
         binding.albumSpinner.adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
         binding.albumSpinner.onItemSelectedListener = this
 
-        selectedAlbum = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
-        binding.albumEditText.setText(selectedAlbum)
+        selectedEventName = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
+        binding.albumEditText.setText(selectedEventName)
 
         val tagListAdapter = TagListAdapter(){isChecked, position ->
             if(isChecked){
@@ -69,10 +63,10 @@ class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedL
             }
         }
         binding.recyclerView.adapter = tagListAdapter
-        happinessViewModel.members.observe(viewLifecycleOwner){
-            members = arrayListOf(happinessViewModel.user.value!!.toMember()) + it
-            tagListAdapter.submitList(members)
-        }
+//        happinessViewModel.members.observe(viewLifecycleOwner){
+//            members = arrayListOf(happinessViewModel.user.value!!.toMember()) + it
+//            tagListAdapter.submitList(members)
+//        }
 
         binding.button.setOnClickListener {
             val files = args.uris.mapIndexed { index, uri ->
@@ -87,14 +81,12 @@ class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedL
                     PhotoUploadBody(file, MediaType.parse(requireActivity().contentResolver.getType(uri))!!)
                 )
             }
-            viewModel.upload(isNewAlbum, selectedAlbum, taggedList, files)
+//            viewModel.upload(isNewAlbum, selectedAlbum, taggedList, files)
         }
 
         binding.albumEditText.addTextChangedListener {
-            selectedAlbum = it.toString()
+            selectedEventName = it.toString()
         }
-
-        return binding.root
     }
 
     private fun initPhotoLayout() {
@@ -116,10 +108,10 @@ class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedL
         binding.albumEditLayout.isVisible = position == 0
         isNewAlbum = position == 0
         if(isNewAlbum){
-           selectedAlbum = binding.albumEditText.text.toString()
+            selectedEventName = binding.albumEditText.text.toString()
         } else {
-            viewModel.albums.value?.also {
-                selectedAlbum = it[position - 1]
+            viewModel.events.value?.also {
+                selectedEventName = it[position - 1].name
             }
         }
     }
@@ -127,4 +119,11 @@ class UploadImageFragment : HappinessBaseFragment(), AdapterView.OnItemSelectedL
     override fun onNothingSelected(parent: AdapterView<*>?) {
         Timber.d("onNothingSelected")
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentUploadImageBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = UploadImageViewModel::class.java
 }

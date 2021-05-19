@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="member"
-            type="com.family.happiness.room.Member" />
+            name="user"
+            type="com.family.happiness.room.user.User" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="centerCrop"
-            app:imageUrl="@{member.photoUrl}"
+            app:imageUrl="@{user.photoUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{member.name}"
+            android:text="@{user.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
             app:layout_constraintStart_toEndOf="@+id/imageView"

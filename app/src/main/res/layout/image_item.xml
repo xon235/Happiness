@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="image"
-            type="com.family.happiness.room.Image" />
+            name="photo"
+            type="com.family.happiness.room.photo.Photo" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:padding="2dp"
-            app:imageUrl="@{image.url}"
+            app:imageUrl="@{photo.url}"
             tools:src="@tools:sample/backgrounds/scenic"/>
     </FrameLayout>
 </layout>

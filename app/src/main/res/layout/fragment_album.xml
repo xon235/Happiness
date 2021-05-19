@@ -25,7 +25,7 @@
             android:src="@drawable/ic_folder"
             android:background="@null"
             android:layout_margin="6dp"
-            app:goneUnless="@{viewModel.showAlbumItems != null}"/>
+            app:visibleIf="@{viewModel.showAlbumItems != null}"/>
         <TextView
             app:layout_constraintTop_toTopOf="@id/imageButton"
             app:layout_constraintBottom_toBottomOf="@id/imageButton"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@{'/' + viewModel.showAlbumItems + '/'}"
             android:layout_marginLeft="6dp"
-            app:goneUnless="@{viewModel.showAlbumItems != null}" />
+            app:visibleIf="@{viewModel.showAlbumItems != null}" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imageRecyclerView"
             android:layout_width="0dp"
@@ -50,7 +50,7 @@
             app:spanCount="3"
             tools:itemCount="24"
             tools:listitem="@layout/image_item"
-            app:goneUnless="@{viewModel.viewAlbumInImages || viewModel.showAlbumItems != null}"/>
+            app:visibleIf="@{viewModel.viewAlbumInPhotos || viewModel.showAlbumItems != null}"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/albumRecyclerView"
@@ -67,7 +67,7 @@
             app:spanCount="3"
             tools:itemCount="24"
             tools:listitem="@layout/image_item"
-            app:goneUnless="@{!viewModel.viewAlbumInImages &amp;&amp; viewModel.showAlbumItems == null}"/>
+            app:visibleIf="@{!viewModel.viewAlbumInPhotos &amp;&amp; viewModel.showAlbumItems == null}"/>
 
         <ImageView
             android:id="@+id/status_image"

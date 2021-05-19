@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.family.happiness.databinding.WishItemLayoutBinding
-import com.family.happiness.room.Wish
+import com.family.happiness.room.wish.Wish
 
 class WishListAdapter(private val clickListener: (wish: Wish) -> Unit)
     : ListAdapter<Wish, WishListAdapter.WishListViewHolder>(DiffCallback) {

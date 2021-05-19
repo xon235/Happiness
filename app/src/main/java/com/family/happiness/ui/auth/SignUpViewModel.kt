@@ -1,10 +1,8 @@
 package com.family.happiness.ui.auth
 
 import androidx.lifecycle.*
-import com.family.happiness.HappinessRepository
+import com.family.happiness.repository.HappinessRepository
 import com.family.happiness.network.HappinessApiService
-import com.family.happiness.network.HappinessApiException
-import com.family.happiness.network.PhoneData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,22 +22,22 @@ class SignUpViewModel(private val repository: HappinessRepository): ViewModel() 
     var phone = ""
 
     fun requestSmsCode() {
-        _buttonEnabled.value = false
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                try {
-                    val response = HappinessApiService.retrofitService.requestSmsCode(PhoneData(phone))
-                    if(response.result) {
-                        _navigateToSmsVerification.postValue(true)
-                    } else {
-                        throw HappinessApiException("Sever response: false")
-                    }
-                } catch (e: Exception){
-                    Timber.d(e)
-                    setFailUi()
-                }
-            }
-        }
+//        _buttonEnabled.value = false
+//        viewModelScope.launch {
+////            withContext(Dispatchers.IO){
+////                try {
+////                    val response = HappinessApiService.retrofitService.requestSmsCode(PhoneData(phone))
+////                    if(response.result) {
+////                        _navigateToSmsVerification.postValue(true)
+////                    } else {
+////                        throw HappinessApiException("Sever response: false")
+////                    }
+////                } catch (e: Exception){
+////                    Timber.d(e)
+////                    setFailUi()
+////                }
+////            }
+//        }
     }
 
     private fun setFailUi() {

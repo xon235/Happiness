@@ -12,22 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.family.happiness.HappinessApplication
 import com.family.happiness.adapter.WishListAdapter
 import com.family.happiness.databinding.FragmentWishesBinding
+import com.family.happiness.ui.HappinessBaseFragment
 import com.family.happiness.ui.ViewModelFactory
 
-class WishesFragment : Fragment() {
+class WishesFragment : HappinessBaseFragment<FragmentWishesBinding, WishesViewModel>() {
 
-    private val viewModel: WishesViewModel by viewModels {
-        ViewModelFactory((requireActivity().application as HappinessApplication).repository)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private lateinit var binding: FragmentWishesBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentWishesBinding.inflate(inflater)
         binding.wishesFragment = this
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -40,10 +32,16 @@ class WishesFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
-        return binding.root
     }
 
     fun onFabClick(view: View){
         findNavController().navigate(WishesFragmentDirections.actionWishesFragmentToNewWishFragment(null))
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentWishesBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = WishesViewModel::class.java
 }

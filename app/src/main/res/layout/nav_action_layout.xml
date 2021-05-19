@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="familyMember"
-            type="com.family.happiness.room.Member" />
+            name="user"
+            type="com.family.happiness.room.user.User" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:id="@+id/imageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:imageUrl="@{familyMember.photoUrl}"
+            app:imageUrl="@{user.photoUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -37,14 +37,14 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{familyMember.name}"
+                android:text="@{user.name}"
                 tools:text="User Name" />
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{familyMember.phone}"
+                android:text="@{user.phone}"
                 tools:text="Phone Number" />
 
         </LinearLayout>

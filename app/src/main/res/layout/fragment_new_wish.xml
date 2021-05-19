@@ -6,7 +6,7 @@
     <data>
         <variable
             name="wish"
-            type="com.family.happiness.room.Wish" />
+            type="com.family.happiness.room.wish.Wish" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
             android:textSize="16sp"
             android:textAlignment="textEnd"
             android:text="Finished"
-            app:goneUnless="@{wish.timestamp_finish != null}" />
+            app:visibleIf="@{wish.timestampClose != null}" />
 
         <TextView
             android:id="@+id/createTv"
@@ -54,7 +54,7 @@
             app:layout_constraintTop_toBottomOf="@id/statusTv"
             android:textSize="16sp"
             android:textAlignment="textEnd"
-            android:text="@{wish.timestamp_create}"
+            android:text="@{wish.timestampOpen}"
             tools:text="YYYY-MM-DD"/>
 
         <TextView
@@ -64,8 +64,8 @@
             app:layout_constraintTop_toBottomOf="@id/createTv"
             android:textSize="16sp"
             android:textAlignment="textEnd"
-            android:text="@{wish.timestamp_finish}"
-            app:goneUnless="@{wish.timestamp_finish != null}"
+            android:text="@{wish.timestampClose}"
+            app:visibleIf="@{wish.timestampClose != null}"
             tools:text="YYYY-MM-DD"/>
 
         <Button

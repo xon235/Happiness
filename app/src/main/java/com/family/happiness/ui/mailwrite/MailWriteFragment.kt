@@ -4,25 +4,21 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.family.happiness.databinding.FragmentWriteMailBinding
-import com.family.happiness.room.Member
+import com.family.happiness.databinding.FragmentMailWriteBinding
+import com.family.happiness.room.user.User
 import com.family.happiness.ui.HappinessBaseFragment
 import timber.log.Timber
 
-class WriteMailFragment : HappinessBaseFragment() {
+class MailWriteFragment : HappinessBaseFragment<FragmentMailWriteBinding, MailWriteViewModel>() {
 
-    private lateinit var binding: FragmentWriteMailBinding
-    private lateinit var members: List<Member>
+    private lateinit var users: List<User>
     private var toIndex = 0
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentWriteMailBinding.inflate(inflater)
-        happinessViewModel.members.observe(viewLifecycleOwner){ members ->
-            this.members = members
+        mainActivityViewModel.users.observe(viewLifecycleOwner){ members ->
+            this.users = members
             binding.spinner.adapter = ArrayAdapter<String>(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
@@ -31,10 +27,16 @@ class WriteMailFragment : HappinessBaseFragment() {
         binding.spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 toIndex = position
-                Timber.d(members[position].name)
+                Timber.d(users[position].name)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        return binding.root
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentMailWriteBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = MailWriteViewModel::class.java
 }

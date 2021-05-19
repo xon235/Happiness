@@ -23,22 +23,22 @@
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center">
             <ImageView
-                android:layout_width="240dp"
-                android:layout_height="240dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:src="@drawable/a"/>
 
             <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_button"
+                android:id="@+id/signInButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:enabledUnless="@{viewModel.buttonEnabled}"/>
+                app:enabledUnless="@{viewModel.signInEnabled}"/>
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_in_failed_please_try_again"
-                app:goneUnless="@{viewModel.textViewVisible}"
+                app:visibleIf="@{viewModel.textViewVisible}"
                 android:textColor="@color/design_default_color_secondary" />
         </LinearLayout>
 

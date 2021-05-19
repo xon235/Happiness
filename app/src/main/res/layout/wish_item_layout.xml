@@ -6,7 +6,7 @@
     <data>
         <variable
             name="wish"
-            type="com.family.happiness.room.Wish" />
+            type="com.family.happiness.room.wish.Wish" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -41,8 +41,8 @@
                 android:id="@+id/statusTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wish.timestamp_finish == null? &quot;Waiting&quot;: &quot;완료!&quot;}"
-                app:goneUnless="@{wish.timestamp_finish != null}"
+                android:text="@{wish.timestampClose == null? &quot;Waiting&quot;: &quot;완료!&quot;}"
+                app:visibleIf="@{wish.timestampClose != null}"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 tools:text="Waiting..."
@@ -56,7 +56,7 @@
                 android:textStyle="bold"
                 android:text="@{wish.user_id}"
                 android:layout_gravity="end"
-                app:goneUnless="@{wish.timestamp_finish == null}"
+                app:visibleIf="@{wish.timestampClose == null}"
                 tools:text="Author" />
         </LinearLayout>
 

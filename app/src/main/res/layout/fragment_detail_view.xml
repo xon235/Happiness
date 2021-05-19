@@ -17,7 +17,7 @@
             android:id="@+id/myZoomageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:imageUrl="@{viewModel.image.url}"
+            app:imageUrl="@{viewModel.photo.url}"
             app:zoomage_restrictBounds="false"
             app:zoomage_animateOnReset="true"
             app:zoomage_autoResetMode="UNDER"

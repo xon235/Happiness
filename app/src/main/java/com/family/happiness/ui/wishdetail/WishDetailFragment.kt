@@ -17,7 +17,7 @@ class WishDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        args.wish.timestamp_finish?:setHasOptionsMenu(true)
+        args.wish.timestampClose?:setHasOptionsMenu(true)
         binding = FragmentWishDetailBinding.inflate(inflater)
         binding.wish = args.wish
         binding.finishBt.setOnClickListener {

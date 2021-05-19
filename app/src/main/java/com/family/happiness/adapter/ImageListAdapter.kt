@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.family.happiness.databinding.ImageItemBinding
-import com.family.happiness.room.Image
+import com.family.happiness.room.photo.Photo
 
-class ImageListAdapter(private val clickListener: (image: Image) -> Unit)
-    : ListAdapter<Image, ImageListAdapter.ImageViewHolder>(DiffCallback) {
+class ImageListAdapter(private val clickListener: (image: Photo) -> Unit)
+    : ListAdapter<Photo, ImageListAdapter.ImageViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(ImageItemBinding.inflate(
@@ -24,12 +24,12 @@ class ImageListAdapter(private val clickListener: (image: Image) -> Unit)
         holder.bind(image)
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Image>() {
-        override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<Photo>() {
+        override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
+        override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
             return oldItem.url == newItem.url
         }
     }
@@ -37,8 +37,8 @@ class ImageListAdapter(private val clickListener: (image: Image) -> Unit)
     class ImageViewHolder(private var binding: ImageItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(image: Image) {
-            binding.image = image
+        fun bind(image: Photo) {
+            binding.photo = image
             binding.executePendingBindings()
         }
     }

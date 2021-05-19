@@ -13,24 +13,17 @@ import com.family.happiness.ui.HappinessBaseFragment
 import com.family.happiness.ui.ViewModelFactory
 
 
-class SignUpFragment : HappinessBaseFragment() {
+class SignUpFragment : HappinessBaseFragment<FragmentSignUpBinding, SignUpViewModel>() {
 
-    lateinit var binding: FragmentSignUpBinding
-    private val viewModel: SignUpViewModel by viewModels(){
-        ViewModelFactory((requireActivity().application as HappinessApplication).repository)
-    }
     private val args: SignUpFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignUpBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.accountInfo = args.accountInfo
+        binding.oAuthData = args.oAuthData
 
         viewModel.navigateToSmsVerification.observe(viewLifecycleOwner){
             if(it == true){
@@ -38,15 +31,20 @@ class SignUpFragment : HappinessBaseFragment() {
                 viewModel.setToDefault()
             }
         }
-
-        return binding.root
     }
 
     private fun navigateToSmsVerification(){
         val action = SignUpFragmentDirections.actionSignUpFragmentToSmsVerificationFragment(
             viewModel.phone,
-            args.accountInfo
+            args.oAuthData
         )
         findNavController().navigate(action)
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSignUpBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = SignUpViewModel::class.java
 }

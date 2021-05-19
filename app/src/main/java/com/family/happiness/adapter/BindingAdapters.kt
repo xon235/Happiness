@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.family.happiness.R
 import com.family.happiness.network.HappinessApiStatus
-import com.family.happiness.room.Image
-import com.family.happiness.room.Member
-import com.family.happiness.room.Wish
+import com.family.happiness.room.event.Event
+import com.family.happiness.room.photo.Photo
+import com.family.happiness.room.user.User
+import com.family.happiness.room.wish.Wish
 
-@BindingAdapter("app:goneUnless")
-fun goneUnless(view: View, visible: Boolean) {
+@BindingAdapter("app:visibleIf")
+fun visibleIf(view: View, visible: Boolean) {
     view.visibility = if (visible) View.VISIBLE else View.GONE
 }
 
@@ -32,14 +33,14 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("app:listData")
 fun bindMembersRecyclerView(recyclerView: RecyclerView,
-                     data: List<Member>?) {
+                     data: List<User>?) {
     val adapter = recyclerView.adapter as FamilyListAdapter
     adapter.submitList(data)
 }
 
 @BindingAdapter("app:listData")
 fun bindImagesRecyclerView(recyclerView: RecyclerView,
-                     data: List<Image>?) {
+                     data: List<Photo>?) {
     val adapter = recyclerView.adapter as ImageListAdapter
     adapter.submitList(data)
 }
@@ -53,11 +54,11 @@ fun bindWishesRecyclerView(recyclerView: RecyclerView,
 
 
 @BindingAdapter("app:listData")
-fun bindAlbumSpinner(spinner: Spinner, data: List<String>?) {
+fun bindAlbumSpinner(spinner: Spinner, data: List<Event>?) {
     (spinner.adapter as ArrayAdapter<String>).apply {
         clear()
         add("New Album")
-        data?.let { addAll(it) }
+        data?.let { addAll(it.map { event -> event.name }) }
     }
 }
 

@@ -1,80 +1,56 @@
 package com.family.happiness.ui.auth
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.*
-import com.family.happiness.HappinessRepository
-import com.family.happiness.R
-import com.family.happiness.network.HappinessApiException
-import com.family.happiness.network.TokenData
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.family.happiness.network.SafeResource
+import com.family.happiness.network.request.OAuthData
+import com.family.happiness.network.response.PersonalDataResponse
+import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-import timber.log.Timber
-import java.lang.Exception
+import retrofit2.HttpException
 
-class SignInViewModel(private val repository: HappinessRepository): ViewModel() {
-    private val _buttonEnabled = MutableLiveData<Boolean>(true)
-    val buttonEnabled: LiveData<Boolean> = _buttonEnabled
+class SignInViewModel(private val userRepository: UserRepository): ViewModel() {
+
+    val personalDataPreferences = userRepository.personalDataPreferencesFlow.asLiveData()
+
+    private val _signInEnabled = MutableLiveData<Boolean>(true)
+    val signInEnabled: LiveData<Boolean> = _signInEnabled
 
     private val _textViewVisible = MutableLiveData<Boolean>(false)
     val textViewVisible: LiveData<Boolean> = _textViewVisible
 
-    private val _accountInfo = MutableLiveData<AccountInfo>(null)
-    val accountInfo: LiveData<AccountInfo> = _accountInfo
+    private val _oAuthData = MutableLiveData<OAuthData>(null)
+    val oAuthData: LiveData<OAuthData> = _oAuthData
 
-    fun getSignInIntent(activity: Activity): Intent {
-        _buttonEnabled.value = false
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(activity.getString(R.string.server_client_id))
-                .build()
-        return GoogleSignIn.getClient(activity, gso).signInIntent
-    }
-
-    fun signInWithToken(accountInfo: AccountInfo) {
-        viewModelScope.launch {
-            try {
-                repository.signInWithToken(accountInfo.toTokenData())
-            } catch (e: HappinessApiException){
-                Timber.d("Failed to sign in with token")
-                Timber.d(e)
-                _accountInfo.postValue(accountInfo)
+    fun signIn(oAuthData: OAuthData) = viewModelScope.launch {
+        when(val resource = userRepository.signIn(oAuthData)){
+            is SafeResource.Success -> {
+                userRepository.insertPersonalData(resource.value)
             }
-            catch (e: Exception){
-                Timber.d(e)
+            is SafeResource.Failure -> {
+                if(resource.throwable is HttpException){
+                    _oAuthData.postValue(oAuthData)
+                }
+                // TODO delete after test
+                _oAuthData.postValue(oAuthData)
+
+                setFailUi()
             }
         }
     }
 
+    fun disableSignIn(){
+        _signInEnabled.value = false
+    }
+
     fun setFailUi() {
-        _buttonEnabled.postValue(true)
+        _signInEnabled.postValue(true)
         _textViewVisible.postValue(true)
     }
 
-    fun setToDefault(activity: Activity){
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .build()
-        GoogleSignIn.getClient(activity, gso).signOut()
-        _buttonEnabled.postValue(true)
-        _textViewVisible.postValue(true)
-        _accountInfo.postValue(null)
+    fun setToDefault(){
+        _signInEnabled.postValue(true)
+        _textViewVisible.postValue(false)
+        _oAuthData.postValue(null)
     }
 
-}
-
-@Parcelize
-data class AccountInfo(
-        val type: String,
-        val token: String,
-        val name: String,
-        val photoUrl: String
-) : Parcelable
-
-fun AccountInfo.toTokenData(): TokenData{
-    return TokenData(
-            type,
-            token
-    )
 }

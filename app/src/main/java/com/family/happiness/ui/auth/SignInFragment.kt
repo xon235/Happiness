@@ -5,63 +5,60 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.family.happiness.HappinessApplication
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentSignInBinding
+import com.family.happiness.network.request.OAuthData
 import com.family.happiness.ui.HappinessBaseFragment
-import com.family.happiness.ui.ViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import timber.log.Timber
 
 
-class SignInFragment : HappinessBaseFragment() {
+class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewModel>() {
 
     private val RC_SIGN_IN = 1
-    private lateinit var binding: FragmentSignInBinding
-    private val viewModel: SignInViewModel by viewModels(){
-        ViewModelFactory((requireActivity().application as HappinessApplication).repository)
-    }
-    lateinit var callback: OnBackPressedCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback { requireActivity().finish() }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignInBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.signInButton.setOnClickListener {
-            startActivityForResult(viewModel.getSignInIntent(requireActivity()), RC_SIGN_IN)
-        }
-
-        happinessViewModel.user.observe(viewLifecycleOwner){
-            if(it != null){
+        viewModel.personalDataPreferences.observe(viewLifecycleOwner) {
+            if (it.token != null) {
                 findNavController().navigate(R.id.action_global_mailFragment)
             }
         }
 
-        viewModel.accountInfo.observe(viewLifecycleOwner){
-            if(it != null){
-                navigateToSignUp(it)
-                viewModel.setToDefault(requireActivity())
+        viewModel.oAuthData.observe(viewLifecycleOwner) { oAuthData ->
+            if (oAuthData != null) {
+                navigateToSignUp(oAuthData)
+                viewModel.setToDefault()
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build().also {
+                    GoogleSignIn.getClient(requireActivity(), it).signOut()
+                }
             }
         }
 
-        return binding.root
+        binding.signInButton.setOnClickListener {
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .build()
+                .also { googleSignInOptions ->
+                    startActivityForResult(
+                        GoogleSignIn.getClient(requireActivity(), googleSignInOptions).signInIntent,
+                        RC_SIGN_IN
+                    )
+                    viewModel.disableSignIn()
+                }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,10 +67,14 @@ class SignInFragment : HappinessBaseFragment() {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                task.getResult(ApiException::class.java)?.let {account ->
-                    Timber.d(account.photoUrl.toString())
-                    val accountInfo = AccountInfo("google", account.idToken!!, account.displayName!!, account.photoUrl.toString())
-                    viewModel.signInWithToken(accountInfo)
+                task.getResult(ApiException::class.java)?.let { account ->
+                    val oAuthData = OAuthData(
+                        "google",
+                        account.idToken!!,
+                        account.displayName!!,
+                        account.photoUrl.toString()
+                    )
+                    viewModel.signIn(oAuthData)
                 }
             } catch (e: ApiException) {
                 viewModel.setFailUi()
@@ -81,8 +82,16 @@ class SignInFragment : HappinessBaseFragment() {
         }
     }
 
-    private fun navigateToSignUp(accountInfo: AccountInfo){
-        val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment(accountInfo)
-        findNavController().navigate(action)
+    private fun navigateToSignUp(OAuthData: OAuthData) {
+        findNavController().navigate(
+            SignInFragmentDirections.actionSignInFragmentToSignUpFragment(OAuthData)
+        )
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSignInBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = SignInViewModel::class.java
 }

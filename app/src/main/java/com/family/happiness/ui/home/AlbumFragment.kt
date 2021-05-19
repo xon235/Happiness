@@ -7,40 +7,39 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.family.happiness.adapter.AlbumListAdapter
-import com.family.happiness.HappinessApplication
 import com.family.happiness.adapter.ImageListAdapter
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentAlbumBinding
 import com.family.happiness.ui.HappinessBaseFragment
-import com.family.happiness.ui.ViewModelFactory
 
 
-class AlbumFragment : HappinessBaseFragment() {
+class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel>() {
 
     private val PICK_IMAGE = 1
 
-    private val viewModel: AlbumViewModel by viewModels {
-        ViewModelFactory((requireActivity().application as HappinessApplication).repository)
-    }
-    private val sharedPreferences: SharedPreferences by lazy{
+    private val sharedPreferences: SharedPreferences by lazy {
         requireActivity().getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
+            getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
         )
     }
 
-    private lateinit var binding: FragmentAlbumBinding
     private lateinit var imageListAdapter: ImageListAdapter
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
-        binding = FragmentAlbumBinding.inflate(inflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.albumFragment = this
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -51,21 +50,18 @@ class AlbumFragment : HappinessBaseFragment() {
 
         imageListAdapter = setupImageGrid()
         setupAlbumGrid(imageListAdapter)
-
-        setHasOptionsMenu(true)
-        return binding.root
     }
 
     private fun setupImageGrid(): ImageListAdapter {
-        val imageListAdapter = ImageListAdapter{
+        val imageListAdapter = ImageListAdapter {
             viewModel.displayPropertyDetails(it)
         }
         binding.imageRecyclerView.adapter = imageListAdapter
 
-        viewModel.images.observe(viewLifecycleOwner){
-            if(viewModel.showAlbumItems.value != null){
-                val filteredImages = viewModel.images.value?.filter {image ->
-                    image.album == viewModel.showAlbumItems.value
+        viewModel.photos.observe(viewLifecycleOwner) {
+            if (viewModel.showAlbumItems.value != null) {
+                val filteredImages = viewModel.photos.value?.filter { image ->
+                    image.eventId == viewModel.showAlbumItems.value
                 }
                 imageListAdapter.submitList(filteredImages)
             } else {
@@ -74,8 +70,12 @@ class AlbumFragment : HappinessBaseFragment() {
         }
 
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) {
-            if ( null != it ) {
-                findNavController().navigate(AlbumFragmentDirections.actionAlbumFragmentToDetailViewFragment(it))
+            if (null != it) {
+                findNavController().navigate(
+                    AlbumFragmentDirections.actionAlbumFragmentToDetailViewFragment(
+                        it
+                    )
+                )
                 viewModel.displayPropertyDetailsComplete()
             }
         }
@@ -83,18 +83,18 @@ class AlbumFragment : HappinessBaseFragment() {
         return imageListAdapter
     }
 
-    private fun setupAlbumGrid(imageListAdapter: ImageListAdapter){
-        val albumListAdapter = AlbumListAdapter { album->
-            val filteredImages = viewModel.images.value?.filter {image ->
-                image.album == album
+    private fun setupAlbumGrid(imageListAdapter: ImageListAdapter) {
+        val albumListAdapter = AlbumListAdapter { album ->
+            val filteredImages = viewModel.photos.value?.filter { image ->
+                image.eventId == album
             }
             imageListAdapter.submitList(filteredImages)
             viewModel.showAlbumItems.value = album
         }
         binding.albumRecyclerView.adapter = albumListAdapter
 
-        viewModel.albums.observe(viewLifecycleOwner){
-            albumListAdapter.submitList(it)
+        viewModel.events.observe(viewLifecycleOwner) {
+            albumListAdapter.submitList(it.map { event -> event.name })
         }
     }
 
@@ -103,10 +103,10 @@ class AlbumFragment : HappinessBaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         sharedPreferences.getBoolean(getString(R.string.view_album_in_images), true).also {
-            viewModel.viewAlbumInImages.value = it
+            viewModel.viewAlbumInPhotos.value = it
         }
 
-        viewModel.viewAlbumInImages.observe(viewLifecycleOwner){
+        viewModel.viewAlbumInPhotos.observe(viewLifecycleOwner) {
             menu.findItem(R.id.image).isVisible = !it
             menu.findItem(R.id.folder).isVisible = it
         }
@@ -116,14 +116,14 @@ class AlbumFragment : HappinessBaseFragment() {
         when (item.itemId) {
             R.id.folder -> {
                 item.isVisible = false
-                viewModel.viewAlbumInImages.value = false
+                viewModel.viewAlbumInPhotos.value = false
                 viewModel.showAlbumItems.value = null
             }
             R.id.image -> {
                 item.isVisible = false
-                viewModel.viewAlbumInImages.value = true
+                viewModel.viewAlbumInPhotos.value = true
                 viewModel.showAlbumItems.value = null
-                imageListAdapter.submitList(viewModel.images.value)
+                imageListAdapter.submitList(viewModel.photos.value)
             }
         }
         return true
@@ -132,35 +132,41 @@ class AlbumFragment : HappinessBaseFragment() {
     override fun onPause() {
         super.onPause()
         sharedPreferences.edit().putBoolean(
-                getString(R.string.view_album_in_images),
-                viewModel.viewAlbumInImages.value!!
+            getString(R.string.view_album_in_images),
+            viewModel.viewAlbumInPhotos.value!!
         ).apply()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK){
-            if(data != null){
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
                 val uris = mutableListOf<Uri>()
-                if(data.data == null){
-                    data.clipData?.let{
-                        for(i in 0 until it.itemCount){
+                if (data.data == null) {
+                    data.clipData?.let {
+                        for (i in 0 until it.itemCount) {
                             uris.add(it.getItemAt(i).uri)
                         }
                     }
-                } else{
+                } else {
                     uris.add(data.data!!)
                 }
-                val action = AlbumFragmentDirections.actionAlbumFragmentToUploadImageFragment(uris.toTypedArray())
+                val action =
+                    AlbumFragmentDirections.actionAlbumFragmentToUploadImageFragment(uris.toTypedArray())
                 findNavController().navigate(action)
             }
         }
     }
 
-    fun onFabClick(view: View){
+    fun onFabClick(view: View) {
         val getIntent = Intent(Intent.ACTION_GET_CONTENT)
         getIntent.type = "image/*"
         getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         startActivityForResult(getIntent, PICK_IMAGE)
     }
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentAlbumBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = AlbumViewModel::class.java
 }

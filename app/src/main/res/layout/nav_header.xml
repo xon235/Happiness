@@ -8,7 +8,7 @@
             type="com.family.happiness.ui.MainActivity" />
         <variable
             name="viewModel"
-            type="com.family.happiness.ui.HappinessViewModel" />
+            type="com.family.happiness.ui.MainActivityViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_sign_out"
-                android:onClick="@{() -> viewModel.clearUserData()}"
+                android:onClick="@{() -> mainActivity.onClickSignOut()}"
                 android:background="@null"
                 android:padding="6dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                app:imageUrl="@{viewModel.user.photo_url}"
+                app:imageUrl="@{viewModel.me.photoUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageView"
-                android:text="@{viewModel.user.name}"
+                android:text="@{viewModel.me.name}"
                 android:textAlignment="center"
                 tools:text="User Name"/>
 
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:goneUnless="@{viewModel.user.id_family == null}">
+            app:visibleIf="@{viewModel.personalData.familyId == null}">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:goneUnless="@{viewModel.user.id_family != null}">
+            app:visibleIf="@{viewModel.personalData.familyId != null}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:orientation="horizontal"
@@ -93,7 +93,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.user.id_family}"
+                    android:text="@{viewModel.personalData.familyId}"
                     android:textStyle="bold"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:text="No members yet"
                 android:textAlignment="center"
-                app:goneUnless="@{viewModel.members.size() == 0}"/>
+                app:visibleIf="@{viewModel.members.size() == 0}"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

@@ -3,26 +3,47 @@ package com.family.happiness.room
 import android.content.Context
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import com.family.happiness.room.contributor.Contributor
+import com.family.happiness.room.contributor.ContributorDao
+import com.family.happiness.room.event.Event
+import com.family.happiness.room.event.EventDao
+import com.family.happiness.room.photo.Photo
+import com.family.happiness.room.photo.PhotoDao
+import com.family.happiness.room.tag.Tag
+import com.family.happiness.room.tag.TagDao
+import com.family.happiness.room.user.User
+import com.family.happiness.room.user.UserDao
+import com.family.happiness.room.wish.Wish
+import com.family.happiness.room.wish.WishDao
 
-@Database(entities = [User::class, Member::class, Image::class, Wish::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        User::class,
+        Event::class,
+        Photo::class,
+        Tag::class,
+        Wish::class,
+        Contributor::class,
+    ],
+    version = 1,
+    exportSchema = false
+)
 abstract class HappinessRoomDatabase : RoomDatabase() {
 
-    abstract fun userDAO(): UserDAO
-    abstract fun memberDAO(): MemberDAO
-    abstract fun imageDAO(): ImageDAO
-    abstract fun wishDAO(): WishDAO
+    abstract fun userDao(): UserDao
+    abstract fun eventDao(): EventDao
+    abstract fun photoDao(): PhotoDao
+    abstract fun tagDao(): TagDao
+    abstract fun wishDao(): WishDao
+    abstract fun contributorDao(): ContributorDao
 
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: HappinessRoomDatabase? = null
 
         fun getDatabase(
             context: Context,
         ): HappinessRoomDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
