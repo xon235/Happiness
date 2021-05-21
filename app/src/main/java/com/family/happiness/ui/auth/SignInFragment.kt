@@ -16,7 +16,9 @@ import com.google.android.gms.common.api.ApiException
 
 class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewModel>() {
 
-    private val RC_SIGN_IN = 1
+    companion object {
+        private const val RC_SIGN_IN = 100
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

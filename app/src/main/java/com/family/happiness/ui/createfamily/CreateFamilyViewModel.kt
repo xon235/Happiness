@@ -1,25 +1,52 @@
 package com.family.happiness.ui.createfamily
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.family.happiness.network.HappinessApiStatus
-import com.family.happiness.repository.HappinessRepository
+import com.family.happiness.network.SafeResource
+import com.family.happiness.repository.UserRepository
 import com.family.happiness.room.user.User
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
-class CreateFamilyViewModel(private val repository: HappinessRepository): ViewModel() {
+class CreateFamilyViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _status = MutableLiveData<HappinessApiStatus>(null)
     val status: LiveData<HappinessApiStatus> = _status
 
-    private val _message = MutableLiveData<String>(null)
-    val message: LiveData<String> = _message
+    private val _failText = MutableLiveData<String>(null)
+    val failText: LiveData<String> = _failText
 
-    val user: LiveData<User> = MutableLiveData<User>()
+    val personalData = userRepository.personalDataPreferencesFlow.asLiveData()
 
-    fun createFamily() {
-        viewModelScope.launch {
+    fun createFamily() = viewModelScope.launch {
+        if (userRepository.personalDataPreferencesFlow.first().familyId == null) {
+            _status.postValue(HappinessApiStatus.LOADING)
+            when (val response = userRepository.createFamily()) {
+                is SafeResource.Success -> {
+                    userRepository.insertFamilyId(response.value.familyId)
+                    _status.postValue(HappinessApiStatus.DONE)
+                }
+                is SafeResource.Failure -> {
+                    _status.postValue(HappinessApiStatus.ERROR)
+                    if (response.throwable is HttpException) {
+                        when (response.throwable.code()) {
+                            401 -> {
+                                _failText.postValue("Unauthorized to create family")
+                            }
+                            else -> {
+                                _failText.postValue("Server failed. Please try again.")
+                            }
+                        }
+                    } else {
+                        _failText.postValue("Server failed. Please try again.")
+                    }
+                }
+            }
+        }
+    }
+
+//    fun createFamily() {
+//        viewModelScope.launch {
 //            _status.value = HappinessApiStatus.LOADING
 //            try {
 //                repository.createFamily(user.value!!.toAuthData())
@@ -32,6 +59,6 @@ class CreateFamilyViewModel(private val repository: HappinessRepository): ViewMo
 //                _message.value = "Server Failed"
 //                Timber.d(e)
 //            }
-        }
-    }
+//        }
+//    }
 }

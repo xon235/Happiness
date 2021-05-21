@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.family.happiness.adapter.AlbumListAdapter
-import com.family.happiness.adapter.ImageListAdapter
+import com.family.happiness.adapter.PhotoListAdapter
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentAlbumBinding
 import com.family.happiness.ui.HappinessBaseFragment
@@ -17,16 +17,18 @@ import com.family.happiness.ui.HappinessBaseFragment
 
 class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel>() {
 
-    private val PICK_IMAGE = 1
+    companion object {
+        private const val PICK_IMAGE = 101
+    }
 
-    private val sharedPreferences: SharedPreferences by lazy {
+        private val sharedPreferences: SharedPreferences by lazy {
         requireActivity().getSharedPreferences(
             getString(R.string.preference_file_key),
             Context.MODE_PRIVATE
         )
     }
 
-    private lateinit var imageListAdapter: ImageListAdapter
+    private lateinit var photoListAdapter: PhotoListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,14 +50,12 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
             viewModel.showAlbumItems.value = null
         }
 
-        imageListAdapter = setupImageGrid()
-        setupAlbumGrid(imageListAdapter)
+        photoListAdapter = setupImageGrid()
+        setupAlbumGrid(photoListAdapter)
     }
 
-    private fun setupImageGrid(): ImageListAdapter {
-        val imageListAdapter = ImageListAdapter {
-            viewModel.displayPropertyDetails(it)
-        }
+    private fun setupImageGrid(): PhotoListAdapter {
+        val imageListAdapter = PhotoListAdapter { viewModel.displayPropertyDetails(it) }
         binding.imageRecyclerView.adapter = imageListAdapter
 
         viewModel.photos.observe(viewLifecycleOwner) {
@@ -83,12 +83,12 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         return imageListAdapter
     }
 
-    private fun setupAlbumGrid(imageListAdapter: ImageListAdapter) {
+    private fun setupAlbumGrid(photoListAdapter: PhotoListAdapter) {
         val albumListAdapter = AlbumListAdapter { album ->
             val filteredImages = viewModel.photos.value?.filter { image ->
                 image.eventId == album
             }
-            imageListAdapter.submitList(filteredImages)
+            photoListAdapter.submitList(filteredImages)
             viewModel.showAlbumItems.value = album
         }
         binding.albumRecyclerView.adapter = albumListAdapter
@@ -123,7 +123,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
                 item.isVisible = false
                 viewModel.viewAlbumInPhotos.value = true
                 viewModel.showAlbumItems.value = null
-                imageListAdapter.submitList(viewModel.photos.value)
+                photoListAdapter.submitList(viewModel.photos.value)
             }
         }
         return true
@@ -139,7 +139,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Companion.PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 val uris = mutableListOf<Uri>()
                 if (data.data == null) {
@@ -162,7 +162,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         val getIntent = Intent(Intent.ACTION_GET_CONTENT)
         getIntent.type = "image/*"
         getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(getIntent, PICK_IMAGE)
+        startActivityForResult(getIntent, Companion.PICK_IMAGE)
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =

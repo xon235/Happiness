@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.family.happiness.databinding.ImageItemBinding
 import com.family.happiness.room.photo.Photo
 
-class ImageListAdapter(private val clickListener: (image: Photo) -> Unit)
-    : ListAdapter<Photo, ImageListAdapter.ImageViewHolder>(DiffCallback) {
+class PhotoListAdapter(private val clickListener: (image: Photo) -> Unit)
+    : ListAdapter<Photo, PhotoListAdapter.ImageViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(ImageItemBinding.inflate(

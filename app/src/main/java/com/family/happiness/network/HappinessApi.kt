@@ -1,5 +1,6 @@
 package com.family.happiness.network
 
+import com.family.happiness.network.request.GetSmsData
 import com.family.happiness.network.response.JoinFamilyResponse
 import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.network.request.OAuthData
@@ -11,10 +12,7 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 //data class PhoneData(
@@ -91,20 +89,23 @@ interface HappinessApi {
 //    @POST("signIn")
 //    suspend fun signIn(@Body body: AuthData): SignInRe
 
+    @POST("signIn")
+    suspend fun signIn(@Body oAuthData: OAuthData): PersonalDataResponse
+
+    @POST("getSmsCode")
+    suspend fun getSmsCode(@Body getSmsData: GetSmsData): ResponseBody
+
+    @POST("signUp")
+    suspend fun signUp(@Body signUpData: SignUpData): PersonalDataResponse
+
+    @GET("family")
+    suspend fun createFamily(): JoinFamilyResponse
+
     @POST("family")
     suspend fun joinFamily(@Body familyId: String): JoinFamilyResponse
 
     @DELETE("family")
     suspend fun leaveFamily()
-
-    @POST("signIn")
-    suspend fun signIn(@Body oAuthData: OAuthData): PersonalDataResponse
-
-    @POST("signUp")
-    suspend fun signUp(@Body signUpData: SignUpData): PersonalDataResponse
-
-    @POST("getSmsCode")
-    suspend fun getSmsCode(@Body phone: String): ResponseBody
 
 //    @POST("requestSmsCode")
 //    suspend fun requestSmsCode(@Body body: PhoneData): BasicResponse
@@ -118,8 +119,6 @@ interface HappinessApi {
 //    @POST("signUp")
 //    suspend fun signUp(@Body body: SignUpData): UserResponse
 //
-//    @POST("createFamily")
-//    suspend fun createFamily(@Body body: AuthData): FamilyResponse
 //
 //    @POST("joinFamily")
 //    suspend fun joinFamily(@Body body: JoinFamilyData): FamilyResponse

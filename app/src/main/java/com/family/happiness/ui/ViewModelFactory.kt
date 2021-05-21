@@ -25,6 +25,7 @@ class ViewModelFactory(private val app: HappinessApplication)
             modelClass.isAssignableFrom(SignUpViewModel::class.java) -> SignUpViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(SmsVerificationViewModel::class.java) -> SmsVerificationViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> MainActivityViewModel(app.userRepository) as T
+            modelClass.isAssignableFrom(CreateFamilyViewModel::class.java) -> CreateFamilyViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(MailViewModel::class.java) -> MailViewModel() as T
             else -> throw IllegalArgumentException("Unknown ViewModel class ${modelClass.canonicalName}")
         }

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.family.happiness.PreferenceKeys
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.SafeResource
+import com.family.happiness.network.request.GetSmsData
 import com.family.happiness.network.request.OAuthData
 import com.family.happiness.network.request.SignUpData
 import com.family.happiness.network.response.PersonalDataResponse
@@ -69,8 +70,8 @@ class UserRepository(
         return safeApiCall { happinessApi.signUp(signUpData) }
     }
 
-    suspend fun getSmsCode(phone: String): SafeResource<ResponseBody>{
-        return safeApiCall { happinessApi.getSmsCode(phone) }
+    suspend fun getSmsCode(getSmsData: GetSmsData): SafeResource<ResponseBody>{
+        return safeApiCall { happinessApi.getSmsCode(getSmsData) }
     }
 
     suspend fun insertPersonalData(personalDataResponse: PersonalDataResponse) {
@@ -85,12 +86,22 @@ class UserRepository(
         }
     }
 
+    suspend fun insertFamilyId(familyId: String) {
+        personalDataDatastore.edit {
+            it[PreferenceKeys.FAMILY_ID] = familyId
+        }
+    }
+
     suspend fun deleteAllPersonalData() {
         personalDataDatastore.edit {
             it.remove(PreferenceKeys.TOKEN)
             it.remove(PreferenceKeys.USER_ID)
             it.remove(PreferenceKeys.FAMILY_ID)
         }
+    }
+
+    suspend fun createFamily() = safeApiCall {
+        happinessApi.createFamily()
     }
 
     suspend fun joinFamily(familyId: String) = safeApiCall {

@@ -26,12 +26,12 @@ class SignInViewModel(private val userRepository: UserRepository) : ViewModel() 
                 userRepository.insertPersonalData(resource.value)
             }
             is SafeResource.Failure -> {
-                if (resource.throwable is HttpException && resource.throwable.code() == 404) {
-                    _oAuthData.postValue(oAuthData)
+                if (resource.throwable is HttpException){
+                    when(resource.throwable.code()){
+                        401 -> _oAuthData.postValue(oAuthData)
+                        else -> setFailUi("Failed to sign in with Google")
+                    }
                 } else {
-                    // TODO delete after test
-                    _oAuthData.postValue(oAuthData)
-
                     setFailUi("Failed to sign in with Google")
                 }
             }

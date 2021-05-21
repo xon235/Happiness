@@ -27,13 +27,11 @@ class SmsVerificationViewModel(private val userRepository: UserRepository): View
                 _inputEnabled.postValue(true)
                 _failText.postValue(
                     if(resource.throwable is HttpException){
-                        "Incorrect code. Please check again."
+                        when(resource.throwable.code()){
+                            400 -> "Incorrect code. Please check again."
+                            else -> "Server failed. Please try again."
+                        }
                     } else {
-                        // TODO delete after test
-                        userRepository.insertPersonalData(
-                            PersonalDataResponse("token", "userId", null)
-                        )
-
                         "Server failed. Please try again."
                     }
                 )

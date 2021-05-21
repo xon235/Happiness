@@ -1,5 +1,6 @@
 package com.family.happiness.ui.createfamily
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,20 +22,17 @@ class CreateFamilyFragment :
         binding.viewModel = viewModel
 
         binding.copyButton.setOnClickListener {
-            val clipboard = getSystemService(
-                requireContext(),
-                ClipboardManager::class.java
-            )
-//            val clip = ClipData.newPlainText("Family Code", viewModel.user.value!!.id_family)
-//            clipboard!!.setPrimaryClip(clip)
-            Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+            getSystemService(requireContext(), ClipboardManager::class.java)?.apply {
+                setPrimaryClip(
+                    ClipData.newPlainText(
+                        "Family Code", binding.familyIdTextView.text.toString()
+                    )
+                )
+                Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        viewModel.user.observe(viewLifecycleOwner) {
-//            if(it != null && it.id_family == null){
-//                viewModel.createFamily()
-//            }
-        }
+        viewModel.createFamily()
     }
 
     override fun getBinding(
