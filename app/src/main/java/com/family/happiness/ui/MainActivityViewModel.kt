@@ -1,11 +1,10 @@
 package com.family.happiness.ui
 
 import androidx.lifecycle.*
-import com.family.happiness.Event
+import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
 import com.family.happiness.network.response.JoinFamilyResponse
 import com.family.happiness.repository.UserRepository
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -20,18 +19,18 @@ class MainActivityViewModel(
 
     val members = userRepository.members.asLiveData()
 
-    private val _joinFamilyEvent = MutableLiveData<Event<SafeResource<JoinFamilyResponse>>>()
-    val joinFamilyEvent: LiveData<Event<SafeResource<JoinFamilyResponse>>> = _joinFamilyEvent
+    private val _joinFamilyEvent = MutableLiveData<Flag<SafeResource<JoinFamilyResponse>>>()
+    val joinFamilyFlag: LiveData<Flag<SafeResource<JoinFamilyResponse>>> = _joinFamilyEvent
 
     fun joinFamily(familyId: String) = viewModelScope.launch {
-        _joinFamilyEvent.value = Event(userRepository.joinFamily(familyId))
+        _joinFamilyEvent.value = Flag(userRepository.joinFamily(familyId))
     }
 
-    private val _leaveFamilyEvent = MutableLiveData<Event<SafeResource<Unit>>>()
-    val leaveFamilyEvent: LiveData<Event<SafeResource<Unit>>> = _leaveFamilyEvent
+    private val _leaveFamilyEvent = MutableLiveData<Flag<SafeResource<Unit>>>()
+    val leaveFamilyFlag: LiveData<Flag<SafeResource<Unit>>> = _leaveFamilyEvent
 
     fun leaveFamily() = viewModelScope.launch {
-        _leaveFamilyEvent.value = Event(userRepository.leaveFamily())
+        _leaveFamilyEvent.value = Flag(userRepository.leaveFamily())
     }
 
     fun clearUserData() = viewModelScope.launch {

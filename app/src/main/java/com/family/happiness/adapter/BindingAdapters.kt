@@ -39,9 +39,16 @@ fun bindMembersRecyclerView(recyclerView: RecyclerView,
 }
 
 @BindingAdapter("app:listData")
-fun bindImagesRecyclerView(recyclerView: RecyclerView,
+fun bindPhotoesRecyclerView(recyclerView: RecyclerView,
                      data: List<Photo>?) {
     val adapter = recyclerView.adapter as PhotoListAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("app:listData")
+fun bindEventsRecyclerView(recyclerView: RecyclerView,
+                           data: List<Event>?) {
+    val adapter = recyclerView.adapter as EventListAdapter
     adapter.submitList(data)
 }
 

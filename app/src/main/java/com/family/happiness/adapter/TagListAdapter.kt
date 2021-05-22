@@ -5,14 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.family.happiness.databinding.TagListItemLayoutBinding
+import com.family.happiness.databinding.TagItemLayoutBinding
 import com.family.happiness.room.user.User
 
-class TagListAdapter(private val checkedChangeListener: (isChecked: Boolean, position: Int) -> Unit)
-    : ListAdapter<User, TagListAdapter.TagListViewHolder>(DiffCallback) {
+class TagListAdapter(
+    private val checkedChangeListener: (isChecked: Boolean, position: Int) -> Unit
+) : ListAdapter<User, TagListAdapter.TagListViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagListViewHolder {
-        return TagListViewHolder(TagListItemLayoutBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+        return TagListViewHolder(
+            TagItemLayoutBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: TagListViewHolder, position: Int) {
@@ -29,11 +33,14 @@ class TagListAdapter(private val checkedChangeListener: (isChecked: Boolean, pos
         }
     }
 
-    class TagListViewHolder(private var binding:
-                           TagListItemLayoutBinding):
-            RecyclerView.ViewHolder(binding.root) {
+    class TagListViewHolder(private var binding: TagItemLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User, position: Int, checkedChangeListener: (isChecked: Boolean, position: Int) -> Unit) {
+        fun bind(
+            user: User,
+            position: Int,
+            checkedChangeListener: (isChecked: Boolean, position: Int) -> Unit
+        ) {
             binding.user = user
             binding.executePendingBindings()
             binding.checkbox.setOnCheckedChangeListener { _, isChecked ->

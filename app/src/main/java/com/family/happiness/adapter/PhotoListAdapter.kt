@@ -5,23 +5,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.family.happiness.databinding.ImageItemBinding
+import com.family.happiness.databinding.PhotoItemLayoutBinding
 import com.family.happiness.room.photo.Photo
 
-class PhotoListAdapter(private val clickListener: (image: Photo) -> Unit)
+class PhotoListAdapter(private val clickListener: (photo: Photo) -> Unit)
     : ListAdapter<Photo, PhotoListAdapter.ImageViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        return ImageViewHolder(ImageItemBinding.inflate(
+        return ImageViewHolder(PhotoItemLayoutBinding.inflate(
             LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val image = getItem(position)
+        val photo = getItem(position)
         holder.itemView.setOnClickListener {
-            clickListener(image)
+            clickListener(photo)
         }
-        holder.bind(image)
+        holder.bind(photo)
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Photo>() {
@@ -34,11 +34,11 @@ class PhotoListAdapter(private val clickListener: (image: Photo) -> Unit)
         }
     }
 
-    class ImageViewHolder(private var binding: ImageItemBinding)
+    class ImageViewHolder(private var binding: PhotoItemLayoutBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(image: Photo) {
-            binding.photo = image
+        fun bind(photo: Photo) {
+            binding.photo = photo
             binding.executePendingBindings()
         }
     }

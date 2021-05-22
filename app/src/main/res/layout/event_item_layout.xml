@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="album"
-            type="String" />
+            name="event"
+            type="com.family.happiness.room.event.Event" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="@{album}"
+                android:text="@{event.name}"
                 android:textAlignment="center"
                 android:textSize="16dp"
                 android:textStyle="bold"

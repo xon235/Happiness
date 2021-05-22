@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/button"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/tag_list_item_layout" />
+            tools:listitem="@layout/tag_item_layout" />
 
         <Button
             android:id="@+id/button"

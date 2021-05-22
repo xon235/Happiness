@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<!--    <item-->
-<!--        android:id="@+id/upload"-->
-<!--        android:title="Upload"-->
-<!--        android:icon="@drawable/ic_upload"-->
-<!--        app:showAsAction="always">-->
-<!--    </item>-->
     <item
-        android:id="@+id/image"
-        android:title="Image"
+        android:id="@+id/photoView"
+        android:title="Photo"
         android:icon="@drawable/ic_image"
         app:showAsAction="always"
         android:visible="false">
     </item>
     <item
-        android:id="@+id/folder"
-        android:title="Folder"
+        android:id="@+id/eventView"
+        android:title="Event"
         android:icon="@drawable/ic_folder"
         app:showAsAction="always"
         android:visible="true">

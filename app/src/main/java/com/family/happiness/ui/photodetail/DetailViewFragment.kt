@@ -37,11 +37,7 @@ class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, Deta
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        viewModel.events.observeOnce(viewLifecycleOwner){
-            eventNames = it.map { event -> event.name }
-        }
-
-//        (activity as MainActivity).supportActionBar?.title = "/" + args.photo.album + "/"
+        (activity as MainActivity).supportActionBar?.title = "/" + args.photo.album + "/"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -84,13 +80,4 @@ class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, Deta
     ) = FragmentDetailViewBinding.inflate(inflater, container, false)
 
     override fun getViewModel() = DetailViewModel::class.java
-}
-
-fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-    observe(lifecycleOwner, object : Observer<T> {
-        override fun onChanged(t: T?) {
-            observer.onChanged(t)
-            removeObserver(this)
-        }
-    })
 }

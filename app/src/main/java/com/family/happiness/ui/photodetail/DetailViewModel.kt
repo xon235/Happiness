@@ -1,25 +1,22 @@
 package com.family.happiness.ui.photodetail
 
 import androidx.lifecycle.*
+import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.HappinessRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val repository: HappinessRepository): ViewModel() {
+class DetailViewModel(private val albumRepository: AlbumRepository): ViewModel() {
 
     val photo = MutableLiveData<Photo>(null)
-    val events = MutableLiveData<List<Event>>(null)
+    val events = albumRepository.events
 
-    fun deleteImage(image: Photo){
-        viewModelScope.launch {
-//            repository.deleteImage(image)
-        }
+    fun deleteImage(photo: Photo) = viewModelScope.launch {
+
     }
 
-    fun moveImage(image: Photo, album: String) {
-        viewModelScope.launch {
-//            repository.moveImage(image, album)
-        }
+    fun moveImage(photo: Photo, event: Event) = viewModelScope.launch {
+
     }
 }

@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val homeSet = setOf(R.id.mailFragment, R.id.albumFragment, R.id.wishesFragment)
-    private val noToolBarSet = setOf(R.id.signInFragment)
+    private val noToolBarSet = setOf(R.id.splashFragment, R.id.signInFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,14 +82,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.joinFamilyEvent.observe(this){ event ->
+        viewModel.joinFamilyFlag.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
                 val text = if(it is SafeResource.Success) "Join Successful" else "Join Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.leaveFamilyEvent.observe(this){ event ->
+        viewModel.leaveFamilyFlag.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
                 val text = if(it is SafeResource.Success) "Left Family" else "Leave Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()

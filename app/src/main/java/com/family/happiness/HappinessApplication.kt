@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.family.happiness.network.HappinessApi
+import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.HappinessRepository
 import com.family.happiness.repository.UserRepository
 import com.family.happiness.room.HappinessRoomDatabase
@@ -73,9 +74,6 @@ class HappinessApplication : Application() {
         retrofit.create(HappinessApi::class.java)
     }
 
-
-
-
     val happinessRepository by lazy {
         HappinessRepository(
             database.userDao(),
@@ -87,10 +85,19 @@ class HappinessApplication : Application() {
             happinessApi
         )
     }
+
     val userRepository by lazy {
         UserRepository(
             (this as Context).dataStore,
             database.userDao(),
+            happinessApi
+        )
+    }
+
+    val albumRepository by lazy {
+        AlbumRepository(
+            database.photoDao(),
+            database.eventDao(),
             happinessApi
         )
     }
