@@ -12,14 +12,7 @@ abstract class BaseRepository {
             try {
                 SafeResource.Success(apiCall.invoke())
             } catch (throwable: Throwable){
-                when (throwable) {
-                    is HttpException -> {
-                        SafeResource.Failure(throwable)
-                    }
-                    else -> {
-                        SafeResource.Failure(throwable)
-                    }
-                }
+                SafeResource.Failure(throwable)
             }
         }
     }

@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
+            name="uploadImageFragment"
+            type="com.family.happiness.ui.photoupload.UploadImageFragment" />
+        <variable
             name="viewModel"
             type="com.family.happiness.ui.photoupload.UploadImageViewModel" />
     </data>
@@ -27,28 +30,29 @@
                 android:layout_height="match_parent" />
         </HorizontalScrollView>
         <Spinner
-            android:id="@+id/albumSpinner"
+            android:id="@+id/eventSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/scrollView"
-            app:listData="@{viewModel.events}" />
+            app:listData="@{viewModel.events}"
+            app:enabledIf="@{viewModel.inputEnabled}"/>
         <LinearLayout
-            android:id="@+id/albumEditLayout"
+            android:id="@+id/eventEditLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-            app:layout_constraintTop_toBottomOf="@id/albumSpinner"
-            app:layout_constraintBottom_toTopOf="@id/button">
+            app:layout_constraintTop_toBottomOf="@id/eventSpinner"
+            app:layout_constraintBottom_toTopOf="@id/uploadButton">
             <EditText
-                android:id="@+id/albumEditText"
+                android:id="@+id/eventEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:enabledIf="@{viewModel.inputEnabled}"/>
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tagged Members" />
@@ -56,15 +60,28 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:listData="@{viewModel.users}"
+                app:enabledIf="@{viewModel.inputEnabled}"/>
         </LinearLayout>
         <Button
-            android:id="@+id/button"
+            android:id="@+id/uploadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upload"
+            android:onClick="@{() -> uploadImageFragment.onClickUpload()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:enabledIf="@{viewModel.inputEnabled}"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{!viewModel.inputEnabled}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

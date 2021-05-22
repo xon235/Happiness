@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.ui.MainActivity
@@ -18,8 +15,6 @@ import com.family.happiness.ui.HappinessBaseFragment
 class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, DetailViewModel>() {
 
     private val args: DetailViewFragmentArgs by navArgs()
-
-    private lateinit var eventNames: List<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +28,22 @@ class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, Deta
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.photo.value = args.photo
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        (activity as MainActivity).supportActionBar?.title = "/" + args.photo.album + "/"
+        viewModel.setPhoto(args.photo)
+
+        viewModel.event.observe(viewLifecycleOwner) {
+            (activity as MainActivity).supportActionBar?.title = "/" + it.name + "/"
+        }
+
+        viewModel.events.observe(viewLifecycleOwner) {}
+
+        viewModel.eventChangedFlag.observe(viewLifecycleOwner){ flag ->
+            flag.getContentIfNotHandled()?.let {
+                Toast.makeText(requireContext(), "Moved to /${it.name}/", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -48,27 +54,24 @@ class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, Deta
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.moveImage -> {
-                AlertDialog.Builder(requireContext())
-                        .setTitle("Choose an album")
-                        .setItems(eventNames.toTypedArray()) { dialog, which ->
-                            val newAlbum = eventNames[which]
-                            viewModel.moveImage(args.photo, newAlbum)
-                            (activity as MainActivity).supportActionBar?.title = "/$newAlbum/"
-                            Toast.makeText(requireContext(), "Moved to /$newAlbum/", Toast.LENGTH_SHORT).show()
+                viewModel.events.value?.let { events ->
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Choose an event")
+                        .setItems(events.map { it.name }.toTypedArray()) { dialog, which ->
+                            viewModel.changeEvent(events[which])
                             dialog.dismiss()
                         }.show()
+                }
             }
             R.id.deleteImage -> {
                 AlertDialog.Builder(requireContext())
-                        .setTitle("Delete this image?")
-                        .setPositiveButton("Yes") { _, _ ->
-                            viewModel.deleteImage(args.photo)
-                            findNavController().popBackStack()
-                        }
-                        .setNegativeButton("No") { dialog, _ ->
-                            dialog.cancel()
-                        }
-                        .show()
+                    .setTitle("Delete this image?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        viewModel.deletePhoto()
+                        navController.popBackStack()
+                    }
+                    .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
+                    .show()
             }
         }
         return true

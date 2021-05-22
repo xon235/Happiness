@@ -1,9 +1,11 @@
 package com.family.happiness.adapter
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
+import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,6 +24,11 @@ fun visibleIf(view: View, visible: Boolean) {
 @BindingAdapter("app:enabledIf")
 fun enabledIf(view: View, isEnabled: Boolean) {
     view.isEnabled = isEnabled
+    if(view is ViewGroup){
+        view.children.forEach {
+            enabledIf(it, isEnabled)
+        }
+    }
 }
 
 @BindingAdapter("app:imageUrl")
@@ -34,8 +41,10 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 @BindingAdapter("app:listData")
 fun bindMembersRecyclerView(recyclerView: RecyclerView,
                      data: List<User>?) {
-    val adapter = recyclerView.adapter as FamilyListAdapter
-    adapter.submitList(data)
+    when(val adapter = recyclerView.adapter){
+        is FamilyListAdapter -> adapter.submitList(data)
+        is TagListAdapter -> adapter.submitList(data)
+    }
 }
 
 @BindingAdapter("app:listData")

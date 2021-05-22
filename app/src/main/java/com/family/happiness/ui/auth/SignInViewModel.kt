@@ -3,6 +3,7 @@ package com.family.happiness.ui.auth
 import androidx.lifecycle.*
 import com.family.happiness.network.SafeResource
 import com.family.happiness.network.request.OAuthData
+import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -21,6 +22,9 @@ class SignInViewModel(private val userRepository: UserRepository) : ViewModel() 
     val oAuthData: LiveData<OAuthData> = _oAuthData
 
     fun signIn(oAuthData: OAuthData) = viewModelScope.launch {
+        // TODO delete after test
+//        userRepository.insertPersonalData(PersonalDataResponse("token", "userId", "familyId"))
+//        return@launch
         when (val resource = userRepository.signIn(oAuthData)) {
             is SafeResource.Success -> {
                 userRepository.insertPersonalData(resource.value)

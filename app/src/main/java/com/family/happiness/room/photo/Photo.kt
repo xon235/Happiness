@@ -29,6 +29,6 @@ import kotlinx.parcelize.Parcelize
 data class Photo(
     @PrimaryKey val url: String,
     @ColumnInfo(name = "user_id") val userId: String?,
-    @ColumnInfo(name = "event_id") val eventId: String,
+    @ColumnInfo(name = "event_id") val eventId: Int,
     val timestamp: String,
 ) : Parcelable

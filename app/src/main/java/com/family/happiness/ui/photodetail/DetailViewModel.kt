@@ -1,22 +1,42 @@
 package com.family.happiness.ui.photodetail
 
 import androidx.lifecycle.*
+import com.family.happiness.Flag
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.HappinessRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val albumRepository: AlbumRepository): ViewModel() {
+class DetailViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
-    val photo = MutableLiveData<Photo>(null)
-    val events = albumRepository.events
+    private val _photo = MutableLiveData<Photo>()
+    val events = albumRepository.events.asLiveData()
 
-    fun deleteImage(photo: Photo) = viewModelScope.launch {
-
+    fun setPhoto(photo: Photo) {
+        _photo.value = photo
     }
 
-    fun moveImage(photo: Photo, event: Event) = viewModelScope.launch {
+    val photo = Transformations.switchMap(_photo){
+        albumRepository.getPhotoByUrl(it.url).asLiveData()
+    }
+    val event = Transformations.switchMap(photo){
+        albumRepository.getEventByPhoto(it).asLiveData()
+    }
 
+    private val _eventChangedFlag = MutableLiveData<Flag<Event>>()
+    val eventChangedFlag: LiveData<Flag<Event>>  = _eventChangedFlag
+
+    fun changeEvent(event: Event) = viewModelScope.launch {
+        _photo.value?.let {
+            albumRepository.changePhotoEvent(it, event)
+            _eventChangedFlag.value = Flag(event)
+        }
+    }
+
+    fun deletePhoto() = viewModelScope.launch {
+        _photo.value?.let {
+            albumRepository.deletePhoto(it)
+        }
     }
 }

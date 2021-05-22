@@ -1,22 +1,46 @@
 package com.family.happiness.ui.photoupload
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.family.happiness.repository.HappinessRepository
-import com.family.happiness.room.event.Event
+import androidx.lifecycle.*
+import com.family.happiness.Flag
+import com.family.happiness.network.SafeResource
+import com.family.happiness.repository.AlbumRepository
+import com.family.happiness.repository.UserRepository
+import com.family.happiness.room.user.User
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import timber.log.Timber
 
-class UploadImageViewModel(private val repository: HappinessRepository) : ViewModel() {
-//    fun upload(isNewAlbum: Boolean, album: String, tagged: List<Member>, files: List<MultipartBody.Part>) {
-//        viewModelScope.launch {
-//            try {
-//                repository.uploadImage(isNewAlbum, album, tagged, files)
-//            } catch (e: Exception){
-//                Timber.d(e)
-//            }
-//        }
-//    }
+class UploadImageViewModel(
+    private val userRepository: UserRepository,
+    private val albumRepository: AlbumRepository,
+) : ViewModel() {
 
-    val events: LiveData<List<Event>> = MutableLiveData(emptyList<Event>())
-//    val events = repository.albums.asLiveData()
+    val users = userRepository.users.asLiveData()
+    val events = albumRepository.events.asLiveData()
+
+    private val _uploadFinishFlag = MutableLiveData<Flag<Boolean>>()
+    val uploadFinishFlag: LiveData<Flag<Boolean>> = _uploadFinishFlag
+
+    private val _inputEnabled = MutableLiveData(true)
+    val inputEnabled: LiveData<Boolean> = _inputEnabled
+
+    fun upload(
+        isNewEvent: Boolean,
+        eventName: String,
+        tags: List<User>,
+        parts: List<MultipartBody.Part>
+    ) = viewModelScope.launch {
+        _inputEnabled.value = false
+        when(val resource = albumRepository.uploadPhotos(isNewEvent, eventName, tags, parts)){
+            is SafeResource.Success ->{
+                resource.value.events?.let { albumRepository.insertEvents(it) }
+                resource.value.photos?.let { albumRepository.insertPhotos(it) }
+                _uploadFinishFlag.value = Flag(true)
+            }
+            is SafeResource.Failure -> {
+                _uploadFinishFlag.value = Flag(false)
+            }
+        }
+        _inputEnabled.value = true
+    }
 }

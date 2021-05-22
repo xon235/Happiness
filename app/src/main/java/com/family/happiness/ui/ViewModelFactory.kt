@@ -28,6 +28,8 @@ class ViewModelFactory(private val app: HappinessApplication)
             modelClass.isAssignableFrom(CreateFamilyViewModel::class.java) -> CreateFamilyViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(MailViewModel::class.java) -> MailViewModel() as T
             modelClass.isAssignableFrom(AlbumViewModel::class.java) -> AlbumViewModel(app.albumRepository) as T
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> DetailViewModel(app.albumRepository) as T
+            modelClass.isAssignableFrom(UploadImageViewModel::class.java) -> UploadImageViewModel(app.userRepository, app.albumRepository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class ${modelClass.canonicalName}")
         }
     }

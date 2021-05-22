@@ -45,7 +45,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
 
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) { flag ->
             flag?.getContentIfNotHandled()?.let {
-                findNavController().navigate(
+                navController.navigate(
                     AlbumFragmentDirections.actionAlbumFragmentToDetailViewFragment(it)
                 )
             }
@@ -63,10 +63,6 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         viewModel.isEventView.value = item.itemId == R.id.eventView
-//        when (item.itemId) {
-//            R.id.photoView -> viewModel.isEventView.value = false
-//            R.id.eventView -> viewModel.isEventView.value = true
-//        }
         return true
     }
 
@@ -85,7 +81,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
                     uris.add(data.data!!)
                 }
 
-                findNavController().navigate(
+                navController.navigate(
                     AlbumFragmentDirections.actionAlbumFragmentToUploadImageFragment(
                         uris.toTypedArray()
                     )
