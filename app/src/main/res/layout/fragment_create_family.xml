@@ -43,11 +43,10 @@
                     android:textStyle="bold"
                     tools:text="abcdefghijklmnop" />
 
-                <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/loading_animation"
                     app:visibleIf="@{viewModel.status == HappinessApiStatus.LOADING}"/>
 
             </FrameLayout>

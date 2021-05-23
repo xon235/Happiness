@@ -9,11 +9,9 @@ import com.family.happiness.ui.auth.SignInViewModel
 import com.family.happiness.ui.auth.SignUpViewModel
 import com.family.happiness.ui.auth.SmsVerificationViewModel
 import com.family.happiness.ui.home.MailViewModel
-import com.family.happiness.ui.home.WishesViewModel
-import com.family.happiness.ui.photodetail.DetailViewModel
-import com.family.happiness.ui.photoupload.UploadImageViewModel
+import com.family.happiness.ui.photodetail.PhotoDetailViewModel
+import com.family.happiness.ui.photoupload.PhotoUploadViewModel
 import com.family.happiness.ui.splash.SplashViewModel
-import com.family.happiness.viewmodel.WishFinisViewModel
 
 class ViewModelFactory(private val app: HappinessApplication)
     : ViewModelProvider.Factory {
@@ -28,8 +26,8 @@ class ViewModelFactory(private val app: HappinessApplication)
             modelClass.isAssignableFrom(CreateFamilyViewModel::class.java) -> CreateFamilyViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(MailViewModel::class.java) -> MailViewModel() as T
             modelClass.isAssignableFrom(AlbumViewModel::class.java) -> AlbumViewModel(app.albumRepository) as T
-            modelClass.isAssignableFrom(DetailViewModel::class.java) -> DetailViewModel(app.albumRepository) as T
-            modelClass.isAssignableFrom(UploadImageViewModel::class.java) -> UploadImageViewModel(app.userRepository, app.albumRepository) as T
+            modelClass.isAssignableFrom(PhotoDetailViewModel::class.java) -> PhotoDetailViewModel(app.albumRepository) as T
+            modelClass.isAssignableFrom(PhotoUploadViewModel::class.java) -> PhotoUploadViewModel(app.userRepository, app.albumRepository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class ${modelClass.canonicalName}")
         }
     }

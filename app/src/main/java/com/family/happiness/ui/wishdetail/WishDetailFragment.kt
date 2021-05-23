@@ -21,7 +21,7 @@ class WishDetailFragment : Fragment() {
         binding = FragmentWishDetailBinding.inflate(inflater)
         binding.wish = args.wish
         binding.finishBt.setOnClickListener {
-            findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishSelectContributoFragment(args.wish))
+            findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishFinishFragment(args.wish))
         }
         return binding.root
     }
@@ -34,7 +34,7 @@ class WishDetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.modify ->
-                findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToNewWishFragment(args.wish))
+                findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishWriteFragment(args.wish))
         }
         return true
     }

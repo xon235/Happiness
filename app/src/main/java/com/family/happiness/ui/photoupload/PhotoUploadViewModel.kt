@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import timber.log.Timber
 
-class UploadImageViewModel(
+class PhotoUploadViewModel(
     private val userRepository: UserRepository,
     private val albumRepository: AlbumRepository,
 ) : ViewModel() {

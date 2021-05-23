@@ -11,8 +11,8 @@
         android:label="@string/title_mail"
         tools:layout="@layout/fragment_mail" >
         <action
-            android:id="@+id/action_mailFragment_to_writeMailFragment"
-            app:destination="@id/writeMailFragment" />
+            android:id="@+id/action_mailFragment_to_mailWriteFragment"
+            app:destination="@id/mailWriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
@@ -20,23 +20,23 @@
         android:label="@string/title_album"
         tools:layout="@layout/fragment_album" >
         <action
-            android:id="@+id/action_albumFragment_to_uploadImageFragment"
-            app:destination="@id/uploadImageFragment" />
+            android:id="@+id/action_albumFragment_to_photoUploadFragment"
+            app:destination="@id/photoUploadFragment" />
         <action
-            android:id="@+id/action_albumFragment_to_detailViewFragment"
-            app:destination="@id/detailViewFragment" />
+            android:id="@+id/action_albumFragment_to_photoDetailFragment"
+            app:destination="@id/photoDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/wishesFragment"
-        android:name="com.family.happiness.ui.home.WishesFragment"
+        android:id="@+id/wishFragment"
+        android:name="com.family.happiness.ui.home.WishFragment"
         android:label="@string/title_wishes"
-        tools:layout="@layout/fragment_wishes" >
+        tools:layout="@layout/fragment_wish" >
         <action
-            android:id="@+id/action_wishesFragment_to_wishDetailFragment"
+            android:id="@+id/action_wishFragment_to_wishDetailFragment"
             app:destination="@id/wishDetailFragment" />
         <action
-            android:id="@+id/action_wishesFragment_to_newWishFragment"
-            app:destination="@id/newWishFragment" />
+            android:id="@+id/action_wishFragment_to_wishWriteFragment"
+            app:destination="@id/wishWriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
@@ -94,19 +94,19 @@
         tools:layout="@layout/fragment_create_family" />
     <action android:id="@+id/action_global_createFamilyFragment" app:destination="@id/createFamilyFragment" />
     <fragment
-        android:id="@+id/uploadImageFragment"
-        android:name="com.family.happiness.ui.photoupload.UploadImageFragment"
+        android:id="@+id/photoUploadFragment"
+        android:name="com.family.happiness.ui.photoupload.PhotoUploadFragment"
         android:label="Upload Image"
-        tools:layout="@layout/fragment_upload_image">
+        tools:layout="@layout/fragment_photo_upload">
         <argument
             android:name="uris"
             app:argType="android.net.Uri[]"/>
     </fragment>
     <fragment
-        android:id="@+id/detailViewFragment"
-        android:name="com.family.happiness.ui.photodetail.DetailViewFragment"
+        android:id="@+id/photoDetailFragment"
+        android:name="com.family.happiness.ui.photodetail.PhotoDetailFragment"
         android:label="Detail View"
-        tools:layout="@layout/fragment_detail_view" >
+        tools:layout="@layout/fragment_photo_detail" >
         <argument
             android:name="photo"
             app:argType="com.family.happiness.room.photo.Photo" />
@@ -120,24 +120,24 @@
             android:name="wish"
             app:argType="com.family.happiness.room.wish.Wish" />
         <action
-            android:id="@+id/action_wishDetailFragment_to_newWishFragment"
-            app:destination="@id/newWishFragment" />
+            android:id="@+id/action_wishDetailFragment_to_wishWriteFragment"
+            app:destination="@id/wishWriteFragment" />
         <action
-            android:id="@+id/action_wishDetailFragment_to_wishSelectContributoFragment"
-            app:destination="@id/wishSelectContributorFragment" />
+            android:id="@+id/action_wishDetailFragment_to_wishFinishFragment"
+            app:destination="@id/wishFinishFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newWishFragment"
-        android:name="com.family.happiness.ui.wishnwrite.NewWishFragment"
+        android:id="@+id/wishWriteFragment"
+        android:name="com.family.happiness.ui.wishnwrite.WishWriteFragment"
         android:label="Edit Wish"
-        tools:layout="@layout/fragment_new_wish" >
+        tools:layout="@layout/fragment_wish_write" >
         <argument
             android:name="wish"
             app:argType="com.family.happiness.room.wish.Wish"
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/wishSelectContributorFragment"
+        android:id="@+id/wishFinishFragment"
         android:name="com.family.happiness.ui.wishfinish.WishFinishFragment"
         android:label="Select Contributor"
         tools:layout="@layout/fragment_wish_finish" >
@@ -146,7 +146,7 @@
             app:argType="com.family.happiness.room.wish.Wish" />
     </fragment>
     <fragment
-        android:id="@+id/writeMailFragment"
+        android:id="@+id/mailWriteFragment"
         android:name="com.family.happiness.ui.mailwrite.MailWriteFragment"
         android:label="New Mail"
         tools:layout="@layout/fragment_mail_write" />

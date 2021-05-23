@@ -46,7 +46,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) { flag ->
             flag?.getContentIfNotHandled()?.let {
                 navController.navigate(
-                    AlbumFragmentDirections.actionAlbumFragmentToDetailViewFragment(it)
+                    AlbumFragmentDirections.actionAlbumFragmentToPhotoDetailFragment(it)
                 )
             }
         }
@@ -82,7 +82,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
                 }
 
                 navController.navigate(
-                    AlbumFragmentDirections.actionAlbumFragmentToUploadImageFragment(
+                    AlbumFragmentDirections.actionAlbumFragmentToPhotoUploadFragment(
                         uris.toTypedArray()
                     )
                 )

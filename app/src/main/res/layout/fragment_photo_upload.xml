@@ -5,16 +5,16 @@
     <data>
         <variable
             name="uploadImageFragment"
-            type="com.family.happiness.ui.photoupload.UploadImageFragment" />
+            type="com.family.happiness.ui.photoupload.PhotoUploadFragment" />
         <variable
             name="viewModel"
-            type="com.family.happiness.ui.photoupload.UploadImageViewModel" />
+            type="com.family.happiness.ui.photoupload.PhotoUploadViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.photoupload.UploadImageFragment"
+        tools:context=".ui.photoupload.PhotoUploadFragment"
         android:orientation="vertical">
         <HorizontalScrollView
             android:id="@+id/scrollView"

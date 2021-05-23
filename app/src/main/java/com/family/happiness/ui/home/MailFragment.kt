@@ -14,7 +14,7 @@ class MailFragment : HappinessBaseFragment<FragmentMailBinding, MailViewModel>()
 
         binding.fab.setOnClickListener {
             findNavController()
-                .navigate(MailFragmentDirections.actionMailFragmentToWriteMailFragment())
+                .navigate(MailFragmentDirections.actionMailFragmentToMailWriteFragment())
         }
     }
 

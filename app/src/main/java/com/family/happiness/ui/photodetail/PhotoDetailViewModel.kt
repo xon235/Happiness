@@ -8,7 +8,7 @@ import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
+class PhotoDetailViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
     private val _photo = MutableLiveData<Photo>()
     val events = albumRepository.events.asLiveData()

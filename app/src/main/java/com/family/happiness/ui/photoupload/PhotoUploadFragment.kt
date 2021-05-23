@@ -8,12 +8,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.adapter.TagListAdapter
-import com.family.happiness.databinding.FragmentUploadImageBinding
+import com.family.happiness.databinding.FragmentPhotoUploadBinding
 import com.family.happiness.network.PhotoUploadBody
 import com.family.happiness.room.user.User
 import com.family.happiness.ui.HappinessBaseFragment
@@ -27,11 +26,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class UploadImageFragment :
-    HappinessBaseFragment<FragmentUploadImageBinding, UploadImageViewModel>(),
+class PhotoUploadFragment :
+    HappinessBaseFragment<FragmentPhotoUploadBinding, PhotoUploadViewModel>(),
     AdapterView.OnItemSelectedListener {
 
-    private val args: UploadImageFragmentArgs by navArgs()
+    private val args: PhotoUploadFragmentArgs by navArgs()
     private val tags = mutableListOf<User>()
     private var isNewEvent = false
     private lateinit var eventName: String
@@ -131,7 +130,7 @@ class UploadImageFragment :
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentUploadImageBinding.inflate(inflater, container, false)
+    ) = FragmentPhotoUploadBinding.inflate(inflater, container, false)
 
-    override fun getViewModel() = UploadImageViewModel::class.java
+    override fun getViewModel() = PhotoUploadViewModel::class.java
 }

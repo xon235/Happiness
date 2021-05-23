@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 //        findNavController(R.id.navHostFragment)
     }
 
-    private val homeSet = setOf(R.id.mailFragment, R.id.albumFragment, R.id.wishesFragment)
+    private val homeSet = setOf(R.id.mailFragment, R.id.albumFragment, R.id.wishFragment)
     private val noToolBarSet = setOf(R.id.splashFragment, R.id.signInFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {

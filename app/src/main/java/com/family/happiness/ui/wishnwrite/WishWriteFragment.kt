@@ -5,13 +5,13 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.R
-import com.family.happiness.databinding.FragmentNewWishBinding
+import com.family.happiness.databinding.FragmentWishWriteBinding
 import timber.log.Timber
 
-class NewWishFragment : Fragment() {
+class WishWriteFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewWishBinding
-    val args: NewWishFragmentArgs by navArgs()
+    private lateinit var binding: FragmentWishWriteBinding
+    val args: WishWriteFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,7 +21,7 @@ class NewWishFragment : Fragment() {
             setHasOptionsMenu(true)
         }
 
-        binding = FragmentNewWishBinding.inflate(inflater)
+        binding = FragmentWishWriteBinding.inflate(inflater)
         binding.wish = args.wish
         binding.finishBt.setOnClickListener {
 

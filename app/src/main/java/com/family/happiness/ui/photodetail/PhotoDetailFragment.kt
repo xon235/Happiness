@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.ui.MainActivity
 import com.family.happiness.R
-import com.family.happiness.databinding.FragmentDetailViewBinding
+import com.family.happiness.databinding.FragmentPhotoDetailBinding
 import com.family.happiness.ui.HappinessBaseFragment
 
 
-class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, DetailViewModel>() {
+class PhotoDetailFragment : HappinessBaseFragment<FragmentPhotoDetailBinding, PhotoDetailViewModel>() {
 
-    private val args: DetailViewFragmentArgs by navArgs()
+    private val args: PhotoDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +79,7 @@ class DetailViewFragment : HappinessBaseFragment<FragmentDetailViewBinding, Deta
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentDetailViewBinding.inflate(inflater, container, false)
+    ) = FragmentPhotoDetailBinding.inflate(inflater, container, false)
 
-    override fun getViewModel() = DetailViewModel::class.java
+    override fun getViewModel() = PhotoDetailViewModel::class.java
 }

@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_album"
         android:title="@string/title_album"/>
     <item
-        android:id="@+id/wishesFragment"
+        android:id="@+id/wishFragment"
         android:icon="@drawable/ic_wishes"
         android:title="@string/title_wishes"/>
 </menu>
