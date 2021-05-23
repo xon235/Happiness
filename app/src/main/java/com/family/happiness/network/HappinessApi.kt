@@ -1,22 +1,13 @@
 package com.family.happiness.network
 
 import com.family.happiness.network.request.GetSmsData
-import com.family.happiness.network.response.JoinFamilyResponse
-import com.family.happiness.network.response.PersonalDataResponse
+import com.family.happiness.network.request.JoinFamilyData
 import com.family.happiness.network.request.OAuthData
 import com.family.happiness.network.request.SignUpData
-import com.family.happiness.network.response.UploadPhotosResponse
-import com.family.happiness.room.user.User
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.family.happiness.network.response.*
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
-import java.util.concurrent.TimeUnit
 
 enum class HappinessApiStatus { LOADING, ERROR, DONE }
 
@@ -35,17 +26,23 @@ interface HappinessApi {
     suspend fun createFamily(): JoinFamilyResponse
 
     @POST("family")
-    suspend fun joinFamily(@Body familyId: String): JoinFamilyResponse
+    suspend fun joinFamily(@Body joinFamilyData: JoinFamilyData): JoinFamilyResponse
 
     @DELETE("family")
     suspend fun leaveFamily()
 
     @Multipart
     @POST("upload/photo")
-    suspend fun uploadPhotos(
+    suspend fun uploadPhoto(
         @Part("isNewEvent") isNewEvent: Boolean,
         @Part("eventName") eventName: String,
-        @Part("tags") tags: List<User>,
+        @Part("userIds") userIds: List<String>,
         @Part parts: List<MultipartBody.Part>
     ): UploadPhotosResponse
+
+    @GET("sync/user")
+    suspend fun syncUser(): SyncUserResponse
+
+    @POST("mail")
+    suspend fun writeMail(@Body writeMailData: WriteMailData)
 }

@@ -31,7 +31,7 @@ class PhotoUploadFragment :
     AdapterView.OnItemSelectedListener {
 
     private val args: PhotoUploadFragmentArgs by navArgs()
-    private val tags = mutableListOf<User>()
+    private val taggedUsers = mutableListOf<User>()
     private var isNewEvent = false
     private lateinit var eventName: String
 
@@ -55,9 +55,9 @@ class PhotoUploadFragment :
         binding.recyclerView.adapter = TagListAdapter() { isChecked, position ->
             viewModel.users.value?.let {
                 if (isChecked) {
-                    tags.add(it[position])
+                    taggedUsers.add(it[position])
                 } else {
-                    tags.remove(it[position])
+                    taggedUsers.remove(it[position])
                 }
             }
         }
@@ -107,10 +107,10 @@ class PhotoUploadFragment :
                 PhotoUploadBody(
                     file,
                     MediaType.parse(requireActivity().contentResolver.getType(uri))!!
-                ) { file.delete() }
+                )
             )
         }
-        viewModel.upload(isNewEvent, eventName, tags, parts)
+        viewModel.upload(isNewEvent, eventName, taggedUsers.map { it.id }, parts)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

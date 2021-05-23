@@ -7,13 +7,18 @@ import com.family.happiness.PreferenceKeys
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.SafeResource
 import com.family.happiness.network.request.GetSmsData
+import com.family.happiness.network.request.JoinFamilyData
 import com.family.happiness.network.request.OAuthData
 import com.family.happiness.network.request.SignUpData
 import com.family.happiness.network.response.PersonalDataResponse
+import com.family.happiness.room.user.User
 import com.family.happiness.room.user.UserDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
@@ -92,6 +97,12 @@ class UserRepository(
         }
     }
 
+    suspend fun deleteFamilyId() {
+        personalDataDatastore.edit {
+            it.remove(PreferenceKeys.FAMILY_ID)
+        }
+    }
+
     suspend fun deleteAllPersonalData() {
         personalDataDatastore.edit {
             it.remove(PreferenceKeys.TOKEN)
@@ -105,11 +116,15 @@ class UserRepository(
     }
 
     suspend fun joinFamily(familyId: String) = safeApiCall {
-        happinessApi.joinFamily(familyId)
+        happinessApi.joinFamily(JoinFamilyData(familyId))
     }
 
     suspend fun leaveFamily() = safeApiCall {
         happinessApi.leaveFamily()
+    }
+
+    suspend fun syncUser() = safeApiCall {
+        userDao.refresh(happinessApi.syncUser().users)
     }
 
     data class PersonalDataPreferences(

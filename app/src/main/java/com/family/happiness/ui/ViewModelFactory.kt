@@ -9,6 +9,7 @@ import com.family.happiness.ui.auth.SignInViewModel
 import com.family.happiness.ui.auth.SignUpViewModel
 import com.family.happiness.ui.auth.SmsVerificationViewModel
 import com.family.happiness.ui.home.MailViewModel
+import com.family.happiness.ui.mailwrite.MailWriteViewModel
 import com.family.happiness.ui.photodetail.PhotoDetailViewModel
 import com.family.happiness.ui.photoupload.PhotoUploadViewModel
 import com.family.happiness.ui.splash.SplashViewModel
@@ -25,6 +26,7 @@ class ViewModelFactory(private val app: HappinessApplication)
             modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> MainActivityViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(CreateFamilyViewModel::class.java) -> CreateFamilyViewModel(app.userRepository) as T
             modelClass.isAssignableFrom(MailViewModel::class.java) -> MailViewModel() as T
+            modelClass.isAssignableFrom(MailWriteViewModel::class.java) -> MailWriteViewModel(app.userRepository, app.mailRepository) as T
             modelClass.isAssignableFrom(AlbumViewModel::class.java) -> AlbumViewModel(app.albumRepository) as T
             modelClass.isAssignableFrom(PhotoDetailViewModel::class.java) -> PhotoDetailViewModel(app.albumRepository) as T
             modelClass.isAssignableFrom(PhotoUploadViewModel::class.java) -> PhotoUploadViewModel(app.userRepository, app.albumRepository) as T

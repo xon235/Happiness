@@ -36,17 +36,17 @@ class AlbumRepository(
     suspend fun uploadPhotos(
         newEvent: Boolean,
         eventName: String,
-        tags: List<User>,
+        tags: List<String>,
         parts: List<MultipartBody.Part>
     ) = safeApiCall {
-        happinessApi.uploadPhotos(newEvent, eventName, tags, parts)
+        happinessApi.uploadPhoto(newEvent, eventName, tags, parts)
     }
 
-    suspend fun insertEvents(events: List<Event>){
+    suspend fun insertEvents(events: List<Event>) = withContext(Dispatchers.IO) {
         eventDao.insert(events)
     }
 
-    suspend fun insertPhotos(photos: List<Photo>){
+    suspend fun insertPhotos(photos: List<Photo>) = withContext(Dispatchers.IO) {
         photoDao.insert(photos)
     }
 }

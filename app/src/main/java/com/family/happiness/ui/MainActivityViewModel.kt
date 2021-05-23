@@ -3,7 +3,6 @@ package com.family.happiness.ui
 import androidx.lifecycle.*
 import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
-import com.family.happiness.network.response.JoinFamilyResponse
 import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
 
@@ -19,24 +18,44 @@ class MainActivityViewModel(
 
     val members = userRepository.members.asLiveData()
 
-    private val _joinFamilyEvent = MutableLiveData<Flag<SafeResource<JoinFamilyResponse>>>()
-    val joinFamilyFlag: LiveData<Flag<SafeResource<JoinFamilyResponse>>> = _joinFamilyEvent
+    private val _joinFamilyFlag = MutableLiveData<Flag<Boolean>>()
+    val joinFamilyFlag: LiveData<Flag<Boolean>> = _joinFamilyFlag
 
     fun joinFamily(familyId: String) = viewModelScope.launch {
-        _joinFamilyEvent.value = Flag(userRepository.joinFamily(familyId))
+        when(val resource = userRepository.joinFamily(familyId)){
+            is SafeResource.Success -> {
+                _joinFamilyFlag.value = Flag(true)
+                userRepository.insertFamilyId(resource.value.familyId)
+            }
+            is SafeResource.Failure -> {
+                _joinFamilyFlag.value = Flag(false)
+            }
+        }
     }
 
-    private val _leaveFamilyEvent = MutableLiveData<Flag<SafeResource<Unit>>>()
-    val leaveFamilyFlag: LiveData<Flag<SafeResource<Unit>>> = _leaveFamilyEvent
+    private val _leaveFamilyEvent = MutableLiveData<Flag<Boolean>>()
+    val leaveFamilyFlag: LiveData<Flag<Boolean>> = _leaveFamilyEvent
 
     fun leaveFamily() = viewModelScope.launch {
-        _leaveFamilyEvent.value = Flag(userRepository.leaveFamily())
+        when(userRepository.leaveFamily()){
+            is SafeResource.Success -> {
+                _leaveFamilyEvent.value = Flag(true)
+                userRepository.deleteFamilyId()
+            }
+            is SafeResource.Failure -> {
+                _leaveFamilyEvent.value = Flag(false)
+            }
+        }
+    }
+
+    fun syncUser() = viewModelScope.launch {
+        when(val resource = userRepository.syncUser()){
+            is SafeResource.Success -> { }
+            is SafeResource.Failure -> { }
+        }
     }
 
     fun clearUserData() = viewModelScope.launch {
         userRepository.deleteAllPersonalData()
     }
-
-    fun updateMembers(){}
-
 }

@@ -80,18 +80,22 @@ class MainActivity : AppCompatActivity() {
             if (it.token == null) {
                 navController.navigate(R.id.action_global_signInFragment)
             }
+
+            if(it.familyId != null){
+                viewModel.syncUser()
+            }
         }
 
         viewModel.joinFamilyFlag.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
-                val text = if(it is SafeResource.Success) "Join Successful" else "Join Failed"
+                val text = if(it) "Join Successful" else "Join Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
 
         viewModel.leaveFamilyFlag.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
-                val text = if(it is SafeResource.Success) "Left Family" else "Leave Failed"
+                val text = if(it) "Left Family" else "Leave Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }

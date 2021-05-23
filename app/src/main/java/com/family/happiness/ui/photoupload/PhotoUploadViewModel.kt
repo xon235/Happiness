@@ -27,7 +27,7 @@ class PhotoUploadViewModel(
     fun upload(
         isNewEvent: Boolean,
         eventName: String,
-        tags: List<User>,
+        tags: List<String>,
         parts: List<MultipartBody.Part>
     ) = viewModelScope.launch {
         _inputEnabled.value = false

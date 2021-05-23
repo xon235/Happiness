@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_refresh"
                 android:layout_gravity="right"
-                android:onClick="@{() -> viewModel.updateMembers()}"
+                android:onClick="@{() -> viewModel.syncUser()}"
                 android:background="@null"
                 android:padding="6dp"/>
 

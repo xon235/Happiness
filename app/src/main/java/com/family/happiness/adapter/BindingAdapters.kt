@@ -78,20 +78,28 @@ fun bindAlbumSpinner(spinner: Spinner, data: List<Event>?) {
     }
 }
 
-@BindingAdapter("HappinessApiStatus")
-fun bindStatus(statusImageView: ImageView,
-               status: HappinessApiStatus?) {
-    when (status) {
-        HappinessApiStatus.LOADING -> {
-            statusImageView.visibility = View.VISIBLE
-            statusImageView.setImageResource(R.drawable.loading_animation)
-        }
-        HappinessApiStatus.ERROR -> {
-            statusImageView.visibility = View.VISIBLE
-            statusImageView.setImageResource(R.drawable.ic_connection_error)
-        }
-        HappinessApiStatus.DONE -> {
-            statusImageView.visibility = View.GONE
-        }
+@BindingAdapter("app:listData")
+fun bindMemberSpinner(spinner: Spinner, data: List<User>?) {
+    (spinner.adapter as ArrayAdapter<String>).apply {
+        clear()
+        data?.let { addAll(it.map { user -> user.name }) }
     }
 }
+
+//@BindingAdapter("HappinessApiStatus")
+//fun bindStatus(statusImageView: ImageView,
+//               status: HappinessApiStatus?) {
+//    when (status) {
+//        HappinessApiStatus.LOADING -> {
+//            statusImageView.visibility = View.VISIBLE
+//            statusImageView.setImageResource(R.drawable.loading_animation)
+//        }
+//        HappinessApiStatus.ERROR -> {
+//            statusImageView.visibility = View.VISIBLE
+//            statusImageView.setImageResource(R.drawable.ic_connection_error)
+//        }
+//        HappinessApiStatus.DONE -> {
+//            statusImageView.visibility = View.GONE
+//        }
+//    }
+//}

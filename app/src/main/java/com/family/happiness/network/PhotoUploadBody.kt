@@ -9,7 +9,6 @@ import java.io.FileInputStream
  class PhotoUploadBody(
     private val file: File,
     private val mediaType: MediaType,
-    private val callback: () -> Unit,
 ): RequestBody() {
 
     companion object{

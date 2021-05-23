@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.HappinessRepository
+import com.family.happiness.repository.MailRepository
 import com.family.happiness.repository.UserRepository
 import com.family.happiness.room.HappinessRoomDatabase
 import com.squareup.moshi.Moshi
@@ -92,6 +93,10 @@ class HappinessApplication : Application() {
             database.userDao(),
             happinessApi
         )
+    }
+
+    val mailRepository by lazy {
+        MailRepository(happinessApi)
     }
 
     val albumRepository by lazy {
