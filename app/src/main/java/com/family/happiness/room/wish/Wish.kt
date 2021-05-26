@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.family.happiness.room.user.User
+import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -20,8 +21,8 @@ import kotlinx.parcelize.Parcelize
     ]
 )
 data class Wish(
-    @PrimaryKey val id: String,
-    val user_id: String,
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "user_id") val userId: String,
     val title: String,
     val content: String,
     @ColumnInfo(name = "timestamp_open") val timestampOpen: String,

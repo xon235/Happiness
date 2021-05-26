@@ -7,10 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.family.happiness.network.HappinessApi
-import com.family.happiness.repository.AlbumRepository
-import com.family.happiness.repository.HappinessRepository
-import com.family.happiness.repository.MailRepository
-import com.family.happiness.repository.UserRepository
+import com.family.happiness.repository.*
 import com.family.happiness.room.HappinessRoomDatabase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -96,13 +93,24 @@ class HappinessApplication : Application() {
     }
 
     val mailRepository by lazy {
-        MailRepository(happinessApi)
+        MailRepository(
+            database.mailDao(),
+            happinessApi
+        )
     }
 
     val albumRepository by lazy {
         AlbumRepository(
             database.photoDao(),
             database.eventDao(),
+            happinessApi
+        )
+    }
+
+    val wishRepository by lazy {
+        WishRepository(
+            database.wishDao(),
+            database.contributorDao(),
             happinessApi
         )
     }

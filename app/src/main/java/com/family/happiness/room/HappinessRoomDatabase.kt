@@ -7,6 +7,8 @@ import com.family.happiness.room.contributor.Contributor
 import com.family.happiness.room.contributor.ContributorDao
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.event.EventDao
+import com.family.happiness.room.mail.Mail
+import com.family.happiness.room.mail.MailDao
 import com.family.happiness.room.photo.Photo
 import com.family.happiness.room.photo.PhotoDao
 import com.family.happiness.room.tag.Tag
@@ -19,6 +21,7 @@ import com.family.happiness.room.wish.WishDao
 @Database(
     entities = [
         User::class,
+        Mail::class,
         Event::class,
         Photo::class,
         Tag::class,
@@ -31,6 +34,7 @@ import com.family.happiness.room.wish.WishDao
 abstract class HappinessRoomDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
+    abstract fun mailDao(): MailDao
     abstract fun eventDao(): EventDao
     abstract fun photoDao(): PhotoDao
     abstract fun tagDao(): TagDao

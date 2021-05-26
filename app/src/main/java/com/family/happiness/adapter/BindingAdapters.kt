@@ -15,6 +15,7 @@ import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
 import com.family.happiness.room.user.User
 import com.family.happiness.room.wish.Wish
+import com.family.happiness.room.wish.WishDetail
 
 @BindingAdapter("app:visibleIf")
 fun visibleIf(view: View, visible: Boolean) {
@@ -63,7 +64,7 @@ fun bindEventsRecyclerView(recyclerView: RecyclerView,
 
 @BindingAdapter("app:listData")
 fun bindWishesRecyclerView(recyclerView: RecyclerView,
-                           data: List<Wish>?) {
+                           data: List<WishDetail>?) {
     val adapter = recyclerView.adapter as WishListAdapter
     adapter.submitList(data)
 }

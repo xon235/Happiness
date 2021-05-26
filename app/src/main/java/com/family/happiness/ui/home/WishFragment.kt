@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.family.happiness.adapter.WishListAdapter
 import com.family.happiness.databinding.FragmentWishBinding
 import com.family.happiness.ui.HappinessBaseFragment
+import timber.log.Timber
 
 class WishFragment : HappinessBaseFragment<FragmentWishBinding, WishViewModel>() {
 
@@ -19,6 +20,7 @@ class WishFragment : HappinessBaseFragment<FragmentWishBinding, WishViewModel>()
         binding.wishesFragment = this
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
         binding.recyclerView.adapter = WishListAdapter {
             findNavController().navigate(WishFragmentDirections.actionWishFragmentToWishDetailFragment(it))
         }
@@ -30,7 +32,7 @@ class WishFragment : HappinessBaseFragment<FragmentWishBinding, WishViewModel>()
         )
     }
 
-    fun onFabClick(view: View){
+    fun onFabClick(){
         findNavController().navigate(WishFragmentDirections.actionWishFragmentToWishWriteFragment(null))
     }
 

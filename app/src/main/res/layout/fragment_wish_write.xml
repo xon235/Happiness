@@ -5,47 +5,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="wish"
-            type="com.family.happiness.room.wish.Wish" />
+            name="wishWriteFragment"
+            type="com.family.happiness.ui.wishnwrite.WishWriteFragment" />
+        <variable
+            name="viewModel"
+            type="com.family.happiness.ui.wishnwrite.WishWriteViewModel" />
+        <variable
+            name="wishDetail"
+            type="com.family.happiness.room.wish.WishDetail" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="6dp">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{!viewModel.inputEnabled}" />
+
         <EditText
-            android:id="@+id/toTv"
+            android:id="@+id/titleEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="32sp"
             android:textStyle="bold"
             android:hint="Title"
-            android:text="@{wish == null? null: wish.title}"
-            tools:text="Title"/>
+            android:text="@{wishDetail.wish.title}"
+            tools:text="Title"
+            app:enabledIf="@{viewModel.inputEnabled}"/>
 
         <EditText
-            android:id="@+id/contentTv"
+            android:id="@+id/contentEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Content"
             android:gravity="top|start"
             android:minLines="8"
             android:inputType="textMultiLine"
-            app:layout_constraintTop_toBottomOf="@id/toTv"
+            app:layout_constraintTop_toBottomOf="@id/titleEt"
             android:textSize="24sp"
-            android:text="@{wish.content}"
-            tools:text="lorem ipsum"/>
+            android:text="@{wishDetail.wish.content}"
+            tools:text="lorem ipsum"
+            app:enabledIf="@{viewModel.inputEnabled}"/>
 
         <TextView
             android:id="@+id/statusTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/contentTv"
+            app:layout_constraintTop_toBottomOf="@id/contentEt"
             android:textSize="16sp"
             android:textAlignment="textEnd"
             android:text="Finished"
-            app:visibleIf="@{wish.timestampClose != null}" />
+            app:visibleIf="@{wishDetail.wish.timestampClose != null}" />
 
         <TextView
             android:id="@+id/createTv"
@@ -54,7 +71,7 @@
             app:layout_constraintTop_toBottomOf="@id/statusTv"
             android:textSize="16sp"
             android:textAlignment="textEnd"
-            android:text="@{wish.timestampOpen}"
+            android:text="@{wishDetail.wish.timestampOpen}"
             tools:text="YYYY-MM-DD"/>
 
         <TextView
@@ -64,8 +81,8 @@
             app:layout_constraintTop_toBottomOf="@id/createTv"
             android:textSize="16sp"
             android:textAlignment="textEnd"
-            android:text="@{wish.timestampClose}"
-            app:visibleIf="@{wish.timestampClose != null}"
+            android:text="@{wishDetail.wish.timestampClose}"
+            app:visibleIf="@{wishDetail.wish.timestampClose != null}"
             tools:text="YYYY-MM-DD"/>
 
         <Button
@@ -73,8 +90,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{wish== null? &quot;Post&quot;: &quot;Update&quot;}"
-            tools:text="Post"/>
+            android:text="@{wishDetail == null? &quot;Post&quot;: &quot;Update&quot;}"
+            tools:text="Post"
+            android:onClick="@{() -> wishWriteFragment.onClickFinish()}"
+            app:enabledIf="@{viewModel.inputEnabled}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

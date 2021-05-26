@@ -5,8 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="wish"
-            type="com.family.happiness.room.wish.Wish" />
+            name="wishDetailFragment"
+            type="com.family.happiness.ui.wishdetail.WishDetailFragment" />
+        <variable
+            name="wishDetail"
+            type="com.family.happiness.room.wish.WishDetail" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="@{wish.title}"
+            android:text="@{wishDetail.wish.title}"
             android:padding="6dp"
             tools:text="Title"/>
 
@@ -31,7 +34,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/toTv"
             android:textSize="18sp"
-            android:text="@{wish.content}"
+            android:text="@{wishDetail.wish.content}"
             android:padding="6dp"
             tools:text="lorem ipsum"/>
 
@@ -41,7 +44,7 @@
             app:layout_constraintBottom_toTopOf="@id/statusTv"
             android:textSize="16sp"
             android:textAlignment="textEnd"
-            android:text="@{wish.user_id}"
+            android:text="@{wishDetail.user.name}"
             android:padding="6dp"/>
 
         <TextView
@@ -53,7 +56,7 @@
             android:textAlignment="textEnd"
             android:text="완료!"
             android:padding="6dp"
-            app:visibleIf="@{wish.timestampClose != null}" />
+            app:visibleIf="@{wishDetail.wish.timestampClose != null}" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -68,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
-                android:text="@{wish.timestampOpen}"
+                android:text="@{wishDetail.wish.timestampOpen}"
                 android:padding="6dp"
                 tools:text="YYYY-MM-DD"/>
 
@@ -78,7 +81,7 @@
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
                 android:text="~"
-                app:visibleIf="@{wish.timestampClose != null}"
+                app:visibleIf="@{wishDetail.wish.timestampClose != null}"
                 android:padding="6dp" />
 
             <TextView
@@ -87,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textAlignment="textEnd"
-                android:text="@{wish.timestampClose}"
-                app:visibleIf="@{wish.timestampClose != null}"
+                android:text="@{wishDetail.wish.timestampClose}"
+                app:visibleIf="@{wishDetail.wish.timestampClose != null}"
                 android:padding="6dp"
                 tools:text="YYYY-MM-DD"/>
         </LinearLayout>
@@ -98,8 +101,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{wish.timestampClose != null? &quot;Finished&quot;: &quot;Finish&quot;}"
-            android:enabled="@{wish.timestampClose == null}"
+            android:text="@{wishDetail.wish.timestampClose != null? &quot;Finished&quot;: &quot;Finish&quot;}"
+            android:enabled="@{wishDetail.wish.timestampClose == null}"
+            android:onClick="@{() -> wishDetailFragment.onClickFinish()}"
             tools:text="Finish"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

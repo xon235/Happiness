@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_mailFragment_to_mailWriteFragment"
             app:destination="@id/mailWriteFragment" />
+        <action
+            android:id="@+id/action_mailFragment_to_mailReadFragment"
+            app:destination="@id/mailReadFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
@@ -117,8 +120,8 @@
         android:label="Wish Detail"
         tools:layout="@layout/fragment_wish_detail" >
         <argument
-            android:name="wish"
-            app:argType="com.family.happiness.room.wish.Wish" />
+            android:name="wishDetail"
+            app:argType="com.family.happiness.room.wish.WishDetail" />
         <action
             android:id="@+id/action_wishDetailFragment_to_wishWriteFragment"
             app:destination="@id/wishWriteFragment" />
@@ -132,9 +135,14 @@
         android:label="Edit Wish"
         tools:layout="@layout/fragment_wish_write" >
         <argument
-            android:name="wish"
-            app:argType="com.family.happiness.room.wish.Wish"
+            android:name="wishDetail"
+            app:argType="com.family.happiness.room.wish.WishDetail"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_wishWriteFragment_to_wishFragment"
+            app:destination="@id/wishFragment"
+            app:popUpTo="@id/wishFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/wishFinishFragment"
@@ -166,4 +174,9 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/mailReadFragment"
+        android:name="com.family.happiness.ui.mailread.MailReadFragment"
+        android:label="fragment_mail_read"
+        tools:layout="@layout/fragment_mail_read" />
 </navigation>

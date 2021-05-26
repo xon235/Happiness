@@ -3,11 +3,9 @@ package com.family.happiness.ui.mailwrite
 import androidx.lifecycle.*
 import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
-import com.family.happiness.network.response.WriteMailData
+import com.family.happiness.network.request.WriteMailData
 import com.family.happiness.repository.MailRepository
 import com.family.happiness.repository.UserRepository
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MailWriteViewModel(

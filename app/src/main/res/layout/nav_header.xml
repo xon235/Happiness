@@ -30,6 +30,7 @@
                 android:onClick="@{() -> mainActivity.onClickSignOut()}"
                 android:background="@null"
                 android:padding="6dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

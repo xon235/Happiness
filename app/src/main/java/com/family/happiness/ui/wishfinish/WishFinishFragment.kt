@@ -4,37 +4,52 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.navArgs
 import com.family.happiness.adapter.TagListAdapter
 import com.family.happiness.databinding.FragmentWishFinishBinding
+import com.family.happiness.network.request.FinishWishData
 import com.family.happiness.room.user.User
 import com.family.happiness.ui.HappinessBaseFragment
-import com.family.happiness.viewmodel.WishFinisViewModel
 import timber.log.Timber
 
 class WishFinishFragment : HappinessBaseFragment<FragmentWishFinishBinding, WishFinisViewModel>() {
 
-    private lateinit var users: List<User>
-    private val tags = mutableListOf<User>()
+    private val args: WishFinishFragmentArgs by navArgs()
+    private val taggedUsers = mutableListOf<User>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tagListAdapter = TagListAdapter(){isChecked, position ->
-            if(isChecked){
-                tags.add(users[position])
-            } else {
-                tags.remove(users[position])
+        binding.wishFinishFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+
+        binding.recyclerView.adapter = TagListAdapter() { isChecked, position ->
+            viewModel.users.value?.let {
+                if (isChecked) {
+                    taggedUsers.add(it[position])
+                } else {
+                    taggedUsers.remove(it[position])
+                }
             }
         }
-        binding.recyclerView.adapter = tagListAdapter
-//        happinessViewModel.members.observe(viewLifecycleOwner){
-//            users = arrayListOf(happinessViewModel.user.value!!.toMember()) + it
-//            tagListAdapter.submitList(users)
-//        }
 
-        binding.button.setOnClickListener {
-            Timber.d("click")
+        viewModel.finishFlag.observe(viewLifecycleOwner){ flag ->
+            flag.getContentIfNotHandled()?.let {
+                Toast.makeText(
+                    requireContext(),
+                    "Finish " + if (it) { "successful" } else { "failed" },
+                    Toast.LENGTH_SHORT
+                ).show()
+
+//                if (it){ navController.popBackStack() }
+            }
         }
+    }
+
+    fun onClickFinish() {
+        viewModel.finishWish(FinishWishData(args.wish.id, contributors = taggedUsers.map { it.id }))
     }
 
     override fun getBinding(

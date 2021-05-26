@@ -12,10 +12,19 @@ class MailFragment : HappinessBaseFragment<FragmentMailBinding, MailViewModel>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fab.setOnClickListener {
-            findNavController()
-                .navigate(MailFragmentDirections.actionMailFragmentToMailWriteFragment())
-        }
+        binding.mailFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+    }
+
+    fun onClickRead() {
+        findNavController()
+            .navigate(MailFragmentDirections.actionMailFragmentToMailReadFragment())
+    }
+
+    fun onClickFab(){
+        findNavController()
+            .navigate(MailFragmentDirections.actionMailFragmentToMailWriteFragment())
     }
 
 

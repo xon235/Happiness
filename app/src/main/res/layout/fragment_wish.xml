@@ -17,16 +17,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="6dp"
             android:clipToPadding="false"
             app:layoutManager=
                 "androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:spanCount="1"
             app:listData="@{viewModel.wishes}"
             tools:itemCount="24"
@@ -40,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_compose"
             android:layout_margin="16dp"
-            android:onClick="@{wishesFragment::onFabClick}"/>
+            android:onClick="@{() -> wishesFragment.onFabClick()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

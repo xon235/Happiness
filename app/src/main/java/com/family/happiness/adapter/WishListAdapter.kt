@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.family.happiness.databinding.WishItemLayoutBinding
 import com.family.happiness.room.wish.Wish
+import com.family.happiness.room.wish.WishDetail
 
-class WishListAdapter(private val clickListener: (wish: Wish) -> Unit)
-    : ListAdapter<Wish, WishListAdapter.WishListViewHolder>(DiffCallback) {
+class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
+    : ListAdapter<WishDetail, WishListAdapter.WishListViewHolder>(DiffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WishListViewHolder {
         return WishListViewHolder(WishItemLayoutBinding.inflate(
             LayoutInflater.from(parent.context), parent, false))
@@ -23,18 +24,18 @@ class WishListAdapter(private val clickListener: (wish: Wish) -> Unit)
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Wish>() {
-        override fun areItemsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-            return oldItem.id === newItem.id
+    companion object DiffCallback : DiffUtil.ItemCallback<WishDetail>() {
+        override fun areItemsTheSame(oldItem: WishDetail, newItem: WishDetail): Boolean {
+            return oldItem.wish.id === newItem.wish.id
         }
 
-        override fun areContentsTheSame(oldItem: Wish, newItem: Wish): Boolean {
-            return oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: WishDetail, newItem: WishDetail): Boolean {
+            return oldItem.wish.id == newItem.wish.id
         }
     }
 
     class WishListViewHolder(private var binding: WishItemLayoutBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(wish: Wish) { binding.wish = wish }
+        fun bind(wish: WishDetail) { binding.wishDetail = wish }
     }
 }

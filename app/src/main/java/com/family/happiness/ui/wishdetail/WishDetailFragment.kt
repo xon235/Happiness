@@ -7,35 +7,43 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentWishDetailBinding
+import com.family.happiness.ui.HappinessBaseFragment
 
-class WishDetailFragment : Fragment() {
+class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, WishDetailViewModel>() {
 
-    private lateinit var binding: FragmentWishDetailBinding
-    val args: WishDetailFragmentArgs by navArgs()
+    private val args: WishDetailFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        args.wish.timestampClose?:setHasOptionsMenu(true)
-        binding = FragmentWishDetailBinding.inflate(inflater)
-        binding.wish = args.wish
-        binding.finishBt.setOnClickListener {
-            findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishFinishFragment(args.wish))
-        }
-        return binding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.wishDetailFragment = this
+        binding.wishDetail = args.wishDetail
+
+        args.wishDetail.wish.timestampClose?:setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.wish_detail_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.wish_detail_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.modify ->
-                findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishWriteFragment(args.wish))
+                findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishWriteFragment(args.wishDetail))
         }
         return true
     }
+
+    fun onClickFinish(){
+        findNavController().navigate(WishDetailFragmentDirections.actionWishDetailFragmentToWishFinishFragment(args.wishDetail.wish))
+    }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentWishDetailBinding.inflate(inflater, container, false)
+
+    override fun getViewModel() = WishDetailViewModel::class.java
 }

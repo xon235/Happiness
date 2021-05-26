@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="wish"
-            type="com.family.happiness.room.wish.Wish" />
+            name="wishDetail"
+            type="com.family.happiness.room.wish.WishDetail" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="@{wish.title}"
+            android:text="@{wishDetail.wish.title}"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,11 +41,10 @@
                 android:id="@+id/statusTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{wish.timestampClose == null? &quot;Waiting&quot;: &quot;완료!&quot;}"
-                app:visibleIf="@{wish.timestampClose != null}"
+                android:text="Complete"
+                app:visibleIf="@{wishDetail.wish.timestampClose != null}"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                tools:text="Waiting..."
                 android:layout_gravity="end"/>
 
             <TextView
@@ -54,9 +53,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:text="@{wish.user_id}"
+                android:text="@{wishDetail.user.name}"
                 android:layout_gravity="end"
-                app:visibleIf="@{wish.timestampClose == null}"
+                app:visibleIf="@{wishDetail.wish.timestampClose == null}"
                 tools:text="Author" />
         </LinearLayout>
 

@@ -7,6 +7,7 @@ import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import timber.log.Timber
 
 class SignInViewModel(private val userRepository: UserRepository) : ViewModel() {
 

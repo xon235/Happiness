@@ -18,5 +18,8 @@ import com.family.happiness.room.user.User
 )
 data class Mail(
     @PrimaryKey val id: Int,
-    @ColumnInfo(name = "from_user_id") val fromUserId: String
+    @ColumnInfo(name = "from_user_id") val fromUserId: String,
+    val content: String,
+    val timestamp: String,
+    @ColumnInfo(name = "time_sent") val timeSent: String,
 )

@@ -1,9 +1,6 @@
 package com.family.happiness.network
 
-import com.family.happiness.network.request.GetSmsData
-import com.family.happiness.network.request.JoinFamilyData
-import com.family.happiness.network.request.OAuthData
-import com.family.happiness.network.request.SignUpData
+import com.family.happiness.network.request.*
 import com.family.happiness.network.response.*
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -45,4 +42,16 @@ interface HappinessApi {
 
     @POST("mail")
     suspend fun writeMail(@Body writeMailData: WriteMailData)
+
+    @POST("wish")
+    suspend fun writeWish(@Body writeWishData: WriteWishData): WriteWishResponse
+
+    @HTTP(method="DELETE", hasBody=true, path="wish")
+    suspend fun deleteWish(@Body deleteWishData: DeleteWishData)
+
+    @PUT("wish")
+    suspend fun finishWish(@Body finishWishData: FinishWishData): FinishWishResponse
+
+    @GET("wish")
+    suspend fun syncWish(): SyncWishResponse
 }
