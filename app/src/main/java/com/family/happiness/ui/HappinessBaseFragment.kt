@@ -17,10 +17,7 @@ abstract class HappinessBaseFragment<B: ViewBinding, V: ViewModel>: Fragment() {
 
     protected lateinit var binding: B
     protected lateinit var viewModel: V
-    // TODO delete when refactoring is finished
-//    protected val mainActivityViewModel: MainActivityViewModel by activityViewModels(){
-//        ViewModelFactory((requireActivity().application as HappinessApplication))
-//    }
+
     protected val navController: NavController by lazy { findNavController() }
 
     override fun onCreateView(

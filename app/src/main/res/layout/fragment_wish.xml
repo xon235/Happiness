@@ -10,33 +10,38 @@
             name="viewModel"
             type="com.family.happiness.ui.home.WishViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.home.WishFragment">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="6dp"
-            android:clipToPadding="false"
-            app:layoutManager=
-                "androidx.recyclerview.widget.LinearLayoutManager"
-            app:spanCount="1"
-            app:listData="@{viewModel.wishes}"
-            tools:itemCount="24"
-            tools:listitem="@layout/wish_item_layout" />
+            tools:context=".ui.home.WishFragment">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_compose"
-            android:layout_margin="16dp"
-            android:onClick="@{() -> wishesFragment.onFabClick()}"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="6dp"
+                android:clipToPadding="false"
+                app:layoutManager=
+                    "androidx.recyclerview.widget.LinearLayoutManager"
+                app:spanCount="1"
+                app:listData="@{viewModel.wishes}"
+                tools:itemCount="24"
+                tools:listitem="@layout/wish_item_layout" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_compose"
+                android:layout_margin="16dp"
+                android:onClick="@{() -> wishesFragment.onFabClick()}"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

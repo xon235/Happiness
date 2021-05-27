@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentWishWriteBinding
 import com.family.happiness.network.request.DeleteWishData
 import com.family.happiness.network.request.WriteWishData
 import com.family.happiness.ui.HappinessBaseFragment
-import timber.log.Timber
 
 class WishWriteFragment : HappinessBaseFragment<FragmentWishWriteBinding, WishWriteViewModel>() {
 
@@ -63,7 +61,7 @@ class WishWriteFragment : HappinessBaseFragment<FragmentWishWriteBinding, WishWr
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.new_wish_menu, menu)
+        inflater.inflate(R.menu.wish_write_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

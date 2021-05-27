@@ -49,4 +49,8 @@ class WishRepository(
     ) = safeApiCall {
         happinessApi.finishWish(finishWishData)
     }
+
+    suspend fun syncWish() = safeApiCall {
+        happinessApi.syncWish()
+    }
 }
