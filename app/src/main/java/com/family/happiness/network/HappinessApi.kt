@@ -53,5 +53,5 @@ interface HappinessApi {
     suspend fun finishWish(@Body finishWishData: FinishWishData): FinishWishResponse
 
     @GET("wish")
-    suspend fun syncWish(): SyncWishResponse
+    suspend fun getWish(): GetWishResponse
 }

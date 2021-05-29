@@ -18,14 +18,13 @@ class WishViewModel(private val wishRepository: WishRepository): ViewModel() {
 
     fun syncWish() = viewModelScope.launch {
         _isRefreshing.value = true
-        when(val resource = wishRepository.syncWish()){
+        when(val resource = wishRepository.getWish()){
             is SafeResource.Success -> {
-                resource.value.wishes?.let { wishRepository.insertWish(it) }
-                resource.value.contributors?.let { wishRepository.insertContributor(it) }
+                resource.value.wishes?.let { wishRepository.syncWish(it) }
+                resource.value.contributors?.let { wishRepository.syncContributor(it) }
                 _syncFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
-                Timber.d(resource.throwable)
                 _syncFinishFlag.value = Flag(false)
             }
         }

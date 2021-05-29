@@ -43,7 +43,7 @@ class WishFinishFragment : HappinessBaseFragment<FragmentWishFinishBinding, Wish
                     Toast.LENGTH_SHORT
                 ).show()
 
-//                if (it){ navController.popBackStack() }
+                if (it){ navController.navigate(WishFinishFragmentDirections.actionWishFinishFragmentToWishFragment()) }
             }
         }
     }

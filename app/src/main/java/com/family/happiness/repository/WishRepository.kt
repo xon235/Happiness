@@ -3,7 +3,6 @@ package com.family.happiness.repository
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.request.DeleteWishData
 import com.family.happiness.network.request.FinishWishData
-import com.family.happiness.network.request.WriteMailData
 import com.family.happiness.network.request.WriteWishData
 import com.family.happiness.room.contributor.Contributor
 import com.family.happiness.room.contributor.ContributorDao
@@ -20,28 +19,11 @@ class WishRepository(
 
     val wishDetails = wishDao.getAll()
 
-    suspend fun insertWish(wishes: List<Wish>) = withContext(Dispatchers.IO){
-        wishDao.insert(wishes)
-    }
-
-    suspend fun deleteWishById(wishId: Int) = withContext(Dispatchers.IO){
-        wishDao.deleteById(wishId)
-    }
-
-    suspend fun insertContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
-        contributorDao.insert(contributors)
-    }
-
+    // Api
     suspend fun writeWish(
         writeWishData: WriteWishData
     ) = safeApiCall {
         happinessApi.writeWish(writeWishData)
-    }
-
-    suspend fun deleteWish(
-        deleteWishData: DeleteWishData
-    ) = safeApiCall {
-        happinessApi.deleteWish(deleteWishData)
     }
 
     suspend fun finishWish(
@@ -50,7 +32,38 @@ class WishRepository(
         happinessApi.finishWish(finishWishData)
     }
 
-    suspend fun syncWish() = safeApiCall {
-        happinessApi.syncWish()
+    suspend fun deleteWish(
+        deleteWishData: DeleteWishData
+    ) = safeApiCall {
+        happinessApi.deleteWish(deleteWishData)
+    }
+
+    suspend fun getWish() = safeApiCall {
+        happinessApi.getWish()
+    }
+
+    // Dao
+    suspend fun insertWish(wishes: List<Wish>) = withContext(Dispatchers.IO){
+        wishDao.insert(wishes)
+    }
+
+    suspend fun updateWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
+        wishDao.update(wishes)
+    }
+
+    suspend fun deleteWishById(wishId: Int) = withContext(Dispatchers.IO){
+        wishDao.deleteById(wishId)
+    }
+
+    suspend fun syncWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
+        wishDao.sync(wishes)
+    }
+
+    suspend fun insertContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
+        contributorDao.insert(contributors)
+    }
+
+    suspend fun syncContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
+        contributorDao.sync(contributors)
     }
 }

@@ -10,14 +10,14 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun getAll(): Flow<List<User>>
 
-    @Query("DELETE FROM user WHERE id NOT IN (:userIds)")
-    suspend fun deleteNotIn(userIds: List<String>)
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(users: List<User>): List<Long>
 
-
     // TODO make base Dao
+
+    @Query("DELETE FROM user WHERE id NOT IN (:userIds)")
+    suspend fun deleteNotIn(userIds: List<String>)
+
     @Update
     suspend fun update(users: List<User>)
 

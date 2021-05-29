@@ -152,6 +152,11 @@
         <argument
             android:name="wish"
             app:argType="com.family.happiness.room.wish.Wish" />
+        <action
+            android:id="@+id/action_wishFinishFragment_to_wishFragment"
+            app:destination="@id/wishFragment"
+            app:popUpTo="@id/wishFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mailWriteFragment"

@@ -27,23 +27,18 @@ class WishFragment : HappinessBaseFragment<FragmentWishBinding, WishViewModel>()
         super.onViewCreated(view, savedInstanceState)
 
         binding.wishesFragment = this
-        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         binding.swipeRefreshLayout.setOnRefreshListener { refresh() }
 
         binding.recyclerView.adapter = WishListAdapter {
             findNavController().navigate(
-                WishFragmentDirections.actionWishFragmentToWishDetailFragment(
-                    it
-                )
+                WishFragmentDirections.actionWishFragmentToWishDetailFragment(it)
             )
         }
         binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                LinearLayoutManager.VERTICAL
-            )
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
         )
 
         viewModel.isRefreshing.observe(viewLifecycleOwner) {
@@ -67,9 +62,7 @@ class WishFragment : HappinessBaseFragment<FragmentWishBinding, WishViewModel>()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.refresh -> {
-                refresh()
-            }
+            R.id.refresh -> { refresh() }
         }
 
         return true
