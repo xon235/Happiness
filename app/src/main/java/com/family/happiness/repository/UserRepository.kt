@@ -11,14 +11,10 @@ import com.family.happiness.network.request.JoinFamilyData
 import com.family.happiness.network.request.OAuthData
 import com.family.happiness.network.request.SignUpData
 import com.family.happiness.network.response.PersonalDataResponse
-import com.family.happiness.room.user.User
 import com.family.happiness.room.user.UserDao
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
@@ -124,7 +120,7 @@ class UserRepository(
     }
 
     suspend fun syncUser() = safeApiCall {
-        userDao.refresh(happinessApi.syncUser().users)
+        userDao.sync(happinessApi.syncUser().users)
     }
 
     data class PersonalDataPreferences(

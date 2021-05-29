@@ -72,18 +72,6 @@ class HappinessApplication : Application() {
         retrofit.create(HappinessApi::class.java)
     }
 
-    val happinessRepository by lazy {
-        HappinessRepository(
-            database.userDao(),
-            database.eventDao(),
-            database.photoDao(),
-            database.tagDao(),
-            database.wishDao(),
-            database.contributorDao(),
-            happinessApi
-        )
-    }
-
     val userRepository by lazy {
         UserRepository(
             (this as Context).dataStore,

@@ -33,11 +33,12 @@ class PhotoUploadViewModel(
         _inputEnabled.value = false
         when(val resource = albumRepository.uploadPhotos(isNewEvent, eventName, tags, parts)){
             is SafeResource.Success ->{
-                resource.value.events?.let { albumRepository.insertEvents(it) }
+                resource.value.event?.let { albumRepository.insertEvents(listOf(it)) }
                 resource.value.photos?.let { albumRepository.insertPhotos(it) }
                 _uploadFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
+                Timber.d(resource.throwable)
                 _uploadFinishFlag.value = Flag(false)
             }
         }
