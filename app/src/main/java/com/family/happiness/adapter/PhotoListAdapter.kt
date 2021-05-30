@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.family.happiness.databinding.PhotoItemLayoutBinding
 import com.family.happiness.room.photo.Photo
+import com.family.happiness.room.photo.PhotoDetail
 
 class PhotoListAdapter(private val clickListener: (photo: Photo) -> Unit)
     : ListAdapter<Photo, PhotoListAdapter.ImageViewHolder>(DiffCallback) {

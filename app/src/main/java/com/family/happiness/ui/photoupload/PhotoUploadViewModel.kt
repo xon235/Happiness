@@ -5,7 +5,6 @@ import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.UserRepository
-import com.family.happiness.room.user.User
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import timber.log.Timber
@@ -33,8 +32,8 @@ class PhotoUploadViewModel(
         _inputEnabled.value = false
         when(val resource = albumRepository.uploadPhotos(isNewEvent, eventName, tags, parts)){
             is SafeResource.Success ->{
-                resource.value.event?.let { albumRepository.insertEvents(listOf(it)) }
-                resource.value.photos?.let { albumRepository.insertPhotos(it) }
+                resource.value.event?.let { albumRepository.insertEvent(listOf(it)) }
+                resource.value.photos?.let { albumRepository.insertPhoto(it) }
                 _uploadFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {

@@ -14,11 +14,10 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.family.happiness.PreferenceKeys
 import com.family.happiness.R
 import com.family.happiness.dataStore
-import com.family.happiness.network.HappinessApiStatus
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
+import com.family.happiness.room.photo.PhotoDetail
 import com.family.happiness.room.user.User
-import com.family.happiness.room.wish.Wish
 import com.family.happiness.room.wish.WishDetail
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -69,7 +68,7 @@ fun bindMembersRecyclerView(
 }
 
 @BindingAdapter("app:listData")
-fun bindPhotoesRecyclerView(
+fun bindPhotosRecyclerView(
     recyclerView: RecyclerView,
     data: List<Photo>?
 ) {

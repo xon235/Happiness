@@ -20,7 +20,6 @@ import com.family.happiness.R
 import com.family.happiness.adapter.FamilyListAdapter
 import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
-import com.family.happiness.network.SafeResource
 import com.family.happiness.ui.createfamily.CreateFamilyFragmentDirections
 
 class MainActivity : AppCompatActivity() {
@@ -96,6 +95,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.leaveFamilyFlag.observe(this){ event ->
             event.getContentIfNotHandled()?.let {
                 val text = if(it) "Left Family" else "Leave Failed"
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.syncUserFlag.observe(this){ event ->
+            event.getContentIfNotHandled()?.let {
+                val text = if(it) "Sync Successful" else "Sync Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }

@@ -28,7 +28,7 @@
                 app:layoutManager=
                     "androidx.recyclerview.widget.LinearLayoutManager"
                 app:spanCount="1"
-                app:listData="@{viewModel.wishes}"
+                app:listData="@{viewModel.wishDetails}"
                 tools:itemCount="24"
                 tools:listitem="@layout/wish_item_layout" />
 

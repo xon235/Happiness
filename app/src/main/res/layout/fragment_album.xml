@@ -10,80 +10,84 @@
             name="viewModel"
             type="com.family.happiness.ui.home.AlbumViewModel" />
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.family.happiness.ui.MainActivity">
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            app:visibleIf="@{viewModel.isEventView &amp;&amp; viewModel.selectedEvent != null}"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent"
+            tools:context="com.family.happiness.ui.MainActivity">
 
-            <ImageButton
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleIf="@{viewModel.isEventView &amp;&amp; viewModel.selectedEvent != null}"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_folder"
+                    android:onClick="@{() -> albumFragment.onClickRootEvent()}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="@{'/' + viewModel.selectedEvent.name + '/'}"
+                    tools:text ="/Event/"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/photoRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="6dp"
+                android:clipToPadding="false"
+                app:layoutManager=
+                    "androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayout"
+                app:listData="@{viewModel.photos}"
+                app:spanCount="3"
+                tools:itemCount="24"
+                tools:listitem="@layout/photo_item_layout"
+                app:visibleIf="@{!viewModel.isEventView || viewModel.selectedEvent != null}"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eventRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="6dp"
+                android:clipToPadding="false"
+                app:layoutManager=
+                    "androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:spanCount="3"
+                app:listData="@{viewModel.events}"
+                tools:itemCount="24"
+                tools:listitem="@layout/photo_item_layout"
+                app:visibleIf="@{viewModel.isEventView &amp;&amp; viewModel.selectedEvent == null}"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
-                android:background="@null"
-                android:src="@drawable/ic_folder"
-                android:onClick="@{() -> albumFragment.onRootEventClick()}"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="@{'/' + viewModel.selectedEvent.name + '/'}"
-                tools:text ="/Event/"/>
-        </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_upload"
+                android:layout_margin="16dp"
+                android:onClick="@{() -> albumFragment.onFabClick()}"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/photoRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="6dp"
-            android:clipToPadding="false"
-            app:layoutManager=
-                "androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
-            app:listData="@{viewModel.photos}"
-            app:spanCount="3"
-            tools:itemCount="24"
-            tools:listitem="@layout/photo_item_layout"
-            app:visibleIf="@{!viewModel.isEventView || viewModel.selectedEvent != null}"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/eventRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="6dp"
-            android:clipToPadding="false"
-            app:layoutManager=
-                "androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:spanCount="3"
-            app:listData="@{viewModel.events}"
-            tools:itemCount="24"
-            tools:listitem="@layout/photo_item_layout"
-            app:visibleIf="@{viewModel.isEventView &amp;&amp; viewModel.selectedEvent == null}"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_upload"
-            android:layout_margin="16dp"
-            android:onClick="@{() -> albumFragment.onFabClick()}"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface WishDao {
 
     @Query("SELECT * FROM wish ORDER BY CASE WHEN timestamp_close IS NULL THEN 1 ELSE 0 END DESC, timestamp_open DESC, timestamp_close DESC")
-    fun getAll(): Flow<List<WishDetail>>
+    fun getAllWishDetail(): Flow<List<WishDetail>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(wishes: List<Wish>): List<Long>

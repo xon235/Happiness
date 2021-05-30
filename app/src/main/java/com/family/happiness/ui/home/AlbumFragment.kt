@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.navigation.fragment.findNavController
+import android.widget.Toast
 import com.family.happiness.adapter.EventListAdapter
 import com.family.happiness.adapter.PhotoListAdapter
 import com.family.happiness.R
@@ -18,8 +18,6 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
     companion object {
         private const val PICK_IMAGE = 101
     }
-
-    private lateinit var photoListAdapter: PhotoListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +41,27 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         binding.eventRecyclerView.adapter =
             EventListAdapter { viewModel.selectedEvent.postValue(it) }
 
+        binding.swipeRefreshLayout.setOnRefreshListener { refresh() }
+
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) { flag ->
             flag?.getContentIfNotHandled()?.let {
                 navController.navigate(
                     AlbumFragmentDirections.actionAlbumFragmentToPhotoDetailFragment(it)
                 )
+            }
+        }
+
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
+            binding.swipeRefreshLayout.isRefreshing = it
+        }
+
+        viewModel.syncFinishFlag.observe(viewLifecycleOwner) { flag ->
+            flag.getContentIfNotHandled()?.let {
+                Toast.makeText(
+                    requireContext(),
+                    "Refresh ${if (it) "successful" else "failed"}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -62,7 +76,15 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.isEventView.value = item.itemId == R.id.eventView
+        when(item.itemId){
+            R.id.eventView -> { viewModel.isEventView.value = true }
+            R.id.photoView -> {
+                viewModel.isEventView.value = false
+                viewModel.selectedEvent.value = null
+            }
+            R.id.refresh -> { refresh() }
+
+        }
         return true
     }
 
@@ -90,7 +112,11 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         }
     }
 
-    fun onRootEventClick() {
+    private fun refresh() {
+        viewModel.syncAlbum()
+    }
+
+    fun onClickRootEvent() {
         viewModel.selectedEvent.value = null
     }
 

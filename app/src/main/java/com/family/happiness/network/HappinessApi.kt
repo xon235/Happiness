@@ -37,6 +37,13 @@ interface HappinessApi {
         @Part parts: List<MultipartBody.Part>
     ): UploadPhotosResponse
 
+    @GET("photo")
+    suspend fun getPhoto(): GetPhotoResponse
+
+    @PUT("photo")
+    suspend fun movePhoto(@Body movePhotoData: MovePhotoData)
+
+    // TODO rename, reroute
     @GET("sync/user")
     suspend fun syncUser(): SyncUserResponse
 

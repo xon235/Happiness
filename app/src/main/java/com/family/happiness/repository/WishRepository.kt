@@ -17,7 +17,7 @@ class WishRepository(
     private val happinessApi: HappinessApi,
 ) : BaseRepository() {
 
-    val wishDetails = wishDao.getAll()
+    val wishDetails = wishDao.getAllWishDetail()
 
     // Api
     suspend fun writeWish(
@@ -39,7 +39,9 @@ class WishRepository(
     }
 
     suspend fun getWish() = safeApiCall {
-        happinessApi.getWish()
+        val getWishResponse = happinessApi.getWish()
+        getWishResponse.wishes?.let { wishDao.sync(it) }
+        getWishResponse.contributors?.let { contributorDao.sync(it) }
     }
 
     // Dao
@@ -55,15 +57,15 @@ class WishRepository(
         wishDao.deleteById(wishId)
     }
 
-    suspend fun syncWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
-        wishDao.sync(wishes)
-    }
-
     suspend fun insertContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
         contributorDao.insert(contributors)
     }
 
-    suspend fun syncContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
-        contributorDao.sync(contributors)
-    }
+//    suspend fun syncWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
+//        wishDao.sync(wishes)
+//    }
+//
+//    suspend fun syncContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
+//        contributorDao.sync(contributors)
+//    }
 }

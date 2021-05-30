@@ -11,7 +11,8 @@ import com.family.happiness.databinding.FragmentPhotoDetailBinding
 import com.family.happiness.ui.HappinessBaseFragment
 
 
-class PhotoDetailFragment : HappinessBaseFragment<FragmentPhotoDetailBinding, PhotoDetailViewModel>() {
+class PhotoDetailFragment :
+    HappinessBaseFragment<FragmentPhotoDetailBinding, PhotoDetailViewModel>() {
 
     private val args: PhotoDetailFragmentArgs by navArgs()
 
@@ -32,15 +33,19 @@ class PhotoDetailFragment : HappinessBaseFragment<FragmentPhotoDetailBinding, Ph
 
         viewModel.setPhoto(args.photo)
 
-        viewModel.event.observe(viewLifecycleOwner) {
-            (activity as MainActivity).supportActionBar?.title = "/" + it.name + "/"
+        viewModel.photoDetail.observe(viewLifecycleOwner) {
+            (activity as MainActivity).supportActionBar?.title = "/" + it.event.name + "/"
         }
 
         viewModel.events.observe(viewLifecycleOwner) {}
 
-        viewModel.eventChangedFlag.observe(viewLifecycleOwner){ flag ->
+        viewModel.eventChangedFlag.observe(viewLifecycleOwner) { flag ->
             flag.getContentIfNotHandled()?.let {
-                Toast.makeText(requireContext(), "Moved to /${it.name}/", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    if (it) "Photo moved" else "Move failed",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -57,7 +62,10 @@ class PhotoDetailFragment : HappinessBaseFragment<FragmentPhotoDetailBinding, Ph
                     AlertDialog.Builder(requireContext())
                         .setTitle("Choose an event")
                         .setItems(events.map { it.name }.toTypedArray()) { dialog, which ->
-                            viewModel.changeEvent(events[which])
+                            viewModel.changeEvent(
+                                viewModel.photoDetail.value!!.photo,
+                                events[which]
+                            )
                             dialog.dismiss()
                         }.show()
                 }

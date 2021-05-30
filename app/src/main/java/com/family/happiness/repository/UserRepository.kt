@@ -11,10 +11,13 @@ import com.family.happiness.network.request.JoinFamilyData
 import com.family.happiness.network.request.OAuthData
 import com.family.happiness.network.request.SignUpData
 import com.family.happiness.network.response.PersonalDataResponse
+import com.family.happiness.room.user.User
 import com.family.happiness.room.user.UserDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
@@ -24,6 +27,8 @@ class UserRepository(
     private val userDao: UserDao,
     private val happinessApi: HappinessApi
 ) : BaseRepository() {
+
+    val users = userDao.getAll()
 
     val personalDataPreferencesFlow = personalDataDatastore.data
         .catch { exception ->
@@ -41,45 +46,54 @@ class UserRepository(
             )
         }
 
-    val users = userDao.getAll()
-
-    val members = combine(
-        personalDataPreferencesFlow,
-        users
-    ) {
-            personalDataPreferences, users  ->
-        users.filter {
-            it.id != personalDataPreferences.userId
-        }
+    val me = combine(personalDataPreferencesFlow, users) { personalDataPreferences, users ->
+        users.find { it.id == personalDataPreferences.userId }
     }
 
-    val me = combine(
-        personalDataPreferencesFlow,
-        users
-    ) {
-            personalDataPreferences, users  ->
-        users.find {
-            it.id == personalDataPreferences.userId
-        }
+    val members = combine(personalDataPreferencesFlow, users) { personalDataPreferences, users ->
+        users.filter { it.id != personalDataPreferences.userId }
     }
 
-    suspend fun signIn(oAuthData: OAuthData): SafeResource<PersonalDataResponse> {
-        return safeApiCall { happinessApi.signIn(oAuthData) }
+    // Api
+    suspend fun signIn(oAuthData: OAuthData): SafeResource<PersonalDataResponse> = safeApiCall {
+        happinessApi.signIn(oAuthData)
     }
 
-    suspend fun signUp(signUpData: SignUpData): SafeResource<PersonalDataResponse> {
-        return safeApiCall { happinessApi.signUp(signUpData) }
+    suspend fun signUp(signUpData: SignUpData): SafeResource<PersonalDataResponse> = safeApiCall{
+        happinessApi.signUp(signUpData)
     }
 
-    suspend fun getSmsCode(getSmsData: GetSmsData): SafeResource<ResponseBody>{
-        return safeApiCall { happinessApi.getSmsCode(getSmsData) }
+    suspend fun getSmsCode(getSmsData: GetSmsData): SafeResource<ResponseBody> = safeApiCall {
+        happinessApi.getSmsCode(getSmsData)
     }
 
+    suspend fun createFamily() = safeApiCall {
+        happinessApi.createFamily()
+    }
+
+    suspend fun joinFamily(familyId: String) = safeApiCall {
+        happinessApi.joinFamily(JoinFamilyData(familyId))
+    }
+
+    suspend fun leaveFamily() = safeApiCall {
+        happinessApi.leaveFamily()
+    }
+
+    suspend fun getUser() = safeApiCall {
+        happinessApi.syncUser()
+    }
+
+    // Dao
+    suspend fun syncUser(users: List<User>) = withContext(Dispatchers.IO) {
+        userDao.sync(users)
+    }
+
+    // Datastore
     suspend fun insertPersonalData(personalDataResponse: PersonalDataResponse) {
         personalDataDatastore.edit {
             it[PreferenceKeys.TOKEN] = personalDataResponse.token
             it[PreferenceKeys.USER_ID] = personalDataResponse.userId
-            if(personalDataResponse.familyId == null){
+            if (personalDataResponse.familyId == null) {
                 it.remove(PreferenceKeys.FAMILY_ID)
             } else {
                 it[PreferenceKeys.FAMILY_ID] = personalDataResponse.familyId
@@ -105,22 +119,6 @@ class UserRepository(
             it.remove(PreferenceKeys.USER_ID)
             it.remove(PreferenceKeys.FAMILY_ID)
         }
-    }
-
-    suspend fun createFamily() = safeApiCall {
-        happinessApi.createFamily()
-    }
-
-    suspend fun joinFamily(familyId: String) = safeApiCall {
-        happinessApi.joinFamily(JoinFamilyData(familyId))
-    }
-
-    suspend fun leaveFamily() = safeApiCall {
-        happinessApi.leaveFamily()
-    }
-
-    suspend fun syncUser() = safeApiCall {
-        userDao.sync(happinessApi.syncUser().users)
     }
 
     data class PersonalDataPreferences(

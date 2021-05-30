@@ -24,8 +24,8 @@ class MainActivityViewModel(
     fun joinFamily(familyId: String) = viewModelScope.launch {
         when(val resource = userRepository.joinFamily(familyId)){
             is SafeResource.Success -> {
-                _joinFamilyFlag.value = Flag(true)
                 userRepository.insertFamilyId(resource.value.familyId)
+                _joinFamilyFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
                 _joinFamilyFlag.value = Flag(false)
@@ -33,25 +33,33 @@ class MainActivityViewModel(
         }
     }
 
-    private val _leaveFamilyEvent = MutableLiveData<Flag<Boolean>>()
-    val leaveFamilyFlag: LiveData<Flag<Boolean>> = _leaveFamilyEvent
+    private val _leaveFamilyFlag = MutableLiveData<Flag<Boolean>>()
+    val leaveFamilyFlag: LiveData<Flag<Boolean>> = _leaveFamilyFlag
 
     fun leaveFamily() = viewModelScope.launch {
         when(userRepository.leaveFamily()){
             is SafeResource.Success -> {
-                _leaveFamilyEvent.value = Flag(true)
                 userRepository.deleteFamilyId()
+                _leaveFamilyFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
-                _leaveFamilyEvent.value = Flag(false)
+                _leaveFamilyFlag.value = Flag(false)
             }
         }
     }
 
+    private val _syncUserFlag = MutableLiveData<Flag<Boolean>>()
+    val syncUserFlag: LiveData<Flag<Boolean>> = _syncUserFlag
+
     fun syncUser() = viewModelScope.launch {
-        when(val resource = userRepository.syncUser()){
-            is SafeResource.Success -> { }
-            is SafeResource.Failure -> { }
+        when(val resource = userRepository.getUser()){
+            is SafeResource.Success -> {
+                resource.value.users?.let { userRepository.syncUser(it) }
+                _syncUserFlag.value = Flag(true)
+            }
+            is SafeResource.Failure -> {
+                _syncUserFlag.value = Flag(false)
+            }
         }
     }
 

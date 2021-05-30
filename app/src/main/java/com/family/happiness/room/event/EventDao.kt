@@ -1,21 +1,48 @@
 package com.family.happiness.room.event
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.family.happiness.room.photo.Photo
+import com.family.happiness.room.wish.Wish
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(events: List<Event>)
 
     @Query("SELECT * FROM event")
     fun getAll(): Flow<List<Event>>
 
     @Query("SELECT * FROM event WHERE id = :eventId")
     fun getEventByPhoto(eventId: Int): Flow<Event>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(events: List<Event>): List<Long>
+
+    @Query("DELETE FROM event WHERE id NOT IN (:eventIds)")
+    suspend fun deleteNotIn(eventIds: List<Int>)
+
+    @Update
+    suspend fun update(events: List<Event>)
+
+    @Transaction
+    suspend fun upsert(events: List<Event>) {
+        val insertResult = insert(events)
+        val updateList: MutableList<Event> = ArrayList()
+
+        for (i in insertResult.indices) {
+            if (insertResult[i] == -1L) {
+                updateList.add(events[i])
+            }
+        }
+
+        if (updateList.isNotEmpty()) {
+            update(updateList)
+        }
+
+    }
+
+    @Transaction
+    suspend fun sync(events: List<Event>) {
+        deleteNotIn(events.map { it.id })
+        upsert(events)
+    }
 }
