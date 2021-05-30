@@ -52,9 +52,8 @@ class MainActivityViewModel(
     val syncUserFlag: LiveData<Flag<Boolean>> = _syncUserFlag
 
     fun syncUser() = viewModelScope.launch {
-        when(val resource = userRepository.getUser()){
+        when(val resource = userRepository.syncUser()){
             is SafeResource.Success -> {
-                resource.value.users?.let { userRepository.syncUser(it) }
                 _syncUserFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {

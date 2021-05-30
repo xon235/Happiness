@@ -79,13 +79,9 @@ class UserRepository(
         happinessApi.leaveFamily()
     }
 
-    suspend fun getUser() = safeApiCall {
-        happinessApi.syncUser()
-    }
-
-    // Dao
-    suspend fun syncUser(users: List<User>) = withContext(Dispatchers.IO) {
-        userDao.sync(users)
+    suspend fun syncUser() = safeApiCall {
+        val syncUserResponse = happinessApi.syncUser()
+        userDao.sync(syncUserResponse.users)
     }
 
     // Datastore

@@ -89,8 +89,9 @@ class HappinessApplication : Application() {
 
     val albumRepository by lazy {
         AlbumRepository(
-            database.photoDao(),
             database.eventDao(),
+            database.tagDao(),
+            database.photoDao(),
             happinessApi
         )
     }

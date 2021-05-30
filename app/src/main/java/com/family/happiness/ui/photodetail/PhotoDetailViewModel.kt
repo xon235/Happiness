@@ -20,10 +20,14 @@ class PhotoDetailViewModel(private val albumRepository: AlbumRepository) : ViewM
 
     val events = albumRepository.events.asLiveData()
 
+    private val _inputEnabled = MutableLiveData(true)
+    val inputEnabled: LiveData<Boolean> = _inputEnabled
+
     private val _eventChangedFlag = MutableLiveData<Flag<Boolean>>()
     val eventChangedFlag: LiveData<Flag<Boolean>>  = _eventChangedFlag
 
     fun changeEvent(photo: Photo, event: Event) = viewModelScope.launch {
+        _inputEnabled.value = false
         when(val resource = albumRepository.movePhoto(photo, event)){
             is SafeResource.Success -> {
                 _eventChangedFlag.value = Flag(true)
@@ -32,11 +36,22 @@ class PhotoDetailViewModel(private val albumRepository: AlbumRepository) : ViewM
                 _eventChangedFlag.value = Flag(false)
             }
         }
+        _inputEnabled.value = true
     }
 
-    fun deletePhoto() = viewModelScope.launch {
-        _photo.value?.let {
-            albumRepository.deletePhoto(it)
+    private val _deletePhotoFlag = MutableLiveData<Flag<Boolean>>()
+    val deletePhotoFlag: LiveData<Flag<Boolean>>  = _deletePhotoFlag
+
+    fun deletePhoto(photo: Photo) = viewModelScope.launch {
+        _inputEnabled.value = false
+        when(val resource = albumRepository.deletePhoto(photo)){
+            is SafeResource.Success -> {
+                _deletePhotoFlag.value = Flag(true)
+            }
+            is SafeResource.Failure -> {
+                _deletePhotoFlag.value = Flag(false)
+            }
         }
+        _inputEnabled.value = true
     }
 }

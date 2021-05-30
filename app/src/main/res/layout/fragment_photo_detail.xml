@@ -13,6 +13,12 @@
         tools:context="ui.PhotoDetailFragment"
         android:background="@color/black">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:visibleIf="@{!viewModel.inputEnabled}"/>
+
         <com.jsibbold.zoomage.ZoomageView
             android:id="@+id/myZoomageView"
             android:layout_width="match_parent"
@@ -26,7 +32,7 @@
             app:zoomage_translatable="true"
             app:zoomage_minScale="0.6"
             app:zoomage_maxScale="8"
-            />
+            app:enabledIf="@{viewModel.inputEnabled}"/>
 
     </FrameLayout>
 </layout>

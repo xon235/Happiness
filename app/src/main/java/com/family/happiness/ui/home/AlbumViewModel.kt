@@ -6,7 +6,6 @@ import com.family.happiness.network.SafeResource
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
-import com.family.happiness.room.photo.PhotoDetail
 import kotlinx.coroutines.launch
 
 class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() {
@@ -38,7 +37,7 @@ class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() 
 
     fun syncAlbum() = viewModelScope.launch {
         _isRefreshing.value = true
-        when(val resource = albumRepository.getPhoto()){
+        when(val resource = albumRepository.syncPhoto()){
             is SafeResource.Success -> {
 //                resource.value.events?.let { albumRepository.syncEvent(it) }
 //                resource.value.photos?.let { albumRepository.syncPhoto(it) }

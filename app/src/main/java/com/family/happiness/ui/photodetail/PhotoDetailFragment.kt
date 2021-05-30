@@ -48,6 +48,24 @@ class PhotoDetailFragment :
                 ).show()
             }
         }
+
+        viewModel.deletePhotoFlag.observe(viewLifecycleOwner) { flag ->
+            flag.getContentIfNotHandled()?.let {
+                Toast.makeText(
+                    requireContext(),
+                    if (it) "Delete successful" else "Delete failed",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                if(it){
+                    navController.popBackStack()
+                }
+            }
+        }
+
+        viewModel.inputEnabled.observe(viewLifecycleOwner) {
+            setHasOptionsMenu(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,8 +92,7 @@ class PhotoDetailFragment :
                 AlertDialog.Builder(requireContext())
                     .setTitle("Delete this image?")
                     .setPositiveButton("Yes") { _, _ ->
-                        viewModel.deletePhoto()
-                        navController.popBackStack()
+                        viewModel.deletePhoto(viewModel.photoDetail.value!!.photo)
                     }
                     .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
                     .show()

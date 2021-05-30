@@ -1,18 +1,21 @@
 package com.family.happiness.repository
 
 import com.family.happiness.network.HappinessApi
+import com.family.happiness.network.request.DeletePhotoData
 import com.family.happiness.network.request.MovePhotoData
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.event.EventDao
 import com.family.happiness.room.photo.Photo
 import com.family.happiness.room.photo.PhotoDao
+import com.family.happiness.room.tag.TagDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 class AlbumRepository(
-    private val photoDao: PhotoDao,
     private val eventDao: EventDao,
+    private val tagDao: TagDao,
+    private val photoDao: PhotoDao,
     private val happinessApi: HappinessApi
 ) : BaseRepository() {
 
@@ -21,9 +24,7 @@ class AlbumRepository(
 
     fun getPhotosByEvent(event: Event) = photoDao.getPhotoByEvent(event.id)
     fun getPhotoDetailByUrl(url: String) = photoDao.getPhotoDetailByUrl(url)
-//    fun getEventByPhoto(photo: Photo) = eventDao.getEventByPhoto(photo.eventId)
 
-    // Api
     suspend fun uploadPhotos(
         newEvent: Boolean,
         eventName: String,
@@ -40,34 +41,15 @@ class AlbumRepository(
         photoDao.changePhotoEvent(photo.url, event.id)
     }
 
-    suspend fun getPhoto() = safeApiCall {
-        val getPhotoResponse = happinessApi.getPhoto()
+    suspend fun syncPhoto() = safeApiCall {
+        val getPhotoResponse = happinessApi.syncPhoto()
         eventDao.sync(getPhotoResponse.events)
+        tagDao.sync(getPhotoResponse.tags)
         photoDao.sync(getPhotoResponse.photos)
     }
 
-    // Dao
-//    suspend fun insertEvent(events: List<Event>) = withContext(Dispatchers.IO) {
-//        eventDao.insert(events)
-//    }
-//
-//    suspend fun insertPhoto(photos: List<Photo>) = withContext(Dispatchers.IO) {
-//        photoDao.insert(photos)
-//    }
-
-//    suspend fun changePhotoEvent(photo: Photo, event: Event) = withContext(Dispatchers.IO) {
-//        photoDao.changePhotoEvent(photo.url, event.id)
-//    }
-
-    suspend fun deletePhoto(photo: Photo) = withContext(Dispatchers.IO) {
+    suspend fun deletePhoto(photo: Photo) = safeApiCall {
+        happinessApi.deletePhoto(DeletePhotoData(photo.url))
         photoDao.delete(photo)
     }
-
-//    suspend fun syncEvent(events: List<Event>) = withContext(Dispatchers.IO) {
-//        eventDao.sync(events)
-//    }
-
-//    suspend fun syncPhoto(photos: List<Photo>) = withContext(Dispatchers.IO) {
-//        photoDao.sync(photos)
-//    }
 }

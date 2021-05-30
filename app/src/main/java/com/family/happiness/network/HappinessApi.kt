@@ -10,6 +10,7 @@ enum class HappinessApiStatus { LOADING, ERROR, DONE }
 
 interface HappinessApi {
 
+    // Auth
     @POST("signIn")
     suspend fun signIn(@Body oAuthData: OAuthData): PersonalDataResponse
 
@@ -28,8 +29,17 @@ interface HappinessApi {
     @DELETE("family")
     suspend fun leaveFamily()
 
+    // TODO rename, reroute
+    @GET("sync/user")
+    suspend fun syncUser(): SyncUserResponse
+
+    // Mail
+    @POST("mail")
+    suspend fun writeMail(@Body writeMailData: WriteMailData)
+
+    // Album
     @Multipart
-    @POST("upload/photo")
+    @POST("photo")
     suspend fun uploadPhoto(
         @Part("isNewEvent") isNewEvent: Boolean,
         @Part("eventName") eventName: String,
@@ -37,19 +47,16 @@ interface HappinessApi {
         @Part parts: List<MultipartBody.Part>
     ): UploadPhotosResponse
 
-    @GET("photo")
-    suspend fun getPhoto(): GetPhotoResponse
-
     @PUT("photo")
     suspend fun movePhoto(@Body movePhotoData: MovePhotoData)
 
-    // TODO rename, reroute
-    @GET("sync/user")
-    suspend fun syncUser(): SyncUserResponse
+    @HTTP(method="DELETE", hasBody=true, path="photo")
+    suspend fun deletePhoto(@Body deletePhotoData: DeletePhotoData)
 
-    @POST("mail")
-    suspend fun writeMail(@Body writeMailData: WriteMailData)
+    @GET("photo")
+    suspend fun syncPhoto(): SyncPhotoResponse
 
+    // Wish
     @POST("wish")
     suspend fun writeWish(@Body writeWishData: WriteWishData): WriteWishResponse
 
