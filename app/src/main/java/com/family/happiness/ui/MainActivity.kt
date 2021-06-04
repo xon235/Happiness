@@ -21,8 +21,15 @@ import com.family.happiness.adapter.FamilyListAdapter
 import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
 import com.family.happiness.ui.createfamily.CreateFamilyFragmentDirections
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val RESOLVE_GOOGLE_API_AVAILABILITY_SERVICES_ERROR = 102
+    }
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainActivityViewModel by viewModels() {
@@ -105,6 +112,14 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Check Google Play Services for FCM
+        isGooglePlayServicesAvailable()
+    }
+
+    override fun onResume() {
+        isGooglePlayServicesAvailable()
+        super.onResume()
     }
 
     fun onClickSignOut() {
@@ -130,6 +145,18 @@ class MainActivity : AppCompatActivity() {
 
     fun onClickLeaveFamily() {
         viewModel.leaveFamily()
+    }
+
+    private fun isGooglePlayServicesAvailable(): Boolean {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(this)
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(this, status, RESOLVE_GOOGLE_API_AVAILABILITY_SERVICES_ERROR).show()
+            }
+            return false
+        }
+        return true
     }
 
     fun onClickCopyFamilyCode() {

@@ -19,6 +19,16 @@
         android:layout_height="match_parent"
         tools:context=".ui.auth.SignUpFragment">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibleIf="@{!viewModel.inputEnabled}"
+            android:translationZ="1dp"/>
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
@@ -34,7 +44,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 app:shapeAppearanceOverlay="@style/circleImageView"
-                app:imageUrl="@{oAuthData.photoUrl}"/>
+                app:imageUrl="@{oAuthData.photoUrl}" />
 
             <EditText
                 android:id="@+id/nameEditView"

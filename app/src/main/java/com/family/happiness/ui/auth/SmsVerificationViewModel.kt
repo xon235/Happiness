@@ -11,18 +11,21 @@ import timber.log.Timber
 
 class SmsVerificationViewModel(private val userRepository: UserRepository): ViewModel() {
 
-    val personalData = userRepository.personalDataPreferencesFlow.asLiveData()
-
-    private val _inputEnabled = MutableLiveData<Boolean>(true)
+    private val _inputEnabled = MutableLiveData(true)
     val inputEnabled: LiveData<Boolean> = _inputEnabled
 
     private val _failText = MutableLiveData<String>()
     val failText: LiveData<String> = _failText
 
+    private val _navigateToSignIn = MutableLiveData(false)
+    val navigateToSignIn: LiveData<Boolean> = _navigateToSignIn
+
     fun signUp(signUpData: SignUpData) = viewModelScope.launch {
         _inputEnabled.postValue(false)
         when(val resource = userRepository.signUp(signUpData)){
-            is SafeResource.Success -> userRepository.insertPersonalData(resource.value)
+            is SafeResource.Success -> {
+                _navigateToSignIn.postValue(true)
+            }
             is SafeResource.Failure -> {
                 _inputEnabled.postValue(true)
                 _failText.postValue(

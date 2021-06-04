@@ -34,7 +34,9 @@ class PhotoDetailFragment :
         viewModel.setPhoto(args.photo)
 
         viewModel.photoDetail.observe(viewLifecycleOwner) {
-            (activity as MainActivity).supportActionBar?.title = "/" + it.event.name + "/"
+            it?.let {
+                (activity as MainActivity).supportActionBar?.title = "/" + it.event.name + "/"
+            }
         }
 
         viewModel.events.observe(viewLifecycleOwner) {}

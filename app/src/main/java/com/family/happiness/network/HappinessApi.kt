@@ -18,7 +18,7 @@ interface HappinessApi {
     suspend fun getSmsCode(@Body getSmsData: GetSmsData): ResponseBody
 
     @POST("signUp")
-    suspend fun signUp(@Body signUpData: SignUpData): PersonalDataResponse
+    suspend fun signUp(@Body signUpData: SignUpData)
 
     @GET("family")
     suspend fun createFamily(): JoinFamilyResponse
@@ -29,9 +29,15 @@ interface HappinessApi {
     @DELETE("family")
     suspend fun leaveFamily()
 
-    // TODO rename, reroute
-    @GET("sync/user")
+    @GET("user")
     suspend fun syncUser(): SyncUserResponse
+
+    // FCM
+    @POST("fcm")
+    suspend fun registerFcm(@Body registerFcmData: RegisterFcmData)
+
+    @DELETE("fcm")
+    suspend fun unregisterFcm()
 
     // Mail
     @POST("mail")

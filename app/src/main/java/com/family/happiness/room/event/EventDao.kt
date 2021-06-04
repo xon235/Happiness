@@ -11,11 +11,11 @@ interface EventDao {
     @Query("SELECT * FROM event")
     fun getAll(): Flow<List<Event>>
 
-    @Query("SELECT * FROM event WHERE id = :eventId")
-    fun getEventByPhoto(eventId: Int): Flow<Event>
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(events: List<Event>): List<Long>
+
+    @Query("DELETE FROM event WHERE id IN (:eventIds)")
+    suspend fun deleteById(eventIds: List<Int>)
 
     @Query("DELETE FROM event WHERE id NOT IN (:eventIds)")
     suspend fun deleteNotIn(eventIds: List<Int>)

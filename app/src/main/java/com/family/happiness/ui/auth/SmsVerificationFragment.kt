@@ -23,9 +23,9 @@ class SmsVerificationFragment :
 
         binding.phoneTextView.text = "Sent to: ${args.phone}"
 
-        viewModel.personalData.observe(viewLifecycleOwner) {
-            if (it.token != null) {
-                navController.navigate(SmsVerificationFragmentDirections.actionSmsVerificationFragmentToMailFragment())
+        viewModel.navigateToSignIn.observe(viewLifecycleOwner) {
+            if (it) {
+                navController.navigate(SmsVerificationFragmentDirections.actionGlobalSignInFragment())
                 viewModel.setToDefault()
             }
         }

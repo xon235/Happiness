@@ -28,6 +28,7 @@ object PreferenceKeys {
     val TOKEN = stringPreferencesKey("token")
     val USER_ID = stringPreferencesKey("user_id")
     val FAMILY_ID = stringPreferencesKey("family_id")
+    val FCM_TOKEN = stringPreferencesKey("fcm_token")
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "personal_data")
@@ -48,9 +49,12 @@ class HappinessApplication : Application() {
                 chain.proceed(
                     chain.request().newBuilder().apply {
                         runBlocking {
-                            dataStore.data.map{ it[PreferenceKeys.TOKEN] }.first()
-                        }?.let {
-                            addHeader("Authorization", "Bearer $it")
+                            dataStore.data.map{ it[PreferenceKeys.TOKEN] }.first()?.let {
+                                addHeader("Authorization", "Bearer $it")
+                            }
+                            dataStore.data.map{ it[PreferenceKeys.FCM_TOKEN] }.first()?.let {
+                                addHeader("FCM-Token", it)
+                            }
                         }
                     }.build()
                 )
@@ -65,7 +69,7 @@ class HappinessApplication : Application() {
 
         val retrofit = Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("http://18.191.31.90:5000")
+            .baseUrl("http://3.12.126.96:5000/")
             .client(httpClient)
             .build()
 

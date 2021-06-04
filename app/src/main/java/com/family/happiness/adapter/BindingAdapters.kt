@@ -22,6 +22,7 @@ import com.family.happiness.room.wish.WishDetail
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 
 @BindingAdapter("app:visibleIf")
 fun visibleIf(view: View, visible: Boolean) {
@@ -41,18 +42,23 @@ fun enabledIf(view: View, isEnabled: Boolean) {
 // TODO use glide module for global header
 @BindingAdapter("app:imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
+    Timber.d(imgUrl)
     if (imgUrl != null) {
-        runBlocking {
-            imgView.context.dataStore.data.map { it[PreferenceKeys.TOKEN] }.first()
-        }?.let {
-            Glide.with(imgView.context).load(
+        Glide.with(imgView.context)
+            .load(
                 GlideUrl(
                     imgUrl,
-                    LazyHeaders.Builder().addHeader("Authorization", "Bearer $it").build()
+                    LazyHeaders.Builder().apply {
+                        runBlocking {
+                            imgView.context.dataStore.data.map { it[PreferenceKeys.TOKEN] }.first()
+                        }?.let {
+                            addHeader("Authorization", "Bearer $it")
+                        }
+                    }.build()
                 )
-            ).placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
-                .into(imgView)
-        }
+            )
+            .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
+            .into(imgView)
     }
 }
 

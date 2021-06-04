@@ -1,21 +1,20 @@
 package com.family.happiness.repository
 
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.family.happiness.PreferenceKeys
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.SafeResource
-import com.family.happiness.network.request.GetSmsData
-import com.family.happiness.network.request.JoinFamilyData
-import com.family.happiness.network.request.OAuthData
-import com.family.happiness.network.request.SignUpData
+import com.family.happiness.network.request.*
 import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.room.user.User
 import com.family.happiness.room.user.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -55,15 +54,15 @@ class UserRepository(
     }
 
     // Api
-    suspend fun signIn(oAuthData: OAuthData): SafeResource<PersonalDataResponse> = safeApiCall {
+    suspend fun signIn(oAuthData: OAuthData) = safeApiCall {
         happinessApi.signIn(oAuthData)
     }
 
-    suspend fun signUp(signUpData: SignUpData): SafeResource<PersonalDataResponse> = safeApiCall{
+    suspend fun signUp(signUpData: SignUpData) = safeApiCall {
         happinessApi.signUp(signUpData)
     }
 
-    suspend fun getSmsCode(getSmsData: GetSmsData): SafeResource<ResponseBody> = safeApiCall {
+    suspend fun getSmsCode(getSmsData: GetSmsData) = safeApiCall {
         happinessApi.getSmsCode(getSmsData)
     }
 
@@ -114,6 +113,12 @@ class UserRepository(
             it.remove(PreferenceKeys.TOKEN)
             it.remove(PreferenceKeys.USER_ID)
             it.remove(PreferenceKeys.FAMILY_ID)
+        }
+    }
+
+    suspend fun insertFcmToken(fcmToken: String) {
+        personalDataDatastore.edit {
+            it[PreferenceKeys.FCM_TOKEN] = fcmToken
         }
     }
 

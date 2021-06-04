@@ -9,6 +9,7 @@ import com.family.happiness.room.photo.Photo
 import com.family.happiness.room.photo.PhotoDao
 import com.family.happiness.room.tag.TagDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
@@ -32,12 +33,13 @@ class AlbumRepository(
         parts: List<MultipartBody.Part>
     ) = safeApiCall {
         val uploadPhotoResponse = happinessApi.uploadPhoto(newEvent, eventName, tags, parts)
-        eventDao.insert(listOf(uploadPhotoResponse.event))
+        eventDao.upsert(listOf(uploadPhotoResponse.event))
+        tagDao.upsert(uploadPhotoResponse.tags)
         photoDao.insert(uploadPhotoResponse.photos)
     }
 
     suspend fun movePhoto(photo: Photo, event: Event) = safeApiCall {
-        happinessApi.movePhoto(MovePhotoData(photo.url, event.id))
+        happinessApi.movePhoto(MovePhotoData(listOf(photo.url), event.id))
         photoDao.changePhotoEvent(photo.url, event.id)
     }
 
@@ -49,7 +51,10 @@ class AlbumRepository(
     }
 
     suspend fun deletePhoto(photo: Photo) = safeApiCall {
-        happinessApi.deletePhoto(DeletePhotoData(photo.url))
+        happinessApi.deletePhoto(DeletePhotoData(listOf(photo.url)))
         photoDao.delete(photo)
+        if(photoDao.getPhotoByEvent(photo.eventId).first().isEmpty()){
+            eventDao.deleteById(listOf(photo.eventId))
+        }
     }
 }
