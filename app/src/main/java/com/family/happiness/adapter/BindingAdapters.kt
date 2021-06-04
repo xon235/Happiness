@@ -42,7 +42,6 @@ fun enabledIf(view: View, isEnabled: Boolean) {
 // TODO use glide module for global header
 @BindingAdapter("app:imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
-    Timber.d(imgUrl)
     if (imgUrl != null) {
         Glide.with(imgView.context)
             .load(

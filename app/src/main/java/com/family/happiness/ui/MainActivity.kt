@@ -106,12 +106,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.syncUserFlag.observe(this){ event ->
-            event.getContentIfNotHandled()?.let {
-                val text = if(it) "Sync Successful" else "Sync Failed"
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-            }
-        }
+//        viewModel.syncUserFlag.observe(this){ event ->
+//            event.getContentIfNotHandled()?.let {
+//                val text = if(it) "Sync Successful" else "Sync Failed"
+//                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
         // Check Google Play Services for FCM
         isGooglePlayServicesAvailable()
