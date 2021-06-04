@@ -80,15 +80,24 @@ class UserRepository(
     }
 
     suspend fun createFamily() = safeApiCall {
-        happinessApi.createFamily()
+        val joinFamilyResponse = happinessApi.createFamily()
+        personalDataDatastore.edit {
+            it[PreferenceKeys.FAMILY_ID] = joinFamilyResponse.familyId
+        }
     }
 
     suspend fun joinFamily(familyId: String) = safeApiCall {
-        happinessApi.joinFamily(JoinFamilyData(familyId))
+        val joinFamilyResponse = happinessApi.joinFamily(JoinFamilyData(familyId))
+        personalDataDatastore.edit {
+            it[PreferenceKeys.FAMILY_ID] = joinFamilyResponse.familyId
+        }
     }
 
     suspend fun leaveFamily() = safeApiCall {
         happinessApi.leaveFamily()
+        personalDataDatastore.edit {
+            it.remove(PreferenceKeys.FAMILY_ID)
+        }
     }
 
     suspend fun syncUser() = safeApiCall {
@@ -97,19 +106,6 @@ class UserRepository(
     }
 
     // Datastore
-
-    suspend fun insertFamilyId(familyId: String) {
-        personalDataDatastore.edit {
-            it[PreferenceKeys.FAMILY_ID] = familyId
-        }
-    }
-
-    suspend fun deleteFamilyId() {
-        personalDataDatastore.edit {
-            it.remove(PreferenceKeys.FAMILY_ID)
-        }
-    }
-
     suspend fun deleteAllPersonalData() {
         personalDataDatastore.edit {
             it.remove(PreferenceKeys.TOKEN)

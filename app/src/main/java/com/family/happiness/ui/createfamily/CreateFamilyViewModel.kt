@@ -23,7 +23,6 @@ class CreateFamilyViewModel(private val userRepository: UserRepository) : ViewMo
             _status.postValue(HappinessApiStatus.LOADING)
             when (val response = userRepository.createFamily()) {
                 is SafeResource.Success -> {
-                    userRepository.insertFamilyId(response.value.familyId)
                     _status.postValue(HappinessApiStatus.DONE)
                 }
                 is SafeResource.Failure -> {
@@ -44,21 +43,4 @@ class CreateFamilyViewModel(private val userRepository: UserRepository) : ViewMo
             }
         }
     }
-
-//    fun createFamily() {
-//        viewModelScope.launch {
-//            _status.value = HappinessApiStatus.LOADING
-//            try {
-//                repository.createFamily(user.value!!.toAuthData())
-//                _status.value = HappinessApiStatus.DONE
-//            } catch (e: HappinessApiException){
-//                _status.value = HappinessApiStatus.ERROR
-//                _message.value = e.message
-//            } catch (e: Exception) {
-//                _status.value = HappinessApiStatus.ERROR
-//                _message.value = "Server Failed"
-//                Timber.d(e)
-//            }
-//        }
-//    }
 }

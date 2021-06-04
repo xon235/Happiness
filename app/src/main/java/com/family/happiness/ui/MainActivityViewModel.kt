@@ -24,7 +24,6 @@ class MainActivityViewModel(
     fun joinFamily(familyId: String) = viewModelScope.launch {
         when(val resource = userRepository.joinFamily(familyId)){
             is SafeResource.Success -> {
-                userRepository.insertFamilyId(resource.value.familyId)
                 _joinFamilyFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
@@ -39,7 +38,6 @@ class MainActivityViewModel(
     fun leaveFamily() = viewModelScope.launch {
         when(userRepository.leaveFamily()){
             is SafeResource.Success -> {
-                userRepository.deleteFamilyId()
                 _leaveFamilyFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
