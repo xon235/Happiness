@@ -40,6 +40,9 @@ interface HappinessApi {
     suspend fun unregisterFcm()
 
     // Mail
+    @GET("mail")
+    suspend fun syncMail(): SyncMailResponse
+
     @POST("mail")
     suspend fun writeMail(@Body writeMailData: WriteMailData)
 

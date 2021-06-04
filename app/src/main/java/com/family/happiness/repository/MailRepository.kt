@@ -16,4 +16,9 @@ class MailRepository(
     ) = safeApiCall {
         happinessApi.writeMail(writeMailData)
     }
+
+    suspend fun syncMail() = safeApiCall {
+        val syncMailResponse = happinessApi.syncMail()
+        mailDao.sync(syncMailResponse.mails)
+    }
 }
