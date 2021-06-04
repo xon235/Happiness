@@ -38,7 +38,7 @@ class WishRepository(
         happinessApi.deleteWish(deleteWishData)
     }
 
-    suspend fun getWish() = safeApiCall {
+    suspend fun syncWish() = safeApiCall {
         val getWishResponse = happinessApi.getWish()
         getWishResponse.wishes?.let { wishDao.sync(it) }
         getWishResponse.contributors?.let { contributorDao.sync(it) }

@@ -7,6 +7,7 @@ import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() {
 
@@ -21,6 +22,15 @@ class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() 
     }
 
     val isEventView = MutableLiveData(false)
+
+    init {
+        viewModelScope.launch {
+            when(val resource = albumRepository.syncPhoto()){
+                is SafeResource.Failure -> {
+                    Timber.d(resource.throwable)}
+            }
+        }
+    }
 
     private val _navigateToSelectedImage = MutableLiveData<Flag<Photo>>()
     val navigateToSelectedProperty: LiveData<Flag<Photo>> = _navigateToSelectedImage

@@ -10,6 +10,14 @@ import timber.log.Timber
 class WishViewModel(private val wishRepository: WishRepository): ViewModel() {
     val wishDetails = wishRepository.wishDetails.asLiveData()
 
+    init {
+        viewModelScope.launch {
+            when(val resource = wishRepository.syncWish()){
+                is SafeResource.Failure -> {Timber.d(resource.throwable)}
+            }
+        }
+    }
+
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
@@ -18,7 +26,7 @@ class WishViewModel(private val wishRepository: WishRepository): ViewModel() {
 
     fun syncWish() = viewModelScope.launch {
         _isRefreshing.value = true
-        when(val resource = wishRepository.getWish()){
+        when(val resource = wishRepository.syncWish()){
             is SafeResource.Success -> {
                 _syncFinishFlag.value = Flag(true)
             }
