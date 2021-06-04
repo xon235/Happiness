@@ -55,7 +55,20 @@ class UserRepository(
 
     // Api
     suspend fun signIn(oAuthData: OAuthData) = safeApiCall {
-        happinessApi.signIn(oAuthData)
+        val signInData = SignInData(
+            personalDataDatastore.data.map { it[PreferenceKeys.FCM_TOKEN] }.first()!!,
+            oAuthData
+        )
+        val personalDataResponse = happinessApi.signIn(signInData)
+        personalDataDatastore.edit {
+            it[PreferenceKeys.TOKEN] = personalDataResponse.token
+            it[PreferenceKeys.USER_ID] = personalDataResponse.userId
+            if (personalDataResponse.familyId == null) {
+                it.remove(PreferenceKeys.FAMILY_ID)
+            } else {
+                it[PreferenceKeys.FAMILY_ID] = personalDataResponse.familyId
+            }
+        }
     }
 
     suspend fun signUp(signUpData: SignUpData) = safeApiCall {
@@ -84,17 +97,6 @@ class UserRepository(
     }
 
     // Datastore
-    suspend fun insertPersonalData(personalDataResponse: PersonalDataResponse) {
-        personalDataDatastore.edit {
-            it[PreferenceKeys.TOKEN] = personalDataResponse.token
-            it[PreferenceKeys.USER_ID] = personalDataResponse.userId
-            if (personalDataResponse.familyId == null) {
-                it.remove(PreferenceKeys.FAMILY_ID)
-            } else {
-                it[PreferenceKeys.FAMILY_ID] = personalDataResponse.familyId
-            }
-        }
-    }
 
     suspend fun insertFamilyId(familyId: String) {
         personalDataDatastore.edit {

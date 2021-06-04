@@ -12,7 +12,7 @@ interface HappinessApi {
 
     // Auth
     @POST("signIn")
-    suspend fun signIn(@Body oAuthData: OAuthData): PersonalDataResponse
+    suspend fun signIn(@Body signInData: SignInData): PersonalDataResponse
 
     @POST("getSmsCode")
     suspend fun getSmsCode(@Body getSmsData: GetSmsData): ResponseBody

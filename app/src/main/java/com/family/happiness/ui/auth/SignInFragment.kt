@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentSignInBinding
 import com.family.happiness.network.request.OAuthData
@@ -20,12 +21,6 @@ class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewMo
         private const val RC_SIGN_IN = 100
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        requireActivity().onBackPressedDispatcher.addCallback { requireActivity().finish() }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -34,6 +29,7 @@ class SignInFragment : HappinessBaseFragment<FragmentSignInBinding, SignInViewMo
 
         viewModel.personalData.observe(viewLifecycleOwner) {
             if (it.token != null) {
+                Toast.makeText(requireContext(), "Sign in successful", Toast.LENGTH_SHORT).show()
                 navController.navigate(SignInFragmentDirections.actionSignInFragmentToMailFragment())
             }
         }
