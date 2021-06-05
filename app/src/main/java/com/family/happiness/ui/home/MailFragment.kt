@@ -61,8 +61,10 @@ class MailFragment : HappinessBaseFragment<FragmentMailBinding, MailViewModel>()
     }
 
     fun onClickRead() {
-        findNavController()
-            .navigate(MailFragmentDirections.actionMailFragmentToMailReadFragment())
+        if(viewModel.mailDetails.value?.isNotEmpty() == true){
+            findNavController()
+                .navigate(MailFragmentDirections.actionMailFragmentToMailReadFragment(viewModel.mailDetails.value!![0]))
+        }
     }
 
     fun onClickFab(){

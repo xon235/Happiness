@@ -114,10 +114,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         isGooglePlayServicesAvailable()
+        cancelAllNotification()
+        super.onResume()
+    }
+
+    fun cancelAllNotification() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancelAll()
-        super.onResume()
     }
 
     fun onClickSignOut() {

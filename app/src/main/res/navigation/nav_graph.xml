@@ -183,5 +183,9 @@
         android:id="@+id/mailReadFragment"
         android:name="com.family.happiness.ui.mailread.MailReadFragment"
         android:label="fragment_mail_read"
-        tools:layout="@layout/fragment_mail_read" />
+        tools:layout="@layout/fragment_mail_read" >
+        <argument
+            android:name="mailDetail"
+            app:argType="com.family.happiness.room.mail.MailDetail" />
+    </fragment>
 </navigation>

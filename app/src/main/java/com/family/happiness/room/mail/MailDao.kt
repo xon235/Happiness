@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MailDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(mails: List<Mail>): List<Long>
 
-    @Query("SELECT * FROM mail ORDER BY time_sent DESC")
+    @Query("SELECT * FROM mail ORDER BY time_sent ASC")
     fun getAllMailDetail(): Flow<List<MailDetail>>
 
     @Query("DELETE FROM mail WHERE id = :mailId")

@@ -1,8 +1,6 @@
 package com.family.happiness.ui.mailread
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.family.happiness.network.SafeResource
 import com.family.happiness.network.request.MarkAsReadData
 import com.family.happiness.repository.MailRepository
@@ -19,12 +17,17 @@ class MailReadViewModel(
 ) : ViewModel() {
 
     val me = userRepository.me.asLiveData()
-    val mailDetails = mailRepository.mailDetails.asLiveData()
 
-    fun markAsRead(rating: Float) = CoroutineScope(Dispatchers.IO).launch {
+    private val  _markedAsRead = MutableLiveData(false)
+    val markedAsRead: LiveData<Boolean> = _markedAsRead
+
+    fun markAsRead(mailId: Int, rating: Float) = CoroutineScope(Dispatchers.IO).launch {
         when (val resource =
-            mailRepository.markAsRead((MarkAsReadData(mailDetails.value!![0].mail.id, rating)))) {
-            is SafeResource.Success -> Timber.d("Mark as read success")
+            mailRepository.markAsRead((MarkAsReadData(mailId, rating)))) {
+            is SafeResource.Success -> {
+                Timber.d("Mark as read success")
+                _markedAsRead.postValue(true)
+            }
             is SafeResource.Failure -> Timber.d(resource.throwable)
         }
     }

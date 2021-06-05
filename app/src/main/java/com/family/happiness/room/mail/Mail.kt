@@ -1,11 +1,14 @@
 package com.family.happiness.room.mail
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.family.happiness.room.user.User
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     foreignKeys = [
         ForeignKey(
@@ -22,4 +25,4 @@ data class Mail(
     val content: String,
     val timestamp: String,
     @ColumnInfo(name = "time_sent") val timeSent: String,
-)
+): Parcelable
