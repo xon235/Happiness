@@ -49,8 +49,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() 
         _isRefreshing.value = true
         when(val resource = albumRepository.syncPhoto()){
             is SafeResource.Success -> {
-//                resource.value.events?.let { albumRepository.syncEvent(it) }
-//                resource.value.photos?.let { albumRepository.syncPhoto(it) }
                 _syncFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {

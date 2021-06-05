@@ -32,13 +32,6 @@ interface HappinessApi {
     @GET("user")
     suspend fun syncUser(): SyncUserResponse
 
-    // FCM
-    @POST("fcm")
-    suspend fun registerFcm(@Body registerFcmData: RegisterFcmData)
-
-    @DELETE("fcm")
-    suspend fun unregisterFcm()
-
     // Mail
     @GET("mail")
     suspend fun syncMail(): SyncMailResponse
