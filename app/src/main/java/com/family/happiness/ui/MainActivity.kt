@@ -1,7 +1,9 @@
 package com.family.happiness.ui
 
+import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -106,19 +108,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        viewModel.syncUserFlag.observe(this){ event ->
-//            event.getContentIfNotHandled()?.let {
-//                val text = if(it) "Sync Successful" else "Sync Failed"
-//                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
         // Check Google Play Services for FCM
         isGooglePlayServicesAvailable()
     }
 
     override fun onResume() {
         isGooglePlayServicesAvailable()
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancelAll()
         super.onResume()
     }
 
