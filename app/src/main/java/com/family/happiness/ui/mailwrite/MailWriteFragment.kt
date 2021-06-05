@@ -32,6 +32,10 @@ class MailWriteFragment : HappinessBaseFragment<FragmentMailWriteBinding, MailWr
                     "Mail send ${if(it) "successful" else "failed"}",
                     Toast.LENGTH_SHORT
                 ).show()
+
+                if(it){
+                    navController.popBackStack()
+                }
             }
         }
     }
