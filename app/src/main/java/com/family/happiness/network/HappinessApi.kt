@@ -39,6 +39,9 @@ interface HappinessApi {
     @POST("mail")
     suspend fun writeMail(@Body writeMailData: WriteMailData)
 
+    @PUT("mail")
+    suspend fun markAsRead(@Body marAsReadData: MarkAsReadData)
+
     // Album
     @Multipart
     @POST("photo")

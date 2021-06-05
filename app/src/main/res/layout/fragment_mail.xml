@@ -36,19 +36,19 @@
                         android:layout_width="240dp"
                         android:layout_height="240dp"
                         android:src="@drawable/mailbox_on"
-                        app:visibleIf="@{viewModel.mails.size() > 0}"/>
+                        app:visibleIf="@{viewModel.mailDetails.size() > 0}"/>
                     <ImageView
                         android:layout_width="240dp"
                         android:layout_height="240dp"
                         android:src="@drawable/mailbox_off"
-                        app:visibleIf="@{viewModel.mails.size() == 0}"/>
+                        app:visibleIf="@{viewModel.mailDetails.size() == 0}"/>
                 </FrameLayout>
                 <Button
                     android:id="@+id/readButtton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text='@{"Mail: " + viewModel.mails.size()}'
-                    app:enabledIf="@{viewModel.mails.size() > 0}"
+                    android:text='@{"Mail: " + viewModel.mailDetails.size()}'
+                    app:enabledIf="@{viewModel.mailDetails.size() > 0}"
                     tools:text="Mail: 1"
                     android:onClick="@{() -> mailFragment.onClickRead()}"/>
             </LinearLayout>

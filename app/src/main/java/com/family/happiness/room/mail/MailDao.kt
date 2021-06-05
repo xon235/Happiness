@@ -11,10 +11,10 @@ interface MailDao {
     suspend fun insert(mails: List<Mail>): List<Long>
 
     @Query("SELECT * FROM mail ORDER BY time_sent DESC")
-    fun getAll(): Flow<List<Mail>>
+    fun getAllMailDetail(): Flow<List<MailDetail>>
 
-    @Query("DELETE FROM wish WHERE id = :wishId")
-    suspend fun deleteById(wishId: Int)
+    @Query("DELETE FROM mail WHERE id = :mailId")
+    suspend fun deleteById(mailId: Int)
 
     @Query("DELETE FROM mail WHERE id NOT IN (:mailIds)")
     suspend fun deleteNotIn(mailIds: List<Int>)

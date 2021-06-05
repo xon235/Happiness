@@ -1,6 +1,7 @@
 package com.family.happiness.repository
 
 import com.family.happiness.network.HappinessApi
+import com.family.happiness.network.request.MarkAsReadData
 import com.family.happiness.network.request.WriteMailData
 import com.family.happiness.room.mail.MailDao
 
@@ -9,7 +10,7 @@ class MailRepository(
     private val happinessApi: HappinessApi,
 ) : BaseRepository() {
 
-    val mails =  mailDao.getAll()
+    val mailDetails =  mailDao.getAllMailDetail()
 
     suspend fun writeMail(
         writeMailData: WriteMailData
@@ -20,5 +21,10 @@ class MailRepository(
     suspend fun syncMail() = safeApiCall {
         val syncMailResponse = happinessApi.syncMail()
         mailDao.sync(syncMailResponse.mails)
+    }
+
+    suspend fun markAsRead(markAsReadData: MarkAsReadData) = safeApiCall {
+        happinessApi.markAsRead(markAsReadData)
+        mailDao.deleteById(markAsReadData.mailId)
     }
 }

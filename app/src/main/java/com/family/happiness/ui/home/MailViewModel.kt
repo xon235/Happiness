@@ -9,7 +9,7 @@ import timber.log.Timber
 
 class MailViewModel(private val mailRepository: MailRepository): ViewModel() {
 
-    val mails = mailRepository.mails.asLiveData()
+    val mailDetails = mailRepository.mailDetails.asLiveData()
 
     init {
         viewModelScope.launch {

@@ -13,7 +13,9 @@ class MailWriteViewModel(
     private val mailRepository: MailRepository
 ) : ViewModel() {
 
-    val members = userRepository.members.asLiveData()
+//    val members = userRepository.members.asLiveData()
+    // TODO delete after test
+    val members = userRepository.users.asLiveData()
 
     private val _inputEnabled = MutableLiveData(true)
     val inputEnabled: LiveData<Boolean> = _inputEnabled

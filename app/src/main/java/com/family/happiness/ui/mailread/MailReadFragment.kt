@@ -9,6 +9,7 @@ import com.family.happiness.databinding.FragmentMailBinding
 import com.family.happiness.databinding.FragmentMailReadBinding
 import com.family.happiness.ui.HappinessBaseFragment
 import com.family.happiness.ui.MainActivity
+import timber.log.Timber
 
 class MailReadFragment : HappinessBaseFragment<FragmentMailReadBinding, MailReadViewModel>() {
 
@@ -19,8 +20,8 @@ class MailReadFragment : HappinessBaseFragment<FragmentMailReadBinding, MailRead
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        viewModel.fromUser.observe(viewLifecycleOwner) {
-            (activity as MainActivity).supportActionBar?.title = it?.name
+        viewModel.mailDetails.observe(viewLifecycleOwner) {
+            (activity as MainActivity).supportActionBar?.title = it[0].fromUser.name
         }
     }
 
@@ -29,4 +30,8 @@ class MailReadFragment : HappinessBaseFragment<FragmentMailReadBinding, MailRead
 
     override fun getViewModel() = MailReadViewModel::class.java
 
+    override fun onStop() {
+        super.onStop()
+        viewModel.markAsRead(binding.ratingBar.rating)
+    }
 }
