@@ -4,9 +4,12 @@ import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -19,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.family.happiness.HappinessApplication
 import com.family.happiness.R
+import com.family.happiness.Utils
 import com.family.happiness.adapter.FamilyListAdapter
 import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
@@ -27,6 +31,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.zxing.integration.android.IntentIntegrator
+import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
@@ -91,21 +97,21 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_global_signInFragment)
             }
 
-            if(it.familyId != null){
+            if (it.familyId != null) {
                 viewModel.syncUser()
             }
         }
 
-        viewModel.joinFamilyFlag.observe(this){ event ->
+        viewModel.joinFamilyFlag.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
-                val text = if(it) "Join Successful" else "Join Failed"
+                val text = if (it) "Join Successful" else "Join Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.leaveFamilyFlag.observe(this){ event ->
+        viewModel.leaveFamilyFlag.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
-                val text = if(it) "Left Family" else "Leave Failed"
+                val text = if (it) "Left Family" else "Leave Failed"
                 Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
             }
         }
@@ -150,6 +156,13 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    fun onClickReadQrCode() {
+        val intentIntegrator = IntentIntegrator(this)
+        intentIntegrator.setPrompt("Scan a barcode or QR Code")
+        intentIntegrator.setOrientationLocked(false)
+        intentIntegrator.initiateScan()
+    }
+
     fun onClickLeaveFamily() {
         viewModel.leaveFamily()
     }
@@ -159,7 +172,11 @@ class MainActivity : AppCompatActivity() {
         val status = googleApiAvailability.isGooglePlayServicesAvailable(this)
         if (status != ConnectionResult.SUCCESS) {
             if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(this, status, RESOLVE_GOOGLE_API_AVAILABILITY_SERVICES_ERROR).show()
+                googleApiAvailability.getErrorDialog(
+                    this,
+                    status,
+                    RESOLVE_GOOGLE_API_AVAILABILITY_SERVICES_ERROR
+                ).show()
             }
             return false
         }
@@ -172,6 +189,33 @@ class MainActivity : AppCompatActivity() {
                 it.setPrimaryClip(ClipData.newPlainText("Family Code", familyId))
                 Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    fun onClickFamilyQrCode() {
+        val dialog = AlertDialog.Builder(this)
+            .setPositiveButton("Done") { dialog, _ -> dialog.dismiss() }
+            .create()
+
+        dialog.setView(
+            ImageView(this).apply{ setImageBitmap(Utils.encodeAsBitmap(viewModel.personalData.value?.familyId)) }
+        )
+        dialog.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        // if the intentResult is null then
+        // toast a message as "cancelled"
+        if (intentResult != null) {
+            if (intentResult.contents == null) {
+                Toast.makeText(baseContext, "Cancelled", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.joinFamily(intentResult.contents)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 }

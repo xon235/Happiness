@@ -31,17 +31,14 @@
                 android:textAlignment="center" />
 
             <FrameLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/familyIdTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{viewModel.personalData.familyId}"
-                    android:textStyle="bold"
-                    tools:text="abcdefghijklmnop" />
+                <ImageView
+                    android:id="@+id/familyIdImageView"
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center" />
 
                 <ProgressBar
                     android:layout_width="wrap_content"
@@ -50,27 +47,31 @@
                     app:visibleIf="@{viewModel.status == HappinessApiStatus.LOADING}"/>
 
             </FrameLayout>
-        </LinearLayout>
-        <Button
-            android:id="@+id/copyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Copy"
-            app:visibleIf="@{viewModel.status == HappinessApiStatus.DONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:visibleIf="@{viewModel.status == HappinessApiStatus.ERROR}"
-            android:text="@{viewModel.failText}"
-            android:textColor="@color/design_default_color_primary_variant"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            <TextView
+                android:id="@+id/familyIdTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@{viewModel.personalData.familyId}"
+                android:textStyle="bold"
+                tools:text="abcdefghijklmnop" />
+
+            <Button
+                android:id="@+id/copyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Copy"
+                app:visibleIf="@{viewModel.status == HappinessApiStatus.DONE}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:visibleIf="@{viewModel.status == HappinessApiStatus.ERROR}"
+                android:text="@{viewModel.failText}"
+                android:textColor="@color/design_default_color_primary_variant"
+                android:textAlignment="center" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
