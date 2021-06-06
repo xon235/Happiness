@@ -23,8 +23,8 @@ class PhotoDetailBottomSheet: BottomSheetDialogFragment() {
         val photoDetail: PhotoDetail? = arguments?.getParcelable("photoDetail")
         binding.photoDetail = photoDetail
         photoDetail?.tagDetails?.forEach {
-            binding.idTagsWrapper.addView(
-                TagsShapeableImageBinding.inflate(inflater, null, false).apply {
+            binding.tagsWrapper.addView(
+                TagsShapeableImageBinding.inflate(inflater, binding.tagsWrapper, false).apply {
                     photoUrl = it.user.photoUrl
                 }.root
             )

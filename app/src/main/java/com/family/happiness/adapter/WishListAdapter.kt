@@ -2,9 +2,11 @@ package com.family.happiness.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.family.happiness.databinding.TagsShapeableImageBinding
 import com.family.happiness.databinding.WishItemLayoutBinding
 import com.family.happiness.room.wish.Wish
 import com.family.happiness.room.wish.WishDetail
@@ -17,10 +19,10 @@ class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
     }
 
     override fun onBindViewHolder(holder: WishListViewHolder, position: Int) {
-        val wish = getItem(position)
-        holder.bind(wish)
+        val wishDetail = getItem(position)
+        holder.bind(wishDetail)
         holder.itemView.setOnClickListener {
-            clickListener(wish)
+            clickListener(wishDetail)
         }
     }
 
@@ -36,6 +38,16 @@ class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
 
     class WishListViewHolder(private var binding: WishItemLayoutBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(wish: WishDetail) { binding.wishDetail = wish }
+        fun bind(wishDetail: WishDetail) {
+            binding.wishDetail = wishDetail
+            binding.tagsWrapper.removeAllViews()
+            wishDetail.contributors.forEach {
+                binding.tagsWrapper.addView(
+                    TagsShapeableImageBinding.inflate(LayoutInflater.from(binding.tagsWrapper.context), binding.tagsWrapper, false).apply {
+                        photoUrl = it.user.photoUrl
+                    }.root
+                )
+            }
+        }
     }
 }

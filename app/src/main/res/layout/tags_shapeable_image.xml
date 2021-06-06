@@ -8,8 +8,9 @@
     </data>
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/photoImageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_margin="2dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         app:imageUrl="@{photoUrl}"
         app:shapeAppearanceOverlay="@style/circleImageView" />
 </layout>
