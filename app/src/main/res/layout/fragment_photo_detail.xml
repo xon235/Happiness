@@ -41,7 +41,7 @@
             android:id="@+id/infoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|bottom"
+            android:layout_gravity="end|bottom"
             android:src="@drawable/ic_info"
             android:background="@null"
             android:layout_margin="16dp"
