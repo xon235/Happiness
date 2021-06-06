@@ -3,11 +3,9 @@ package com.family.happiness.ui.auth
 import androidx.lifecycle.*
 import com.family.happiness.network.SafeResource
 import com.family.happiness.network.request.SignUpData
-import com.family.happiness.network.response.PersonalDataResponse
 import com.family.happiness.repository.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import timber.log.Timber
 
 class SmsVerificationViewModel(private val userRepository: UserRepository): ViewModel() {
 

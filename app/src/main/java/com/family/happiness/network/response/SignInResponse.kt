@@ -1,7 +1,9 @@
 package com.family.happiness.network.response
 
-data class PersonalDataResponse(
+import com.family.happiness.room.user.User
+
+data class SignInResponse(
+    val user: User,
     val token: String,
-    val userId: String,
     val familyId: String?,
 )

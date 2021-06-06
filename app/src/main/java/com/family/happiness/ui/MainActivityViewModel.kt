@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
 import com.family.happiness.repository.UserRepository
-import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.coroutines.launch
 
 

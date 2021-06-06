@@ -1,23 +1,16 @@
 package com.family.happiness.repository
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.family.happiness.PreferenceKeys
 import com.family.happiness.network.HappinessApi
-import com.family.happiness.network.SafeResource
 import com.family.happiness.network.request.*
-import com.family.happiness.network.response.PersonalDataResponse
-import com.family.happiness.room.user.User
 import com.family.happiness.room.user.UserDao
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
 import timber.log.Timber
 import java.io.IOException
 
@@ -59,16 +52,17 @@ class UserRepository(
             personalDataDatastore.data.map { it[PreferenceKeys.FCM_TOKEN] }.first()!!,
             oAuthData
         )
-        val personalDataResponse = happinessApi.signIn(signInData)
+        val signInResponse = happinessApi.signIn(signInData)
         personalDataDatastore.edit {
-            it[PreferenceKeys.TOKEN] = personalDataResponse.token
-            it[PreferenceKeys.USER_ID] = personalDataResponse.userId
-            if (personalDataResponse.familyId == null) {
+            it[PreferenceKeys.TOKEN] = signInResponse.token
+            it[PreferenceKeys.USER_ID] = signInResponse.user.id
+            if (signInResponse.familyId == null) {
                 it.remove(PreferenceKeys.FAMILY_ID)
             } else {
-                it[PreferenceKeys.FAMILY_ID] = personalDataResponse.familyId
+                it[PreferenceKeys.FAMILY_ID] = signInResponse.familyId
             }
         }
+        userDao.insert(listOf(signInResponse.user))
     }
 
     suspend fun signUp(signUpData: SignUpData) = safeApiCall {
