@@ -28,6 +28,7 @@ class PhotoDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.photoDetailFragment = this
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
@@ -106,8 +107,7 @@ class PhotoDetailFragment :
     fun onClickInfo() {
         PhotoDetailBottomSheet().apply {
             arguments = Bundle().apply { putParcelable("photoDetail", viewModel.photoDetail.value) }
-            show(requireActivity().supportFragmentManager, "photoDetailBottomSheet")
-        }
+        }.show(requireActivity().supportFragmentManager, "photoDetailBottomSheet")
     }
 
     override fun getBinding(

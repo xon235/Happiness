@@ -24,7 +24,7 @@ class PhotoDetailBottomSheet: BottomSheetDialogFragment() {
         binding.photoDetail = photoDetail
         photoDetail?.tagDetails?.forEach {
             binding.idTagsWrapper.addView(
-                TagsShapeableImageBinding.inflate(inflater, binding.idTagsWrapper, true).apply {
+                TagsShapeableImageBinding.inflate(inflater, null, false).apply {
                     photoUrl = it.user.photoUrl
                 }.root
             )
