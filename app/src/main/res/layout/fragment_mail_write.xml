@@ -23,19 +23,21 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="6dp"
+            android:padding="12dp"
             app:enabledIf="@{viewModel.inputEnabled}">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:layout_gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="To"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -44,10 +46,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="end"
+                    android:paddingTop="2dp"
                     app:listData="@{viewModel.members}"/>
-
             </LinearLayout>
-
 
             <EditText
                 android:id="@+id/contentEditText"
@@ -56,9 +57,8 @@
                 android:layout_weight="1"
                 android:gravity="top|start"
                 android:inputType="textMultiLine"
-                android:minLines="8"
                 android:hint="Content"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <Button
                 android:layout_width="match_parent"

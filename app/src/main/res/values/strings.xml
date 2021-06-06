@@ -21,4 +21,8 @@
     <string name="title_create_family">Create Family</string>
     <string name="preference_file_key">preference_file_key</string>
     <string name="view_album_in_images">view_album_in_images</string>
+    <string name="author">작성자:</string>
+    <string name="contributors">기여자</string>
+    <string name="finish">완료</string>
+    <string name="finished">완료됨</string>
 </resources>

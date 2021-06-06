@@ -14,86 +14,89 @@
             name="wishDetail"
             type="com.family.happiness.room.wish.WishDetail" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="6dp">
+        android:layout_height="match_parent">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
             app:visibleIf="@{!viewModel.inputEnabled}" />
 
-        <EditText
-            android:id="@+id/titleEt"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:hint="Title"
-            android:text="@{wishDetail.wish.title}"
-            tools:text="Title"
-            app:enabledIf="@{viewModel.inputEnabled}"/>
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            app:enabledIf="@{viewModel.inputEnabled}">
 
-        <EditText
-            android:id="@+id/contentEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Content"
-            android:gravity="top|start"
-            android:minLines="8"
-            android:inputType="textMultiLine"
-            app:layout_constraintTop_toBottomOf="@id/titleEt"
-            android:textSize="24sp"
-            android:text="@{wishDetail.wish.content}"
-            tools:text="lorem ipsum"
-            app:enabledIf="@{viewModel.inputEnabled}"/>
+            <EditText
+                android:id="@+id/titleEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:hint="Title"
+                android:text="@{wishDetail.wish.title}"
+                tools:text="Title" />
 
-        <TextView
-            android:id="@+id/statusTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/contentEt"
-            android:textSize="16sp"
-            android:textAlignment="textEnd"
-            android:text="Finished"
-            app:visibleIf="@{wishDetail.wish.timestampClose != null}" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="12dp" />
 
-        <TextView
-            android:id="@+id/createTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/statusTv"
-            android:textSize="16sp"
-            android:textAlignment="textEnd"
-            android:text="@{wishDetail.wish.timestampOpen}"
-            tools:text="YYYY-MM-DD"/>
+            <EditText
+                android:id="@+id/contentEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:hint="Content"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:text="@{wishDetail.wish.content}"
+                tools:text="lorem ipsum"
+                android:paddingBottom="12dp"/>
 
-        <TextView
-            android:id="@+id/finishTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/createTv"
-            android:textSize="16sp"
-            android:textAlignment="textEnd"
-            android:text="@{wishDetail.wish.timestampClose}"
-            app:visibleIf="@{wishDetail.wish.timestampClose != null}"
-            tools:text="YYYY-MM-DD"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/linearLayout"
+                android:textSize="16sp"
+                android:textAlignment="textEnd"
+                android:text='@{"Written by " + wishDetail.user.name}'
+                tools:text="Written By Author"
+                app:visibleIf="@{wishDetail != null}"
+                android:paddingBottom="6dp"/>
 
-        <Button
-            android:id="@+id/finishBt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@{wishDetail == null? &quot;Post&quot;: &quot;Update&quot;}"
-            tools:text="Post"
-            android:onClick="@{() -> wishWriteFragment.onClickFinish()}"
-            app:enabledIf="@{viewModel.inputEnabled}"/>
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingBottom="6dp"
+                app:visibleIf="@{wishDetail != null}">
+                <TextView
+                    android:id="@+id/createTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textAlignment="textEnd"
+                    android:text="@{wishDetail.wish.timestampOpen}"
+                    tools:text="YYYY-MM-DD"/>
+            </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/finishBt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text='@{wishDetail == null? "Post": "Update"}'
+                android:onClick="@{() -> wishWriteFragment.onClickFinish()}"
+                tools:text="Update"/>
+        </LinearLayout>
+    </FrameLayout>
 </layout>

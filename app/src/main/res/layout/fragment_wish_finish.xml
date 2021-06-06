@@ -20,10 +20,9 @@
             android:layout_gravity="center"/>
         <LinearLayout
             android:orientation="vertical"
-            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="6dp"
+            android:padding="12dp"
             app:enabledIf="@{viewModel.inputEnabled}">
 
             <androidx.recyclerview.widget.RecyclerView

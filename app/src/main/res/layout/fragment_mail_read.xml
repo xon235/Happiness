@@ -19,7 +19,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="6dp">
+        android:padding="12dp">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="32dp"
@@ -38,9 +38,6 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="6dp"
                 app:imageUrl="@{viewModel.me.photoUrl}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/circleImageView" />
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="From"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="32dp"
@@ -98,8 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center"
-            android:paddingTop="48dp"
-            android:paddingBottom="42dp">
+            android:paddingTop="48dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.R
 import com.family.happiness.databinding.FragmentWishDetailBinding
+import com.family.happiness.databinding.TagsShapeableImageBinding
 import com.family.happiness.ui.HappinessBaseFragment
 
 class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, WishDetailViewModel>() {
@@ -20,6 +21,14 @@ class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, Wish
         binding.wishDetail = args.wishDetail
 
         args.wishDetail.wish.timestampClose?:setHasOptionsMenu(true)
+
+        args.wishDetail.contributors.forEach {
+            binding.tagsWrapper.addView(
+                TagsShapeableImageBinding.inflate(layoutInflater, binding.tagsWrapper, false).apply {
+                    photoUrl = it.user.photoUrl
+                }.root
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

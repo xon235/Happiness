@@ -24,6 +24,7 @@ class MailReadFragment : HappinessBaseFragment<FragmentMailReadBinding, MailRead
         super.onViewCreated(view, savedInstanceState)
 
         binding.mailReadFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.mailDetail = args.mailDetail
 

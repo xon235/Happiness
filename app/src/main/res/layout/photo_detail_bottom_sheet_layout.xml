@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tags"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
