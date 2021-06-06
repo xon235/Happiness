@@ -64,6 +64,12 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
                 ).show()
             }
         }
+
+        viewModel.photos.observe(viewLifecycleOwner) {
+            if(it.isEmpty()) {
+                viewModel.selectedEvent.value = null
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

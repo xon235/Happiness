@@ -41,6 +41,9 @@ class AlbumRepository(
     suspend fun movePhoto(photo: Photo, event: Event) = safeApiCall {
         happinessApi.movePhoto(MovePhotoData(listOf(photo.url), event.id))
         photoDao.changePhotoEvent(photo.url, event.id)
+        if(photoDao.getPhotoByEvent(photo.eventId).first().isEmpty()){
+            eventDao.deleteById(listOf(photo.eventId))
+        }
     }
 
     suspend fun syncPhoto() = safeApiCall {
