@@ -26,8 +26,6 @@ class WishFinisViewModel(
         _inputEnabled.value = false
         when(val resource = wishRepository.finishWish(finishWishData)){
             is SafeResource.Success ->{
-                resource.value.wish?.let { wishRepository.updateWish(listOf(it)) }
-                resource.value.contributors?.let { wishRepository.insertContributor(it) }
                 _finishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {

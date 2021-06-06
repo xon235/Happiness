@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface ContributorDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(wishes: List<Contributor>): List<Long>
+    suspend fun insert(contributors: List<Contributor>): List<Long>
 
     @Query("DELETE FROM contributor WHERE id = :ContributorId")
     suspend fun deleteById(ContributorId: Int)

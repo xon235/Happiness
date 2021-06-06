@@ -3,12 +3,18 @@ package com.family.happiness.ui
 import androidx.lifecycle.*
 import com.family.happiness.Flag
 import com.family.happiness.network.SafeResource
+import com.family.happiness.repository.AlbumRepository
+import com.family.happiness.repository.MailRepository
 import com.family.happiness.repository.UserRepository
+import com.family.happiness.repository.WishRepository
 import kotlinx.coroutines.launch
 
 
 class MainActivityViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val mailRepository: MailRepository,
+    private val albumRepository: AlbumRepository,
+    private val wishRepository: WishRepository
 ) : ViewModel() {
 
     val personalData = userRepository.personalDataPreferencesFlow.asLiveData()
@@ -54,6 +60,9 @@ class MainActivityViewModel(
         when(val resource = userRepository.syncUser()){
             is SafeResource.Success -> {
                 _syncUserFlag.value = Flag(true)
+                mailRepository.syncMail()
+                albumRepository.syncPhoto()
+                wishRepository.syncWish()
             }
             is SafeResource.Failure -> {
                 _syncUserFlag.value = Flag(false)

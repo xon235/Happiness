@@ -23,15 +23,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository): ViewModel() 
 
     val isEventView = MutableLiveData(false)
 
-    init {
-        viewModelScope.launch {
-            when(val resource = albumRepository.syncPhoto()){
-                is SafeResource.Failure -> {
-                    Timber.d(resource.throwable)}
-            }
-        }
-    }
-
     private val _navigateToSelectedImage = MutableLiveData<Flag<Photo>>()
     val navigateToSelectedProperty: LiveData<Flag<Photo>> = _navigateToSelectedImage
 

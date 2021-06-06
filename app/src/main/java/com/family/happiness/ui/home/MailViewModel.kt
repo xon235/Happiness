@@ -11,15 +11,6 @@ class MailViewModel(private val mailRepository: MailRepository): ViewModel() {
 
     val mailDetails = mailRepository.mailDetails.asLiveData()
 
-    init {
-        viewModelScope.launch {
-            when(val resource = mailRepository.syncMail()){
-                is SafeResource.Success -> {Timber.d("Sync successful")}
-                is SafeResource.Failure -> {Timber.d(resource.throwable)}
-            }
-        }
-    }
-
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 

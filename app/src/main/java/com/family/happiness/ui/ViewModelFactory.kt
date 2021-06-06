@@ -34,7 +34,7 @@ class ViewModelFactory(private val app: HappinessApplication)
             modelClass.isAssignableFrom(SmsVerificationViewModel::class.java) -> SmsVerificationViewModel(app.userRepository) as T
 
             // home
-            modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> MainActivityViewModel(app.userRepository) as T
+            modelClass.isAssignableFrom(MainActivityViewModel::class.java) -> MainActivityViewModel(app.userRepository, app.mailRepository, app.albumRepository, app.wishRepository) as T
             modelClass.isAssignableFrom(CreateFamilyViewModel::class.java) -> CreateFamilyViewModel(app.userRepository) as T
 
             // mail

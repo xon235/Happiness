@@ -26,11 +26,9 @@ class WishWriteViewModel(private val wishRepository: WishRepository): ViewModel(
         _inputEnabled.value = false
         when(val resource = wishRepository.writeWish(writeWishData)){
             is SafeResource.Success ->{
-                resource.value.wish?.let { wishRepository.insertWish(listOf(it)) }
                 _writeFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {
-                Timber.d(resource.throwable.toString())
                 _writeFinishFlag.value = Flag(false)
             }
         }
@@ -44,7 +42,6 @@ class WishWriteViewModel(private val wishRepository: WishRepository): ViewModel(
         _inputEnabled.value = false
         when(val resource = wishRepository.deleteWish(deleteWishData)){
             is SafeResource.Success ->{
-                wishRepository.deleteWishById(deleteWishData.wishId)
                 _deleteFinishFlag.value = Flag(true)
             }
             is SafeResource.Failure -> {

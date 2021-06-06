@@ -23,49 +23,28 @@ class WishRepository(
     suspend fun writeWish(
         writeWishData: WriteWishData
     ) = safeApiCall {
-        happinessApi.writeWish(writeWishData)
+        val writeWishResponse = happinessApi.writeWish(writeWishData)
+        wishDao.upsert(listOf(writeWishResponse.wish))
     }
 
     suspend fun finishWish(
         finishWishData: FinishWishData
     ) = safeApiCall {
-        happinessApi.finishWish(finishWishData)
+        val finishWishResponse = happinessApi.finishWish(finishWishData)
+        wishDao.update(listOf(finishWishResponse.wish))
+        contributorDao.insert(finishWishResponse.contributors)
     }
 
     suspend fun deleteWish(
         deleteWishData: DeleteWishData
     ) = safeApiCall {
         happinessApi.deleteWish(deleteWishData)
+        wishDao.deleteById(deleteWishData.wishId)
     }
 
     suspend fun syncWish() = safeApiCall {
         val getWishResponse = happinessApi.getWish()
-        getWishResponse.wishes?.let { wishDao.sync(it) }
-        getWishResponse.contributors?.let { contributorDao.sync(it) }
+        wishDao.sync(getWishResponse.wishes)
+        contributorDao.sync(getWishResponse.contributors)
     }
-
-    // Dao
-    suspend fun insertWish(wishes: List<Wish>) = withContext(Dispatchers.IO){
-        wishDao.insert(wishes)
-    }
-
-    suspend fun updateWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
-        wishDao.update(wishes)
-    }
-
-    suspend fun deleteWishById(wishId: Int) = withContext(Dispatchers.IO){
-        wishDao.deleteById(wishId)
-    }
-
-    suspend fun insertContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
-        contributorDao.insert(contributors)
-    }
-
-//    suspend fun syncWish(wishes: List<Wish>) = withContext(Dispatchers.IO) {
-//        wishDao.sync(wishes)
-//    }
-//
-//    suspend fun syncContributor(contributors: List<Contributor>) = withContext(Dispatchers.IO){
-//        contributorDao.sync(contributors)
-//    }
 }
