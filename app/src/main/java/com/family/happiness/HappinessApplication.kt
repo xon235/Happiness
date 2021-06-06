@@ -69,7 +69,7 @@ class HappinessApplication : Application() {
 
         val retrofit = Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("http://3.12.126.96:5000/")
+            .baseUrl("https://happyfamily.tk/")
             .client(httpClient)
             .build()
 

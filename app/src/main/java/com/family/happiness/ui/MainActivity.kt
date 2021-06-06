@@ -23,6 +23,8 @@ import com.family.happiness.adapter.FamilyListAdapter
 import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
 import com.family.happiness.ui.createfamily.CreateFamilyFragmentDirections
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 
@@ -126,6 +128,9 @@ class MainActivity : AppCompatActivity() {
 
     fun onClickSignOut() {
         viewModel.clearUserData()
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build().also {
+            GoogleSignIn.getClient(this, it).signOut()
+        }
     }
 
 

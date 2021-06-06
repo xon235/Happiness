@@ -103,6 +103,13 @@ class PhotoDetailFragment :
         return true
     }
 
+    fun onClickInfo() {
+        PhotoDetailBottomSheet().apply {
+            arguments = Bundle().apply { putParcelable("photoDetail", viewModel.photoDetail.value) }
+            show(requireActivity().supportFragmentManager, "photoDetailBottomSheet")
+        }
+    }
+
     override fun getBinding(
         inflater: LayoutInflater,
         container: ViewGroup?

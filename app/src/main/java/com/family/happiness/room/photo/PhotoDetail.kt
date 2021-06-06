@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.tag.Tag
+import com.family.happiness.room.tag.TagDetail
 import com.family.happiness.room.user.User
 import kotlinx.parcelize.Parcelize
 
@@ -23,8 +24,9 @@ data class PhotoDetail (
     )
     val event: Event,
     @Relation(
+        entity = Tag::class,
         parentColumn = "event_id",
         entityColumn = "event_id"
     )
-    val tags: List<Tag>
+    val tagDetails: List<TagDetail>
 ): Parcelable

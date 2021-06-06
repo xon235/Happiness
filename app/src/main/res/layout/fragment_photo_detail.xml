@@ -2,6 +2,9 @@
 <layout>
     <data>
         <variable
+            name="photoDetailFragment"
+            type="com.family.happiness.ui.photodetail.PhotoDetailFragment" />
+        <variable
             name="viewModel"
             type="com.family.happiness.ui.photodetail.PhotoDetailViewModel" />
     </data>
@@ -33,6 +36,16 @@
             app:zoomage_minScale="0.6"
             app:zoomage_maxScale="8"
             app:enabledIf="@{viewModel.inputEnabled}"/>
+
+        <ImageButton
+            android:id="@+id/infoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:src="@drawable/ic_info"
+            android:background="@null"
+            android:layout_margin="16dp"
+            android:onClick="@{() -> photoDetailFragment.onClickInfo()}"/>
 
     </FrameLayout>
 </layout>
