@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PhotoDao {
 
-    @Query("SELECT * FROM photo")
+    @Query("SELECT * FROM photo ORDER BY timestamp DESC")
     fun getAll(): Flow<List<Photo>>
 
     @Query("SELECT * FROM photo WHERE url = :url")
