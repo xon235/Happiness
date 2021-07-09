@@ -60,4 +60,10 @@ class AlbumRepository(
             eventDao.deleteById(listOf(photo.eventId))
         }
     }
+
+    suspend fun deleteAllData() {
+        eventDao.deleteNotIn(emptyList())
+        tagDao.deleteNotIn(emptyList())
+        photoDao.deleteNotIn(emptyList())
+    }
 }

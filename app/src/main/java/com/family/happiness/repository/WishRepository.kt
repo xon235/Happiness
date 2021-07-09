@@ -47,4 +47,9 @@ class WishRepository(
         wishDao.sync(getWishResponse.wishes)
         contributorDao.sync(getWishResponse.contributors)
     }
+
+    suspend fun deleteAllData() {
+        wishDao.deleteNotIn(emptyList())
+        contributorDao.deleteNotIn(emptyList())
+    }
 }

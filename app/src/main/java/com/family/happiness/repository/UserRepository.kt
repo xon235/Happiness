@@ -100,12 +100,13 @@ class UserRepository(
     }
 
     // Datastore
-    suspend fun deleteAllPersonalData() {
+    suspend fun deleteAllData() {
         personalDataDatastore.edit {
             it.remove(PreferenceKeys.TOKEN)
             it.remove(PreferenceKeys.USER_ID)
             it.remove(PreferenceKeys.FAMILY_ID)
         }
+        userDao.deleteNotIn(emptyList())
     }
 
     suspend fun insertFcmToken(fcmToken: String) {

@@ -71,6 +71,9 @@ class MainActivityViewModel(
     }
 
     fun clearUserData() = viewModelScope.launch {
-        userRepository.deleteAllPersonalData()
+        userRepository.deleteAllData()
+        mailRepository.deleteAllData()
+        albumRepository.deleteAllData()
+        wishRepository.deleteAllData()
     }
 }

@@ -13,7 +13,7 @@
     <string name="title_sign_in">Sign In</string>
     <string name="title_family">Family</string>
     <string name="title_sign_up">Sign Up</string>
-    <string name="server_client_id">818882695058-m42ckkl8l5jfqal978b8h1mokpe3gere.apps.googleusercontent.com</string>
+    <string name="server_client_id">785698997732-fj0lks225sgv1q7jfendm1v0jum7bkq4.apps.googleusercontent.com</string>
     <string name="hint_name">Name</string>
     <string name="hint_phone_number">Phone Number</string>
     <string name="title_sms_verification">SMS Verification</string>
@@ -25,4 +25,6 @@
     <string name="contributors">기여자</string>
     <string name="finish">완료</string>
     <string name="finished">완료됨</string>
+<!--    <string name="server_url">http://10.0.2.2:5000</string>-->
+    <string name="server_url">http://34.132.3.49</string>
 </resources>

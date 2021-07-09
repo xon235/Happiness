@@ -27,4 +27,8 @@ class MailRepository(
         happinessApi.markAsRead(markAsReadData)
         mailDao.deleteById(markAsReadData.mailId)
     }
+
+    suspend fun deleteAllData() {
+        mailDao.deleteNotIn(emptyList())
+    }
 }
