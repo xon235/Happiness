@@ -73,24 +73,6 @@ fun bindMembersRecyclerView(
 }
 
 @BindingAdapter("app:listData")
-fun bindPhotosRecyclerView(
-    recyclerView: RecyclerView,
-    data: List<Photo>?
-) {
-    val adapter = recyclerView.adapter as PhotoListAdapter
-    adapter.submitList(data)
-}
-
-@BindingAdapter("app:listData")
-fun bindEventsRecyclerView(
-    recyclerView: RecyclerView,
-    data: List<Event>?
-) {
-    val adapter = recyclerView.adapter as EventListAdapter
-    adapter.submitList(data)
-}
-
-@BindingAdapter("app:listData")
 fun bindWishesRecyclerView(
     recyclerView: RecyclerView,
     data: List<WishDetail>?
@@ -116,21 +98,3 @@ fun bindMemberSpinner(spinner: Spinner, data: List<User>?) {
         data?.let { addAll(it.map { user -> user.name }) }
     }
 }
-
-//@BindingAdapter("HappinessApiStatus")
-//fun bindStatus(statusImageView: ImageView,
-//               status: HappinessApiStatus?) {
-//    when (status) {
-//        HappinessApiStatus.LOADING -> {
-//            statusImageView.visibility = View.VISIBLE
-//            statusImageView.setImageResource(R.drawable.loading_animation)
-//        }
-//        HappinessApiStatus.ERROR -> {
-//            statusImageView.visibility = View.VISIBLE
-//            statusImageView.setImageResource(R.drawable.ic_connection_error)
-//        }
-//        HappinessApiStatus.DONE -> {
-//            statusImageView.visibility = View.GONE
-//        }
-//    }
-//}

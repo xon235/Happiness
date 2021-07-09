@@ -6,9 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import com.family.happiness.adapter.EventListAdapter
-import com.family.happiness.adapter.PhotoListAdapter
 import com.family.happiness.R
+import com.family.happiness.adapter.AlbumListAdapter
 import com.family.happiness.databinding.FragmentAlbumBinding
 import com.family.happiness.ui.HappinessBaseFragment
 
@@ -35,15 +34,22 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-
-        binding.photoRecyclerView.adapter =
-            PhotoListAdapter { viewModel.displayPropertyDetails(it) }
-        binding.eventRecyclerView.adapter =
-            EventListAdapter { viewModel.selectedEvent.postValue(it) }
+        val albumListAdapter = AlbumListAdapter {
+            when (it) {
+                is AlbumListAdapter.AlbumItem.PhotoItem -> {
+                    viewModel.displayImageDetails(it.photo)
+                }
+                is AlbumListAdapter.AlbumItem.EventItem -> {
+                    viewModel.selectedEvent.postValue(it.event)
+                    viewModel.albumViewState.postValue(AlbumViewState.PhotosByEvent)
+                }
+            }
+        }
+        binding.albumItemRecyclerView.adapter = albumListAdapter
 
         binding.swipeRefreshLayout.setOnRefreshListener { refresh() }
 
-        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner) { flag ->
+        viewModel.navigateToSelectedImage.observe(viewLifecycleOwner) { flag ->
             flag?.getContentIfNotHandled()?.let {
                 navController.navigate(
                     AlbumFragmentDirections.actionAlbumFragmentToPhotoDetailFragment(it)
@@ -65,30 +71,32 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
             }
         }
 
-        viewModel.photos.observe(viewLifecycleOwner) {
-            if(it.isEmpty()) {
-                viewModel.selectedEvent.value = null
-            }
+        viewModel.albumItems.observe(viewLifecycleOwner) {
+            albumListAdapter.submitList(it)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.album_menu, menu)
 
-        viewModel.isEventView.observe(viewLifecycleOwner) {
-            menu.findItem(R.id.photoView).isVisible = it
-            menu.findItem(R.id.eventView).isVisible = !it
+        viewModel.albumViewState.observe(viewLifecycleOwner) {
+            menu.findItem(R.id.photoView).isVisible = it != AlbumViewState.AllPhotos
+            menu.findItem(R.id.eventView).isVisible = it == AlbumViewState.AllPhotos
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.eventView -> { viewModel.isEventView.value = true }
+        when (item.itemId) {
+            R.id.eventView -> {
+                viewModel.albumViewState.value = AlbumViewState.Events
+            }
             R.id.photoView -> {
-                viewModel.isEventView.value = false
+                viewModel.albumViewState.value = AlbumViewState.AllPhotos
                 viewModel.selectedEvent.value = null
             }
-            R.id.refresh -> { refresh() }
+            R.id.refresh -> {
+                refresh()
+            }
 
         }
         return true
@@ -124,6 +132,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
 
     fun onClickRootEvent() {
         viewModel.selectedEvent.value = null
+        viewModel.albumViewState.value = AlbumViewState.Events
     }
 
     fun onFabClick() {
