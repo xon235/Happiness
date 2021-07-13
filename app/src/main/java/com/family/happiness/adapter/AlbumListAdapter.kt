@@ -53,40 +53,29 @@ class AlbumListAdapter(private val clickListener: (albumItem: AlbumItem) -> Unit
 
     companion object DiffCallback : DiffUtil.ItemCallback<AlbumItem>() {
         override fun areItemsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean {
-            val result = when (oldItem) {
-                is AlbumItem.PhotoItem -> when (newItem) {
-                    is AlbumItem.PhotoItem -> oldItem.photo === newItem.photo
-                    is AlbumItem.EventItem -> false
-                }
-                is AlbumItem.EventItem -> when (newItem) {
-                    is AlbumItem.PhotoItem -> false
-                    is AlbumItem.EventItem -> oldItem.event === newItem.event
-                }
-            }
-            return result
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: AlbumItem, newItem: AlbumItem): Boolean {
-            val result = when (oldItem) {
-                is AlbumItem.PhotoItem -> when (newItem) {
-                    is AlbumItem.PhotoItem -> oldItem.photo == newItem.photo
-                    is AlbumItem.EventItem -> false
-                }
-                is AlbumItem.EventItem -> when (newItem) {
-                    is AlbumItem.PhotoItem -> false
-                    is AlbumItem.EventItem -> oldItem.event == newItem.event
-                }
-            }
-            return result
+            return oldItem == newItem
         }
     }
 
-    sealed class AlbumItem {
-        data class PhotoItem(val photo: Photo) : AlbumItem()
-        data class EventItem(val event: Event) : AlbumItem()
+    sealed class AlbumItem(val item: Any) {
+        data class PhotoItem(val photo: Photo) : AlbumItem(photo)
+        data class EventItem(val event: Event) : AlbumItem(event)
+
+        override fun equals(other: Any?): Boolean {
+            return (this as? PhotoItem == other as? PhotoItem
+                    && this as? EventItem == other as? EventItem)
+        }
+
+        override fun hashCode(): Int {
+            return item.hashCode()
+        }
     }
 
-    sealed class AlbumItemViewHolder(private var binding: ViewBinding) :
+    sealed class AlbumItemViewHolder(binding: ViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         class PhotoItemViewHolder(private val binding: PhotoItemLayoutBinding) :

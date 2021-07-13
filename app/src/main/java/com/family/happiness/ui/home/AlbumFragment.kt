@@ -40,8 +40,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
                     viewModel.displayImageDetails(it.photo)
                 }
                 is AlbumListAdapter.AlbumItem.EventItem -> {
-                    viewModel.selectedEvent.postValue(it.event)
-                    viewModel.albumViewState.postValue(AlbumViewState.PhotosByEvent)
+                    viewModel.setPhotosByEventViewState(it.event)
                 }
             }
         }
@@ -80,19 +79,18 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         inflater.inflate(R.menu.album_menu, menu)
 
         viewModel.albumViewState.observe(viewLifecycleOwner) {
-            menu.findItem(R.id.photoView).isVisible = it != AlbumViewState.AllPhotos
-            menu.findItem(R.id.eventView).isVisible = it == AlbumViewState.AllPhotos
+            menu.findItem(R.id.allPhotosView).isVisible = it != AlbumViewState.AllPhotos
+            menu.findItem(R.id.eventsView).isVisible = it == AlbumViewState.AllPhotos
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.eventView -> {
-                viewModel.albumViewState.value = AlbumViewState.Events
+            R.id.allPhotosView -> {
+                viewModel.setAllPhotosViewState()
             }
-            R.id.photoView -> {
-                viewModel.albumViewState.value = AlbumViewState.AllPhotos
-                viewModel.selectedEvent.value = null
+            R.id.eventsView -> {
+                viewModel.setEventsViewState()
             }
             R.id.refresh -> {
                 refresh()
@@ -131,8 +129,7 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
     }
 
     fun onClickRootEvent() {
-        viewModel.selectedEvent.value = null
-        viewModel.albumViewState.value = AlbumViewState.Events
+        viewModel.setEventsViewState()
     }
 
     fun onFabClick() {

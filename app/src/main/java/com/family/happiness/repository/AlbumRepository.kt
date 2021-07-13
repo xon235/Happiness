@@ -23,7 +23,7 @@ class AlbumRepository(
     val photos = photoDao.getAll()
     val events = eventDao.getAll()
 
-    fun getPhotosByEvent(event: Event) = photoDao.getPhotoByEvent(event.id)
+    fun getPhotosByEvent(event: Event?) = if(event == null) photoDao.getAll() else photoDao.getPhotoByEvent(event.id)
     fun getPhotoDetailByUrl(url: String) = photoDao.getPhotoDetailByUrl(url)
 
     suspend fun uploadPhotos(

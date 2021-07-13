@@ -7,8 +7,8 @@ import com.family.happiness.network.SafeResource
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 enum class AlbumViewState {
     AllPhotos, Events, PhotosByEvent
@@ -16,30 +16,42 @@ enum class AlbumViewState {
 
 class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
-    val selectedEvent = MutableLiveData<Event>()
+    private val _selectedEvent = MutableLiveData<Event>()
+    val selectedEvent: LiveData<Event> = _selectedEvent
 
-    private val _photosByEvent = Transformations.switchMap(selectedEvent) {
-        if(it == null) {
-            MutableLiveData(emptyList())
-        } else {
-            albumRepository.getPhotosByEvent(it).asLiveData()
-        }
+    private val _albumViewState = MutableLiveData(AlbumViewState.AllPhotos)
+    val albumViewState: LiveData<AlbumViewState> = _albumViewState
+
+    fun setAllPhotosViewState() {
+        _selectedEvent.postValue(null)
+        _albumViewState.postValue(AlbumViewState.AllPhotos)
     }
 
-    val albumViewState = MutableLiveData(AlbumViewState.AllPhotos)
-    val albumItems: LiveData<List<AlbumListAdapter.AlbumItem>> = Transformations.switchMap(albumViewState) { albumViewState ->
-        when(albumViewState) {
-            AlbumViewState.AllPhotos -> albumRepository.photos.asLiveData().switchMap { allPhotos ->
-                MutableLiveData(allPhotos.map { AlbumListAdapter.AlbumItem.PhotoItem(it) })
-            }
-            AlbumViewState.Events -> albumRepository.events.asLiveData().switchMap { events ->
-                MutableLiveData(events.map { AlbumListAdapter.AlbumItem.EventItem(it) })
-            }
-            AlbumViewState.PhotosByEvent -> _photosByEvent.switchMap { photosByEvent ->
-                MutableLiveData(photosByEvent.map { AlbumListAdapter.AlbumItem.PhotoItem(it) })
-            }
-        }
+    fun setEventsViewState() {
+        _selectedEvent.postValue(null)
+        _albumViewState.postValue(AlbumViewState.Events)
     }
+
+    fun setPhotosByEventViewState(event: Event) {
+        _selectedEvent.postValue(event)
+        _albumViewState.postValue(AlbumViewState.PhotosByEvent)
+    }
+
+    val albumItems: LiveData<List<AlbumListAdapter.AlbumItem>> =
+        Transformations.switchMap(albumViewState) { albumViewState ->
+            when (albumViewState) {
+                AlbumViewState.AllPhotos -> albumRepository.photos.map { allPhotos ->
+                    allPhotos.map { AlbumListAdapter.AlbumItem.PhotoItem(it) }
+                }
+                AlbumViewState.Events -> albumRepository.events.map { events ->
+                    events.map { AlbumListAdapter.AlbumItem.EventItem(it) }
+                }
+                AlbumViewState.PhotosByEvent -> albumRepository.getPhotosByEvent(selectedEvent.value)
+                    .map { photosByEvent ->
+                        photosByEvent.map { AlbumListAdapter.AlbumItem.PhotoItem(it) }
+                    }
+            }.asLiveData()
+        }
 
     private val _navigateToSelectedImage = MutableLiveData<Flag<Photo>>()
     val navigateToSelectedImage: LiveData<Flag<Photo>> = _navigateToSelectedImage
