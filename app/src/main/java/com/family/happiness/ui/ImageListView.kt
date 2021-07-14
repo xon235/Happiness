@@ -29,6 +29,10 @@ class ImageListView(context: Context, attrs: AttributeSet? = null) :
             R.styleable.ImageListView,
             0, 0
         ).apply {
+<<<<<<< HEAD
+=======
+            val ss = this
+>>>>>>> origin/master
             try {
                 imageMargin = getDimension(R.styleable.ImageListView_image_margin, dpToPx(context, 2f)).toInt()
                 imageWidth = getDimension(R.styleable.ImageListView_image_width, dpToPx(context, 2f)).toInt()
