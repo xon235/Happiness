@@ -3,7 +3,7 @@ package com.family.happiness.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
 import androidx.core.view.setMargins
 import com.family.happiness.R
 import com.family.happiness.Utils.dpToPx
@@ -13,7 +13,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.ShapeAppearanceModel
 
 class ImageListView(context: Context, attrs: AttributeSet? = null) :
-    HorizontalScrollView(context, attrs) {
+    LinearLayout(context, attrs) {
 
     private val inflater by lazy { LayoutInflater.from(context) }
     private val binding by lazy { ImageListViewLayoutBinding.inflate(inflater, this, true) }
