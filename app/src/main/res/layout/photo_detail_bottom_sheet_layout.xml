@@ -7,7 +7,6 @@
     </data>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:happiness="http://schemas.android.com/apk/res/com.family.happiness"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -21,14 +20,14 @@
             android:textSize="24sp"
             android:textStyle="bold"/>
 
-        <com.family.happiness.ui.ImageListView
-            android:id="@+id/imageListView"
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            happiness:image_margin = "2dp"
-            happiness:image_width = "32dp"
-            happiness:image_height = "32dp"
-            happiness:image_shape_appearance_overlay = "@style/circleImageView"/>
+            android:layout_height="wrap_content">
+            <com.family.happiness.ui.ImageListView
+                android:id="@+id/imageListView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </HorizontalScrollView>
 
         <TextView
             android:layout_width="match_parent"

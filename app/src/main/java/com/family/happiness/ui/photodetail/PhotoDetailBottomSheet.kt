@@ -18,9 +18,9 @@ class PhotoDetailBottomSheet: BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = PhotoDetailBottomSheetLayoutBinding.inflate(inflater, container, false)
-        val photoDetail: PhotoDetail? = arguments?.getParcelable("photoDetail")
+        val photoDetail: PhotoDetail = arguments?.getParcelable("photoDetail")!!
         binding.photoDetail = photoDetail
-        binding.imageListView.setImageUrls(photoDetail?.tagDetails?.map { it.user.photoUrl })
+        binding.imageListView.setImageUrls(photoDetail.tagDetails.map { it.user.photoUrl })
         return binding.root
     }
 }
