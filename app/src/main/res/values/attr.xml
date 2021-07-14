@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageListView">
+        <attr name="image_margin" format="dimension" />
+        <attr name="image_width" format="dimension" />
+        <attr name="image_height" format="dimension" />
+        <attr name="image_shape_appearance_overlay" format="reference" />
+    </declare-styleable>
+</resources>
