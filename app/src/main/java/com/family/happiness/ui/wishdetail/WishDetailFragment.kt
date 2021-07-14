@@ -21,13 +21,7 @@ class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, Wish
 
         args.wishDetail.wish.timestampClose?:setHasOptionsMenu(true)
 
-        args.wishDetail.contributors.forEach {
-            binding.tagsWrapper.addView(
-                DefaultShapeableImageBinding.inflate(layoutInflater, binding.tagsWrapper, false).apply {
-                    photoUrl = it.user.photoUrl
-                }.root
-            )
-        }
+        binding.imageListView.setImageUrls(args.wishDetail.contributors.map { it.user.photoUrl })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
