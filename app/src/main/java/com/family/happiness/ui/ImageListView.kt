@@ -23,23 +23,26 @@ class ImageListView(context: Context, attrs: AttributeSet? = null) :
     private var imageHeight: Int
     private var shapeAppearanceOverlay: Int
 
+    companion object {
+        const val DEFAULT_IMAGE_MARGIN_DP = 2f
+        const val DEFAULT_IMAGE_WIDTH_DP = 32f
+        const val DEFAULT_IMAGE_HEIGHT_DP = 32f
+        const val DEFAULT_SHAPE_APPEARANCE_OVERLAY_RESOURCE_ID = R.style.circleImageView
+    }
+
     init {
         context.obtainStyledAttributes(
             attrs,
             R.styleable.ImageListView,
             0, 0
         ).apply {
-<<<<<<< HEAD
-=======
-            val ss = this
->>>>>>> origin/master
             try {
-                imageMargin = getDimension(R.styleable.ImageListView_image_margin, dpToPx(context, 2f)).toInt()
-                imageWidth = getDimension(R.styleable.ImageListView_image_width, dpToPx(context, 2f)).toInt()
-                imageHeight = getDimension(R.styleable.ImageListView_image_height, dpToPx(context, 2f)).toInt()
+                imageMargin = getDimension(R.styleable.ImageListView_image_margin, dpToPx(context, DEFAULT_IMAGE_MARGIN_DP)).toInt()
+                imageWidth = getDimension(R.styleable.ImageListView_image_width, dpToPx(context, DEFAULT_IMAGE_WIDTH_DP)).toInt()
+                imageHeight = getDimension(R.styleable.ImageListView_image_height, dpToPx(context, DEFAULT_IMAGE_HEIGHT_DP)).toInt()
                 shapeAppearanceOverlay = getResourceId(
                     R.styleable.ImageListView_image_shape_appearance_overlay,
-                    R.style.circleImageView
+                    DEFAULT_SHAPE_APPEARANCE_OVERLAY_RESOURCE_ID
                 )
             } finally {
                 recycle()
@@ -48,9 +51,10 @@ class ImageListView(context: Context, attrs: AttributeSet? = null) :
     }
 
     fun setImageUrls(urls: List<String>?) {
+        binding.root.removeAllViews()
         urls?.forEach {
-            binding.linearLayout.addView(
-                (DefaultShapeableImageBinding.inflate(inflater, binding.linearLayout, false)
+            binding.root.addView(
+                (DefaultShapeableImageBinding.inflate(inflater, binding.root, false)
                     .apply { photoUrl = it }.root as ShapeableImageView).apply {
                     layoutParams =
                         MarginLayoutParams(imageWidth, imageHeight).apply {
