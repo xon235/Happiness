@@ -1,7 +1,9 @@
 package com.family.happiness
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
@@ -34,5 +36,9 @@ object Utils {
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h)
         return bitmap
+    }
+
+    fun dpToPx(context: Context, dp: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
     }
 }

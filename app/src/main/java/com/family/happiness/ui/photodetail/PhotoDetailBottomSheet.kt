@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.family.happiness.databinding.PhotoDetailBottomSheetLayoutBinding
-import com.family.happiness.databinding.TagsShapeableImageBinding
 import com.family.happiness.room.photo.PhotoDetail
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.imageview.ShapeableImageView
 
 class PhotoDetailBottomSheet: BottomSheetDialogFragment() {
 
@@ -22,13 +20,7 @@ class PhotoDetailBottomSheet: BottomSheetDialogFragment() {
         binding = PhotoDetailBottomSheetLayoutBinding.inflate(inflater, container, false)
         val photoDetail: PhotoDetail? = arguments?.getParcelable("photoDetail")
         binding.photoDetail = photoDetail
-        photoDetail?.tagDetails?.forEach {
-            binding.tagsWrapper.addView(
-                TagsShapeableImageBinding.inflate(inflater, binding.tagsWrapper, false).apply {
-                    photoUrl = it.user.photoUrl
-                }.root
-            )
-        }
+        binding.imageListView.setImageUrls(photoDetail?.tagDetails?.map { it.user.photoUrl })
         return binding.root
     }
 }

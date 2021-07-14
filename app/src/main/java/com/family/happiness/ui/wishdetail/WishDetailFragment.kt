@@ -2,12 +2,11 @@ package com.family.happiness.ui.wishdetail
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.family.happiness.R
+import com.family.happiness.databinding.DefaultShapeableImageBinding
 import com.family.happiness.databinding.FragmentWishDetailBinding
-import com.family.happiness.databinding.TagsShapeableImageBinding
 import com.family.happiness.ui.HappinessBaseFragment
 
 class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, WishDetailViewModel>() {
@@ -24,7 +23,7 @@ class WishDetailFragment : HappinessBaseFragment<FragmentWishDetailBinding, Wish
 
         args.wishDetail.contributors.forEach {
             binding.tagsWrapper.addView(
-                TagsShapeableImageBinding.inflate(layoutInflater, binding.tagsWrapper, false).apply {
+                DefaultShapeableImageBinding.inflate(layoutInflater, binding.tagsWrapper, false).apply {
                     photoUrl = it.user.photoUrl
                 }.root
             )

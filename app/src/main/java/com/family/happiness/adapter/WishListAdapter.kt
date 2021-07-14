@@ -2,13 +2,11 @@ package com.family.happiness.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.family.happiness.databinding.TagsShapeableImageBinding
+import com.family.happiness.databinding.DefaultShapeableImageBinding
 import com.family.happiness.databinding.WishItemLayoutBinding
-import com.family.happiness.room.wish.Wish
 import com.family.happiness.room.wish.WishDetail
 
 class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
@@ -43,7 +41,7 @@ class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
             binding.tagsWrapper.removeAllViews()
             wishDetail.contributors.forEach {
                 binding.tagsWrapper.addView(
-                    TagsShapeableImageBinding.inflate(LayoutInflater.from(binding.tagsWrapper.context), binding.tagsWrapper, false).apply {
+                    DefaultShapeableImageBinding.inflate(LayoutInflater.from(binding.tagsWrapper.context), binding.tagsWrapper, false).apply {
                         photoUrl = it.user.photoUrl
                     }.root
                 )
