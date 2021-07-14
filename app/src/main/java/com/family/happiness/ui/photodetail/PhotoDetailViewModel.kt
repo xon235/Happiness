@@ -6,29 +6,35 @@ import com.family.happiness.network.SafeResource
 import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.room.event.Event
 import com.family.happiness.room.photo.Photo
-import com.family.happiness.room.photo.PhotoDetail
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class PhotoDetailViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
     private val _photo = MutableLiveData<Photo>()
-    fun setPhoto(photo: Photo) { _photo.value = photo }
+    fun setPhoto(photo: Photo) {
+        _photo.value = photo
+    }
 
-    val photoDetail = Transformations.switchMap(_photo){
+    val photoDetail = Transformations.switchMap(_photo) {
         albumRepository.getPhotoDetailByUrl(it.url).asLiveData()
     }
 
-    val events = albumRepository.events.asLiveData()
+    val events = Transformations.switchMap(photoDetail) { photoDetail ->
+        albumRepository.events.map { eventsList ->
+            eventsList.filter { it != photoDetail.event }
+        }.asLiveData()
+    }
 
     private val _inputEnabled = MutableLiveData(true)
     val inputEnabled: LiveData<Boolean> = _inputEnabled
 
     private val _eventChangedFlag = MutableLiveData<Flag<Boolean>>()
-    val eventChangedFlag: LiveData<Flag<Boolean>>  = _eventChangedFlag
+    val eventChangedFlag: LiveData<Flag<Boolean>> = _eventChangedFlag
 
     fun changeEvent(photo: Photo, event: Event) = viewModelScope.launch {
         _inputEnabled.value = false
-        when(val resource = albumRepository.movePhoto(photo, event)){
+        when (val resource = albumRepository.movePhoto(photo, event)) {
             is SafeResource.Success -> {
                 _eventChangedFlag.value = Flag(true)
             }
@@ -40,11 +46,11 @@ class PhotoDetailViewModel(private val albumRepository: AlbumRepository) : ViewM
     }
 
     private val _deletePhotoFlag = MutableLiveData<Flag<Boolean>>()
-    val deletePhotoFlag: LiveData<Flag<Boolean>>  = _deletePhotoFlag
+    val deletePhotoFlag: LiveData<Flag<Boolean>> = _deletePhotoFlag
 
     fun deletePhoto(photo: Photo) = viewModelScope.launch {
         _inputEnabled.value = false
-        when(val resource = albumRepository.deletePhoto(photo)){
+        when (val resource = albumRepository.deletePhoto(photo)) {
             is SafeResource.Success -> {
                 _deletePhotoFlag.value = Flag(true)
             }
