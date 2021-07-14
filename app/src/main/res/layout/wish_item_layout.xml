@@ -54,13 +54,19 @@
                 app:visibleIf="@{wishDetail.wish.timestampClose == null}"
                 tools:text="Author"
                 android:layout_gravity="center"/>
-            <LinearLayout
-                android:id="@+id/tagsWrapper"
+<!--            <LinearLayout-->
+<!--                android:id="@+id/tagsWrapper"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:visibleIf="@{wishDetail.wish.timestampClose != null}"-->
+<!--                android:layout_gravity="center"/>-->
+            <com.family.happiness.ui.ImageListView
+                android:id="@+id/imageListView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 app:visibleIf="@{wishDetail.wish.timestampClose != null}"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

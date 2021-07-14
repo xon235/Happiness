@@ -26,11 +26,11 @@ class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
 
     companion object DiffCallback : DiffUtil.ItemCallback<WishDetail>() {
         override fun areItemsTheSame(oldItem: WishDetail, newItem: WishDetail): Boolean {
-            return oldItem.wish.id === newItem.wish.id
+            return oldItem.wish.id == newItem.wish.id
         }
 
         override fun areContentsTheSame(oldItem: WishDetail, newItem: WishDetail): Boolean {
-            return oldItem.wish.id == newItem.wish.id
+            return oldItem == newItem
         }
     }
 
@@ -38,14 +38,7 @@ class WishListAdapter(private val clickListener: (wish: WishDetail) -> Unit)
         RecyclerView.ViewHolder(binding.root) {
         fun bind(wishDetail: WishDetail) {
             binding.wishDetail = wishDetail
-            binding.tagsWrapper.removeAllViews()
-            wishDetail.contributors.forEach {
-                binding.tagsWrapper.addView(
-                    DefaultShapeableImageBinding.inflate(LayoutInflater.from(binding.tagsWrapper.context), binding.tagsWrapper, false).apply {
-                        photoUrl = it.user.photoUrl
-                    }.root
-                )
-            }
+            binding.imageListView.setImageUrls(wishDetail.contributors.map { it.user.photoUrl })
         }
     }
 }
