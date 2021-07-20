@@ -8,21 +8,11 @@ import android.widget.Spinner
 import androidx.core.view.children
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.family.happiness.PreferenceKeys
+import com.family.happiness.GlideApp
 import com.family.happiness.R
-import com.family.happiness.dataStore
 import com.family.happiness.room.event.Event
-import com.family.happiness.room.photo.Photo
-import com.family.happiness.room.photo.PhotoDetail
 import com.family.happiness.room.user.User
 import com.family.happiness.room.wish.WishDetail
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
-import timber.log.Timber
 
 @BindingAdapter("app:visibleIf")
 fun visibleIf(view: View, visible: Boolean) {
@@ -39,26 +29,12 @@ fun enabledIf(view: View, isEnabled: Boolean) {
     }
 }
 
-// TODO use glide module for global header
 @BindingAdapter("app:imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
-    if (imgUrl != null) {
-        Glide.with(imgView.context)
-            .load(
-                GlideUrl(
-                    imgUrl,
-                    LazyHeaders.Builder().apply {
-                        runBlocking {
-                            imgView.context.dataStore.data.map { it[PreferenceKeys.TOKEN] }.first()
-                        }?.let {
-                            addHeader("Authorization", "Bearer $it")
-                        }
-                    }.build()
-                )
-            )
-            .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
-            .into(imgView)
-    }
+    GlideApp.with(imgView.context)
+        .load(imgUrl)
+        .placeholder(R.drawable.loading_animation).error(R.drawable.ic_connection_error)
+        .into(imgView)
 }
 
 @BindingAdapter("app:listData")
