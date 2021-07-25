@@ -7,6 +7,7 @@ import com.family.happiness.repository.AlbumRepository
 import com.family.happiness.repository.MailRepository
 import com.family.happiness.repository.UserRepository
 import com.family.happiness.repository.WishRepository
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 
@@ -23,7 +24,7 @@ class MainActivityViewModel(
 
     val me = userRepository.me.asLiveData()
 
-    val members = userRepository.members.asLiveData()
+    val members = userRepository.members.distinctUntilChanged().asLiveData()
 
     private val _joinFamilyFlag = MutableLiveData<Flag<Boolean>>()
     val joinFamilyFlag: LiveData<Flag<Boolean>> = _joinFamilyFlag
