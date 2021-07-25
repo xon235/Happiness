@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,6 +24,7 @@ import com.family.happiness.HappinessApplication
 import com.family.happiness.R
 import com.family.happiness.Utils
 import com.family.happiness.adapter.FamilyListAdapter
+import com.family.happiness.dataStore
 import com.family.happiness.databinding.ActivityMainBinding
 import com.family.happiness.databinding.NavHeaderBinding
 import com.family.happiness.ui.createfamily.CreateFamilyFragmentDirections
@@ -32,7 +33,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.zxing.integration.android.IntentIntegrator
-import timber.log.Timber
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     }
     private val navController: NavController by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
-//        findNavController(R.id.navHostFragment)
     }
 
     private val homeSet = setOf(R.id.mailFragment, R.id.albumFragment, R.id.wishFragment)
@@ -55,6 +56,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Pre-Load DataStore
+        lifecycleScope.launch {
+            applicationContext.dataStore.data.first()
+        }
 
         // Setup Binding and ContentView
         binding = ActivityMainBinding.inflate(layoutInflater)
