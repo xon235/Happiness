@@ -38,29 +38,20 @@ abstract class BaseDao<T : Any>(private val tableName: String) {
         SimpleSQLiteQuery("DELETE FROM $tableName")
     )
 
-    suspend fun upsert(entities: List<T>) {
-        val newEntities = entities.toSet()
-        val oldEntities = selectAllSync().toSet()
-        upsert(newEntities, oldEntities)
-    }
-
     @Transaction
-    open suspend fun upsert(newEntities: Set<T>, oldEntities: Set<T>) {
-        val entitiesNotInOld = newEntities subtract oldEntities
-        insert(entitiesNotInOld.toList())
+    open suspend fun upsert(entities: List<T>) {
+        val insertResults = insert(entities.toList())
 
-        val entitiesInBoth = newEntities intersect oldEntities
-        update(entitiesInBoth.toList())
+        val entitiesToUpdate = entities.filterIndexed {index, _ ->
+            insertResults[index] == -1L
+        }
+
+        update(entitiesToUpdate)
     }
 
     @Transaction
     open suspend fun sync(entities: List<T>) {
-        val newEntities = entities.toSet()
-        val oldEntities = selectAllSync().toSet()
-
-        val entitiesNotInNew = oldEntities subtract newEntities
-        delete(entitiesNotInNew.toList())
-
-        upsert(newEntities, oldEntities)
+        deleteAll()
+        insert(entities)
     }
 }
