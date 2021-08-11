@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -32,7 +31,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.zxing.integration.android.IntentIntegrator
-import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     }
     private val navController: NavController by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
-//        findNavController(R.id.navHostFragment)
     }
 
     private val homeSet = setOf(R.id.mailFragment, R.id.albumFragment, R.id.wishFragment)
