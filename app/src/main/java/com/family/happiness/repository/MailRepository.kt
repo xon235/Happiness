@@ -4,13 +4,14 @@ import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.request.MarkAsReadData
 import com.family.happiness.network.request.WriteMailData
 import com.family.happiness.room.mail.MailDao
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class MailRepository(
     private val mailDao: MailDao,
     private val happinessApi: HappinessApi,
 ) : BaseRepository() {
 
-    val mailDetails =  mailDao.getAllMailDetail()
+    val mailDetails =  mailDao.getAllMailDetail().distinctUntilChanged()
 
     suspend fun writeMail(
         writeMailData: WriteMailData

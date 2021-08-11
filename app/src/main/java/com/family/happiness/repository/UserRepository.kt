@@ -7,10 +7,7 @@ import com.family.happiness.PreferenceKeys
 import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.request.*
 import com.family.happiness.room.user.UserDao
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.io.IOException
 
@@ -20,7 +17,7 @@ class UserRepository(
     private val happinessApi: HappinessApi
 ) : BaseRepository() {
 
-    val users = userDao.getAll()
+    val users = userDao.getAll().distinctUntilChanged()
 
     val personalDataPreferencesFlow = personalDataDatastore.data
         .catch { exception ->
@@ -36,15 +33,15 @@ class UserRepository(
                 it[PreferenceKeys.USER_ID],
                 it[PreferenceKeys.FAMILY_ID]
             )
-        }
+        }.distinctUntilChanged()
 
     val me = combine(personalDataPreferencesFlow, users) { personalDataPreferences, users ->
         users.find { it.id == personalDataPreferences.userId }
-    }
+    }.distinctUntilChanged()
 
     val members = combine(personalDataPreferencesFlow, users) { personalDataPreferences, users ->
         users.filter { it.id != personalDataPreferences.userId }
-    }
+    }.distinctUntilChanged()
 
     // Api
     suspend fun signIn(oAuthData: OAuthData) = safeApiCall {

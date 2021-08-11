@@ -8,9 +8,8 @@ import com.family.happiness.room.event.EventDao
 import com.family.happiness.room.photo.Photo
 import com.family.happiness.room.photo.PhotoDao
 import com.family.happiness.room.tag.TagDao
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 class AlbumRepository(
@@ -20,8 +19,8 @@ class AlbumRepository(
     private val happinessApi: HappinessApi
 ) : BaseRepository() {
 
-    val photos = photoDao.getAll()
-    val events = eventDao.getAll()
+    val photos = photoDao.getAll().distinctUntilChanged()
+    val events = eventDao.getAll().distinctUntilChanged()
 
     fun getPhotosByEvent(event: Event?) = if(event == null) photoDao.getAll() else photoDao.getPhotoByEvent(event.id)
     fun getPhotoDetailByUrl(url: String) = photoDao.getPhotoDetailByUrl(url)

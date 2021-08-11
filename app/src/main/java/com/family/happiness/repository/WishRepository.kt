@@ -4,12 +4,9 @@ import com.family.happiness.network.HappinessApi
 import com.family.happiness.network.request.DeleteWishData
 import com.family.happiness.network.request.FinishWishData
 import com.family.happiness.network.request.WriteWishData
-import com.family.happiness.room.contributor.Contributor
 import com.family.happiness.room.contributor.ContributorDao
-import com.family.happiness.room.wish.Wish
 import com.family.happiness.room.wish.WishDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 class WishRepository(
     private val wishDao: WishDao,
@@ -17,7 +14,7 @@ class WishRepository(
     private val happinessApi: HappinessApi,
 ) : BaseRepository() {
 
-    val wishDetails = wishDao.getAllWishDetail()
+    val wishDetails = wishDao.getAllWishDetail().distinctUntilChanged()
 
     // Api
     suspend fun writeWish(
