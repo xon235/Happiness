@@ -73,15 +73,14 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
         viewModel.albumItems.observe(viewLifecycleOwner) {
             albumListAdapter.submitList(it)
         }
+
+        viewModel.albumViewState.observe(viewLifecycleOwner) {
+            requireActivity().invalidateOptionsMenu()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.album_menu, menu)
-
-        viewModel.albumViewState.observe(viewLifecycleOwner) {
-            menu.findItem(R.id.allPhotosView).isVisible = it != AlbumViewState.AllPhotos
-            menu.findItem(R.id.eventsView).isVisible = it == AlbumViewState.AllPhotos
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -98,6 +97,12 @@ class AlbumFragment : HappinessBaseFragment<FragmentAlbumBinding, AlbumViewModel
 
         }
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val albumViewState = viewModel.albumViewState.value
+        menu.findItem(R.id.allPhotosView).isVisible = albumViewState != AlbumViewState.AllPhotos
+        menu.findItem(R.id.eventsView).isVisible = albumViewState == AlbumViewState.AllPhotos
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
